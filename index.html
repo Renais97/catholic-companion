@@ -3825,7 +3825,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,[r
 
 
 
-<style id="cpc-home-title-unified-v8">
+<style id="cpc-home-title-unified-v9">
 /* One authoritative Home-card title rule. All cards use exactly the same typography. */
 html,body{
   -webkit-text-size-adjust:100%!important;
@@ -3833,7 +3833,7 @@ html,body{
 }
 #home .grid > .card .home-title-text{
   font-family:system-ui,-apple-system,"Segoe UI",sans-serif!important;
-  font-size:13px!important;
+  font-size:15px!important;
   font-weight:800!important;
   font-style:normal!important;
   font-stretch:normal!important;
@@ -3847,11 +3847,15 @@ html,body{
   overflow-wrap:normal!important;
   text-align:center!important;
 }
+@media(max-width:540px){
+  #home .grid > .card{padding-left:0!important;padding-right:0!important;}
+  #home .grid > .card .home-title-text{transform:scaleX(.95)!important;transform-origin:center!important;}
+}
 @media(max-width:360px){
-  #home .grid > .card .home-title-text{font-size:12px!important;}
+  #home .grid > .card .home-title-text{font-size:14px!important;letter-spacing:-.065em!important;}
 }
 @media(max-width:330px){
-  #home .grid > .card .home-title-text{font-size:11px!important;}
+  #home .grid > .card .home-title-text{font-size:13px!important;letter-spacing:-.075em!important;}
 }
 </style>
 </head>
