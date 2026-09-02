@@ -3851,6 +3851,29 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,[r
 }
 </style>
 
+
+<style id="cpc-home-title-installed-app-fix-v6">
+/* Installed-app mobile fix: every Home card title uses one shared size and stays on one line. */
+@media (max-width:540px){
+  #home .card .home-title-text{
+    font-size:11px!important;
+    font-weight:800!important;
+    line-height:1.05!important;
+    letter-spacing:-.055em!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    -webkit-text-size-adjust:100%!important;
+    text-size-adjust:100%!important;
+  }
+}
+@media (max-width:360px){
+  #home .card .home-title-text{font-size:10px!important;}
+}
+@media (max-width:330px){
+  #home .card .home-title-text{font-size:9px!important;}
+}
+</style>
 </head>
 <body>
 <div class="app">
