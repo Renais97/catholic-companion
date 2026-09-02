@@ -3736,6 +3736,121 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,[r
   line-height:1.45;
 }
 </style>
+
+<style id="cpc-mobile-type-settings-alignment-fix">
+/* Home cards: every title uses the same size and stays on one line. */
+@media (max-width:540px){
+  #home .card .home-title-text,
+  #home .grid > .promises-home-card .home-title-text{
+    max-width:100%!important;
+    padding:0!important;
+    font-size:12.5px!important;
+    font-weight:800!important;
+    line-height:1.08!important;
+    letter-spacing:-.045em!important;
+    white-space:nowrap!important;
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+  }
+}
+@media (max-width:370px){
+  #home .card .home-title-text,
+  #home .grid > .promises-home-card .home-title-text{
+    font-size:11.5px!important;
+  }
+}
+@media (max-width:340px){
+  #home .card .home-title-text,
+  #home .grid > .promises-home-card .home-title-text{
+    font-size:10px!important;
+  }
+}
+
+/* Prayer Settings: use the same vertical rows for icon, label and state in every tile. */
+.prayer-settings-content .prayer-setting,
+.prayer-settings-content .prayer-setting.compact-speed-setting{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  grid-template-rows:18px 28px 14px!important;
+  align-content:center!important;
+  align-items:center!important;
+  justify-items:center!important;
+  row-gap:2px!important;
+  min-height:66px!important;
+  padding:7px 6px!important;
+  text-align:center!important;
+}
+.prayer-settings-content .prayer-setting .setting-icon,
+.prayer-settings-content .prayer-setting .speed-rate-icon{
+  grid-row:1!important;
+  align-self:center!important;
+  justify-self:center!important;
+  width:100%!important;
+  margin:0!important;
+  line-height:18px!important;
+  text-align:center!important;
+}
+.prayer-settings-content .prayer-setting .setting-label,
+.prayer-settings-content .prayer-setting .speed-title{
+  grid-row:2!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  min-height:28px!important;
+  margin:0!important;
+  padding:0 2px!important;
+  box-sizing:border-box!important;
+  line-height:1.15!important;
+  text-align:center!important;
+}
+.prayer-settings-content .prayer-setting .setting-state,
+.prayer-settings-content .prayer-setting .speed-visible{
+  grid-row:3!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  min-height:14px!important;
+  margin:0!important;
+  line-height:14px!important;
+  text-align:center!important;
+}
+/* Keep Play / Pause / Stop icon and text on a common axis too. */
+.prayer-settings-content .compact-audio-row button{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  text-align:center!important;
+}
+.prayer-settings-content .compact-audio-row .audio-icon{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:16px!important;
+  min-width:16px!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+.prayer-settings-content .compact-audio-row .audio-label{
+  display:inline-block!important;
+  line-height:1.2!important;
+  text-align:center!important;
+}
+@media (max-width:380px){
+  .prayer-settings-content .prayer-setting,
+  .prayer-settings-content .prayer-setting.compact-speed-setting{
+    min-height:58px!important;
+    grid-template-rows:17px 24px 13px!important;
+  }
+  .prayer-settings-content .prayer-setting .setting-label,
+  .prayer-settings-content .prayer-setting .speed-title{
+    min-height:24px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -3772,7 +3887,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,[r
       <button class="card" onclick="showLibrary('prayers')"><strong><span class="home-title-text">Daily Prayers</span><span class="home-icon" aria-hidden="true">🙏</span></strong></button>
       <button class="card" onclick="showLibrary('parables')"><strong><span class="home-title-text">Parables of Jesus</span><span class="home-icon" aria-hidden="true">🕯️</span></strong></button>
       <button class="card" onclick="showLibrary('mysteries')"><strong><span class="home-title-text">Rosary Mysteries</span><span class="home-icon" aria-hidden="true">🌹</span></strong></button>
-      <button class="card" onclick="showLibrary('promises')">
+      <button class="card promises-home-card" onclick="showLibrary('promises')">
   <strong>
     <span class="home-title-text">Rosary Promises &amp; Blessings</span>
     <span class="home-icon" aria-hidden="true">✨</span>
