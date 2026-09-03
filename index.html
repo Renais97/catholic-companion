@@ -4738,6 +4738,82 @@ body.cpc-prayer-screen-active #devotions.active{
 }
 </style>
 
+
+<style id="cpc-prayer-controls-below-panel-v22">
+/* v22 — keep the prayer card devoted to prayer content. Navigation guidance and
+   Prayer Settings now sit immediately below the Rosary / Mercy / Angelus card. */
+#prayer .prayer-outside-controls,
+#devotions .prayer-outside-controls{
+  width:100%;
+  box-sizing:border-box;
+  margin:8px 0 0!important;
+  padding:0 2px;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:7px;
+  text-align:center!important;
+}
+#prayer .prayer-outside-controls[hidden],
+#devotions .prayer-outside-controls[hidden]{display:none!important;}
+#prayer .prayer-outside-controls .tap-anywhere-hint,
+#devotions .prayer-outside-controls .tap-anywhere-hint{
+  margin:0!important;
+  padding:0 8px!important;
+  text-align:center!important;
+  line-height:1.35!important;
+}
+#prayer #rosaryPrayerAux .prayer-settings-drawer,
+#devotions #devotionPrayerAux .prayer-settings-drawer{
+  width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  overflow:visible!important;
+  text-align:center!important;
+  isolation:isolate!important;
+}
+#prayer #rosaryPrayerAux .prayer-settings-drawer > summary,
+#devotions #devotionPrayerAux .prayer-settings-drawer > summary{
+  display:inline-flex!important;
+  width:auto!important;
+  min-width:0!important;
+  min-height:0!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0 auto!important;
+  padding:5px 9px!important;
+  border:1px solid var(--line)!important;
+  border-radius:999px!important;
+  background:var(--soft)!important;
+  color:var(--muted)!important;
+  font:700 10.5px/1.2 system-ui,sans-serif!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+  touch-action:manipulation!important;
+}
+#prayer #rosaryPrayerAux .prayer-settings-drawer[open],
+#devotions #devotionPrayerAux .prayer-settings-drawer[open]{
+  border:1px solid var(--line)!important;
+  border-radius:15px!important;
+  background:var(--soft)!important;
+  overflow:hidden!important;
+}
+#prayer #rosaryPrayerAux .prayer-settings-drawer[open] > summary,
+#devotions #devotionPrayerAux .prayer-settings-drawer[open] > summary{
+  margin:5px auto 4px!important;
+}
+#prayer[data-mystery-set] #rosaryPrayerAux .prayer-settings-drawer[open],
+#prayer[data-mystery-set] #rosaryPrayerAux .prayer-settings-drawer > summary{
+  border-color:var(--m-border,var(--line))!important;
+}
+@media(max-width:540px){
+  #prayer .prayer-outside-controls,
+  #devotions .prayer-outside-controls{margin-top:7px!important;gap:6px;padding:0 1px;}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -4796,6 +4872,7 @@ body.cpc-prayer-screen-active #devotions.active{
       </div>
 <div class="prayer-panel panel-art rosary-art joyful-art" id="prayerContent"></div>
     </div>
+    <div id="rosaryPrayerAux" class="prayer-outside-controls" hidden></div>
   </section>
 
   <section id="library" class="screen">
@@ -4804,6 +4881,7 @@ body.cpc-prayer-screen-active #devotions.active{
 
   <section id="devotions" class="screen">
     <div id="devotionPanel" class="prayer-panel panel-art prayers-art"><div class="eyebrow" id="devotionEyebrow">Prayer</div><h2 id="devotionTitle"></h2><div id="devotionContent"></div></div>
+    <div id="devotionPrayerAux" class="prayer-outside-controls" hidden></div>
   </section>
 </div>
 
@@ -5840,36 +5918,45 @@ function enableTapAnywhereProgress(){
 function resetMercy(){mercyState={step:0,decade:0,small:0,holy:0};updateHomeTrackers();renderMercy()}
 
 
+function clearPrayerOutsideControls(){
+ const rosaryAux=document.getElementById('rosaryPrayerAux');
+ const devotionAux=document.getElementById('devotionPrayerAux');
+ [rosaryAux,devotionAux].forEach(aux=>{if(aux){aux.replaceChildren();aux.hidden=true;}});
+}
+
 function ensurePrayerNavigationTip(){
  const prayerActive=document.getElementById('prayer')?.classList.contains('active');
  const devotionActive=document.getElementById('devotions')?.classList.contains('active');
- let root=null;
+ let root=null,aux=null;
  let text='Tap the top half to go back · tap the bottom half to continue.';
 
  if(prayerActive){
    root=document.getElementById('prayerContent');
+   aux=document.getElementById('rosaryPrayerAux');
    if(rosaryMysteryReadingScreen()){
      text='Tap the top half anytime to go back · scroll to the bottom, then tap the bottom half to continue.';
    }
  }else if(devotionActive&&(currentDevotion==='divineMercy'||currentDevotion==='angelus')){
    root=document.getElementById('devotionContent');
+   aux=document.getElementById('devotionPrayerAux');
  }
 
- if(!root)return;
+ if(!root||!aux)return;
 
- let tip=root.querySelector('.tap-anywhere-hint');
- if(!tip){
-   tip=document.createElement('div');
-   tip.className='tap-anywhere-hint';
- }
+ // Each render rebuilds the prayer content. Rebuild the small control area below
+ // the prayer card as well, then move the newly rendered Settings drawer there.
+ // If this helper is called twice without a render, retain the already-moved drawer.
+ const settings=root.querySelector('.prayer-settings-drawer')||aux.querySelector('.prayer-settings-drawer');
+ aux.replaceChildren();
+ aux.hidden=false;
+
+ const tip=document.createElement('div');
+ tip.className='tap-anywhere-hint';
  tip.textContent=text;
+ aux.appendChild(tip);
 
- const settings=root.querySelector('.prayer-settings-drawer');
- if(settings){
-   settings.parentNode.insertBefore(tip,settings);
- }else if(!tip.isConnected){
-   root.appendChild(tip);
- }
+ if(settings)aux.appendChild(settings);
+
  const kind=prayerActive?'rosary':currentDevotion==='divineMercy'?'mercy':'angelus';
  ensurePrayerA11yNavigation(root,kind);
 }
@@ -6396,6 +6483,8 @@ window.renderCpcSettings=function(){const c=document.getElementById('devotionCon
 /* Devotion routing extension + persistent Marian/Divine Mercy state. */
 const baseShowDevotion=showDevotion;
 window.showDevotion=function(type,{fromHistory=false}={}){
+ const devotionAux=document.getElementById('devotionPrayerAux');
+ if(devotionAux){devotionAux.replaceChildren();devotionAux.hidden=true;}
  if(type==='settings'||type==='angelus'||type==='divineMercy'){
    stopSpeech();currentDevotion=type;const art=type==='divineMercy'?'mercy-art':type==='angelus'?'angelus-art':'prayers-art';setPanelArt('devotionPanel',`panel-art ${art}`);setScreen('devotions',{fromHistory,routeKey:`devotion:${type}`});const t=document.getElementById('devotionTitle'),e=document.getElementById('devotionEyebrow');
    if(type==='settings'){releasePrayerWakeLock();e.textContent='Preferences';t.textContent='App Settings';renderCpcSettings();return}
