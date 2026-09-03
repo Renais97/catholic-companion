@@ -4602,26 +4602,39 @@ body.cpc-large-text #devotionPanel.angelus-art #devotionContent .mystery-title{
 }
 </style>
 
-<style id="cpc-short-prayer-no-forced-scroll">
-
-/* ---- cpc-short-prayer-no-forced-scroll ---- */
-/* Short Rosary / Divine Mercy / Angelus steps should fit naturally without
-   artificial viewport overflow. Long prayers still scroll normally. */
-#prayer.active,
-#devotions.active{
-  min-height:0!important;
-  height:auto!important;
+<style id="cpc-prayer-viewport-navigation-v19">
+/* v19 — keep the whole visible prayer area tappable without forcing body scroll.
+   The active Rosary / Divine Mercy / Angelus screen fills the space below the
+   fixed header. Only genuinely long prayer content scrolls, inside that screen. */
+body.cpc-prayer-screen-active{
+  overflow:hidden!important;
 }
 body.cpc-prayer-screen-active .app{
+  height:100dvh!important;
   min-height:100dvh!important;
-  padding-bottom:max(12px, env(safe-area-inset-bottom, 0px))!important;
+  padding-bottom:max(10px, env(safe-area-inset-bottom, 0px))!important;
+  display:flex!important;
+  flex-direction:column!important;
+  overflow:hidden!important;
+}
+body.cpc-prayer-screen-active .topbar{
+  flex:0 0 auto!important;
+}
+body.cpc-prayer-screen-active #prayer.active,
+body.cpc-prayer-screen-active #devotions.active{
+  display:block!important;
+  flex:1 1 auto!important;
+  min-height:0!important;
+  height:auto!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior-y:contain;
+  -webkit-overflow-scrolling:touch;
 }
 @supports not (height:100dvh){
-  body.cpc-prayer-screen-active .app{min-height:100vh!important;}
-}
-@media(max-width:540px){
   body.cpc-prayer-screen-active .app{
-    padding-bottom:max(10px, env(safe-area-inset-bottom, 0px))!important;
+    height:100vh!important;
+    min-height:100vh!important;
   }
 }
 </style>
@@ -4878,7 +4891,8 @@ function setScreen(id,{fromHistory=false,routeKey=null}={}){
   if(previous && previous!==id) stopSpeech();
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  document.body.classList.toggle('cpc-prayer-screen-active', id==='prayer'||id==='devotions');
+  const prayerViewportActive=id==='prayer'||(id==='devotions'&&(currentDevotion==='divineMercy'||currentDevotion==='angelus'));
+  document.body.classList.toggle('cpc-prayer-screen-active',prayerViewportActive);
   if(id!=='prayer'&&id!=='devotions')releasePrayerWakeLock();
   const route=routeKey||id;
   if(!fromHistory){if(id==='home'){history.replaceState({cpcScreen:'home',cpcRoute:'home'},'');}else if(history.state?.cpcRoute!==route){history.pushState({cpcScreen:id,cpcRoute:route},'');}}
