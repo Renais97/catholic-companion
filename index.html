@@ -4146,6 +4146,108 @@ body .app .topbar .topbar-actions .topbar-btn:focus-visible::before{
   #home .hero .daily-quote cite{margin-top:4px !important;}
 }
 </style>
+
+<style id="cpc-home-cards-compact-v15">
+/* v15: hero + Home grid cards approximately 20% more compact than v14. */
+#home .hero{
+  padding:14px !important;
+  margin-bottom:12px !important;
+  border-radius:16px !important;
+}
+#home .hero .hero-title-stack{
+  gap:5px !important;
+  margin-bottom:9px !important;
+}
+#home .hero .hero-title-stack .hero-title-icon{
+  font-size:1.2rem !important;
+}
+#home .hero .hero-title-stack h1{
+  font-size:clamp(25px,5.7vw,34px) !important;
+  line-height:1.06 !important;
+}
+#home .hero .daily-quote{
+  font-size:15px !important;
+  line-height:1.4 !important;
+  margin:0 0 9px !important;
+}
+#home .hero .daily-quote cite{
+  margin-top:4px !important;
+}
+#home .hero .actions{
+  gap:6px !important;
+}
+#home .hero .today-rosary-btn{
+  padding:8px 12px !important;
+}
+
+#home .grid{
+  gap:10px !important;
+}
+#home .grid > .card{
+  height:110px !important;
+  min-height:110px !important;
+  padding:10px 6px !important;
+  border-radius:14px !important;
+}
+#home .grid > .card > strong{
+  gap:7px !important;
+}
+#home .grid > .card .home-icon{
+  font-size:29px !important;
+}
+/* Keep the title size chosen in v9; only the surrounding card becomes smaller. */
+#home .grid > .card .home-title-text{
+  font-size:15px !important;
+}
+
+@media(max-width:540px){
+  #home .hero{
+    padding:11px !important;
+    margin-bottom:11px !important;
+    border-radius:14px !important;
+  }
+  #home .hero .hero-title-stack{
+    gap:4px !important;
+    margin-bottom:7px !important;
+  }
+  #home .hero .hero-title-stack .hero-title-icon{
+    font-size:1.08rem !important;
+  }
+  #home .hero .hero-title-stack h1{
+    font-size:23px !important;
+  }
+  #home .hero .daily-quote{
+    font-size:14px !important;
+    line-height:1.36 !important;
+    margin-bottom:7px !important;
+  }
+  #home .hero .today-rosary-btn{
+    padding:7px 10px !important;
+  }
+  #home .grid{
+    gap:10px !important;
+  }
+  #home .grid > .card{
+    height:120px !important;
+    min-height:120px !important;
+    padding:8px 2px !important;
+    border-radius:14px !important;
+  }
+  #home .grid > .card > strong{
+    gap:6px !important;
+  }
+  #home .grid > .card .home-icon{
+    font-size:26px !important;
+  }
+}
+@media(max-width:360px){
+  #home .grid > .card .home-title-text{font-size:14px !important;}
+}
+@media(max-width:330px){
+  #home .grid > .card .home-title-text{font-size:13px !important;}
+}
+</style>
+
 </head>
 <body>
 <div class="app">
