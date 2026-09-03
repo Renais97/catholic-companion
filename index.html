@@ -4386,6 +4386,245 @@ body.cpc-large-text #devotionPanel.angelus-art #devotionContent .mystery-title{
 }
 </style>
 
+
+<style id="cpc-prayer-controls-panel-v17">
+/* v17 — six equally sized Prayer Settings controls + tighter prayer panels */
+
+/* Compact the prayer display while keeping the reading rhythm even. */
+#prayer .rosary-screen-heading{
+  padding:14px 15px 10px!important;
+}
+#prayer .rosary-screen-heading::after{
+  margin-top:11px!important;
+}
+#prayer #prayerContent{
+  padding:14px 17px 16px!important;
+}
+#devotionPanel.mercy-art,
+#devotionPanel.angelus-art{
+  padding:18px!important;
+}
+#devotionPanel.mercy-art > #devotionContent,
+#devotionPanel.angelus-art > #devotionContent{
+  margin-top:13px!important;
+  padding-top:16px!important;
+}
+#prayer #prayerContent > .eyebrow,
+#devotionPanel.mercy-art #devotionContent > .eyebrow,
+#devotionPanel.angelus-art #devotionContent > .eyebrow{
+  margin-bottom:5px!important;
+}
+#prayer #prayerContent .mystery-title,
+#devotionPanel.mercy-art #devotionContent .mystery-title,
+#devotionPanel.angelus-art #devotionContent .mystery-title{
+  margin-bottom:10px!important;
+}
+#prayer #prayerContent .mystery-desc{
+  margin-bottom:12px!important;
+  line-height:1.55!important;
+}
+#prayer #prayerContent .ref{
+  margin-bottom:13px!important;
+}
+#prayer #prayerContent .section-label{
+  margin-top:16px!important;
+  margin-bottom:7px!important;
+}
+#prayer #prayerContent .reading,
+#prayer #prayerContent .meditation,
+#prayer #prayerContent .prayer-text,
+#devotionPanel.mercy-art #devotionContent .prayer-text,
+#devotionPanel.angelus-art #devotionContent .prayer-text{
+  margin-top:0!important;
+  margin-bottom:13px!important;
+  line-height:1.58!important;
+}
+#devotionPanel.angelus-art #devotionContent .angelus-line{
+  margin:0 0 9px!important;
+  padding:11px 12px!important;
+  line-height:1.55!important;
+}
+#prayer #prayerContent .beads,
+#devotionPanel.mercy-art #devotionContent .beads{
+  margin-top:13px!important;
+  margin-bottom:8px!important;
+  gap:8px!important;
+}
+#prayer #prayerContent .status,
+#devotionPanel.mercy-art #devotionContent .status{
+  margin-top:6px!important;
+  margin-bottom:9px!important;
+}
+#prayer #prayerContent .tap-anywhere-hint,
+#devotionPanel.mercy-art #devotionContent .tap-anywhere-hint,
+#devotionPanel.angelus-art #devotionContent .tap-anywhere-hint{
+  margin-top:11px!important;
+  margin-bottom:0!important;
+  line-height:1.4!important;
+}
+
+/* Drawer itself: less empty space and a smaller settings pill. */
+#prayer .prayer-settings-drawer,
+#devotionPanel.mercy-art .prayer-settings-drawer,
+#devotionPanel.angelus-art .prayer-settings-drawer{
+  margin-top:13px!important;
+}
+#prayer .prayer-settings-drawer > summary,
+#devotionPanel.mercy-art .prayer-settings-drawer > summary,
+#devotionPanel.angelus-art .prayer-settings-drawer > summary{
+  padding:5px 9px!important;
+  font-size:10.5px!important;
+}
+#prayer .prayer-settings-drawer[open] > summary,
+#devotionPanel.mercy-art .prayer-settings-drawer[open] > summary,
+#devotionPanel.angelus-art .prayer-settings-drawer[open] > summary{
+  margin:5px auto 4px!important;
+}
+.prayer-settings-content{
+  padding:2px 6px 6px!important;
+}
+.prayer-settings-content .prayer-settings-playback{
+  padding:0!important;
+  margin:0 0 4px!important;
+}
+.prayer-settings-content .compact-audio-row,
+.prayer-settings-content .prayer-bottom-settings{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:4px!important;
+  width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+}
+
+/* All six controls use the same 48px footprint. */
+.prayer-settings-content .compact-audio-row button,
+.prayer-settings-content .prayer-setting,
+.prayer-settings-content .prayer-setting.compact-speed-setting{
+  width:100%!important;
+  min-width:0!important;
+  height:48px!important;
+  min-height:48px!important;
+  max-height:48px!important;
+  box-sizing:border-box!important;
+  border-radius:11px!important;
+  margin:0!important;
+}
+.prayer-settings-content .compact-audio-row button{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  grid-template-rows:17px 14px!important;
+  align-content:center!important;
+  align-items:center!important;
+  justify-items:center!important;
+  row-gap:2px!important;
+  padding:5px 3px!important;
+  font-size:10px!important;
+  line-height:1!important;
+}
+.prayer-settings-content .compact-audio-row .audio-icon{
+  width:auto!important;
+  min-width:0!important;
+  font-size:14px!important;
+  line-height:17px!important;
+  margin:0!important;
+}
+.prayer-settings-content .compact-audio-row .audio-label{
+  font-size:10px!important;
+  line-height:14px!important;
+  margin:0!important;
+}
+.prayer-settings-content .prayer-setting,
+.prayer-settings-content .prayer-setting.compact-speed-setting{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  grid-template-rows:15px 14px 11px!important;
+  align-content:center!important;
+  align-items:center!important;
+  justify-items:center!important;
+  row-gap:1px!important;
+  padding:3px 3px!important;
+}
+.prayer-settings-content .prayer-setting .setting-icon,
+.prayer-settings-content .prayer-setting .speed-rate-icon{
+  grid-row:1!important;
+  width:100%!important;
+  font-size:13px!important;
+  line-height:15px!important;
+  margin:0!important;
+}
+.prayer-settings-content .prayer-setting .setting-label,
+.prayer-settings-content .prayer-setting .speed-title{
+  grid-row:2!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  min-height:14px!important;
+  padding:0!important;
+  margin:0!important;
+  font-size:9.5px!important;
+  line-height:14px!important;
+  white-space:nowrap!important;
+}
+.prayer-settings-content .prayer-setting .setting-state,
+.prayer-settings-content .prayer-setting .speed-visible{
+  grid-row:3!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  min-height:11px!important;
+  margin:0!important;
+  font-size:9px!important;
+  line-height:11px!important;
+}
+
+@media(max-width:360px){
+  #prayer #prayerContent{padding:13px 14px 15px!important;}
+  #devotionPanel.mercy-art,
+  #devotionPanel.angelus-art{padding:16px!important;}
+  .prayer-settings-content{padding-left:5px!important;padding-right:5px!important;}
+  .prayer-settings-content .compact-audio-row,
+  .prayer-settings-content .prayer-bottom-settings{gap:3px!important;}
+  .prayer-settings-content .compact-audio-row button,
+  .prayer-settings-content .prayer-setting,
+  .prayer-settings-content .prayer-setting.compact-speed-setting{
+    height:46px!important;
+    min-height:46px!important;
+    max-height:46px!important;
+  }
+  .prayer-settings-content .prayer-setting .setting-label,
+  .prayer-settings-content .prayer-setting .speed-title{
+    font-size:9px!important;
+  }
+}
+</style>
+
+<style id="cpc-short-prayer-no-forced-scroll">
+
+/* ---- cpc-short-prayer-no-forced-scroll ---- */
+/* Short Rosary / Divine Mercy / Angelus steps should fit naturally without
+   artificial viewport overflow. Long prayers still scroll normally. */
+#prayer.active,
+#devotions.active{
+  min-height:0!important;
+  height:auto!important;
+}
+body.cpc-prayer-screen-active .app{
+  min-height:100dvh!important;
+  padding-bottom:max(12px, env(safe-area-inset-bottom, 0px))!important;
+}
+@supports not (height:100dvh){
+  body.cpc-prayer-screen-active .app{min-height:100vh!important;}
+}
+@media(max-width:540px){
+  body.cpc-prayer-screen-active .app{
+    padding-bottom:max(10px, env(safe-area-inset-bottom, 0px))!important;
+  }
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -4639,6 +4878,7 @@ function setScreen(id,{fromHistory=false,routeKey=null}={}){
   if(previous && previous!==id) stopSpeech();
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  document.body.classList.toggle('cpc-prayer-screen-active', id==='prayer'||id==='devotions');
   if(id!=='prayer'&&id!=='devotions')releasePrayerWakeLock();
   const route=routeKey||id;
   if(!fromHistory){if(id==='home'){history.replaceState({cpcScreen:'home',cpcRoute:'home'},'');}else if(history.state?.cpcRoute!==route){history.pushState({cpcScreen:id,cpcRoute:route},'');}}
