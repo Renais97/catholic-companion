@@ -3893,6 +3893,66 @@ body .app .topbar .brand > span{
   body .app .topbar .topbar-actions .topbar-btn{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;}
 }
 </style>
+
+<style id="cpc-topbar-panels-v11">
+/* v11: visually smaller header panels while preserving header/tap space and icon size */
+body .app .topbar .topbar-actions .topbar-btn{
+  position:relative!important;
+  background:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+body .app .topbar .topbar-actions .topbar-btn::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:42px;
+  height:42px;
+  transform:translate(-50%,-50%);
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--panel);
+  box-sizing:border-box;
+  z-index:0;
+  transition:filter .15s ease,border-color .15s ease,background .15s ease;
+}
+body .app .topbar .topbar-actions .topbar-btn-icon{
+  position:relative!important;
+  z-index:1!important;
+}
+body .app .topbar .topbar-actions .topbar-btn:hover{filter:none!important;}
+body .app .topbar .topbar-actions .topbar-btn:hover::before{filter:brightness(1.03);}
+body .app .topbar .topbar-actions .topbar-btn:focus-visible{outline:none!important;}
+body .app .topbar .topbar-actions .topbar-btn:focus-visible::before{
+  outline:2px solid var(--accent2);
+  outline-offset:2px;
+}
+[data-theme="dark"] body .app .topbar .topbar-actions .topbar-btn{
+  background:transparent!important;
+  border-color:transparent!important;
+}
+[data-theme="dark"] body .app .topbar .topbar-actions .topbar-btn::before{
+  background:#2c2927;
+  border-color:#5d524a;
+}
+@media(max-width:540px){
+  body .app .topbar .topbar-actions .topbar-btn::before{
+    width:38px;
+    height:38px;
+    border-radius:11px;
+  }
+}
+@media(max-width:330px){
+  body .app .topbar .topbar-actions .topbar-btn::before{
+    width:36px;
+    height:36px;
+    border-radius:10px;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
