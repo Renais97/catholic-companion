@@ -4678,6 +4678,66 @@ body.cpc-prayer-screen-active #devotions.active{
   #home .grid > .card .home-title-text{font-size:13px!important;}
 }
 </style>
+
+<style id="cpc-home-refine-v21">
+/* v21 — slightly smaller Home icons, smaller Rosary CTA, and tighter Home rhythm without squeezing cards. */
+#home > #todayLabel{
+  margin-bottom:12px!important;
+}
+#home .hero .today-rosary-btn{
+  min-height:36px!important;
+  height:36px!important;
+  padding:5px 10px!important;
+  border-radius:11px!important;
+  font-size:13px!important;
+  line-height:1!important;
+}
+#home .resume-strip{
+  margin-bottom:14px!important;
+  padding:12px 14px!important;
+}
+#home .grid{
+  gap:8px!important;
+}
+/* Reduce the ten Home-grid icons by approximately 15% from v20. */
+#home .grid > .card .home-icon{
+  font-size:19.55px!important;
+}
+#home .grid > .card > strong{
+  gap:3px!important;
+}
+#home .grid + .home-network-status,
+#home .home-network-status{
+  margin-top:18px!important;
+}
+#home .home-network-status + .footer-note{
+  margin-top:12px!important;
+}
+#home > .footer-note{
+  margin-top:16px!important;
+}
+@media(max-width:540px){
+  #home > #todayLabel{margin-bottom:10px!important;}
+  #home .hero .today-rosary-btn{
+    min-height:37px!important;
+    height:37px!important;
+    padding:5px 8px!important;
+    border-radius:10px!important;
+    font-size:12.5px!important;
+  }
+  #home .resume-strip{
+    margin-bottom:12px!important;
+    padding:11px 12px!important;
+  }
+  #home .grid{gap:8px!important;}
+  #home .grid > .card .home-icon{font-size:18.7px!important;}
+  #home .grid > .card > strong{gap:3px!important;}
+  #home .grid + .home-network-status,
+  #home .home-network-status{margin-top:20px!important;}
+  #home .home-network-status + .footer-note{margin-top:11px!important;}
+}
+</style>
+
 </head>
 <body>
 <div class="app">
