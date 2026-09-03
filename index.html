@@ -3130,6 +3130,157 @@ body .app{
   margin-top:30px!important;
 }
 
+
+/* ---- cpc-daily-prayer-category-palette-v13 ---- */
+/* Every Daily Prayers category uses the same Essential Prayers layout;
+   only its palette changes. */
+#libraryPanel.prayers-art #libraryContent .other-prayer-group{
+  --prayer-cat: #a7772f;
+  --prayer-cat-rgb: 167,119,47;
+  --prayer-cat-dark: #efcf91;
+  border:1px solid rgba(var(--prayer-cat-rgb),.32)!important;
+  background:rgba(var(--prayer-cat-rgb),.09)!important;
+  box-shadow:0 8px 24px rgba(var(--prayer-cat-rgb),.055)!important;
+}
+#libraryPanel.prayers-art #libraryContent .other-prayer-daily{
+  --prayer-cat:#aa782e;
+  --prayer-cat-rgb:170,120,46;
+  --prayer-cat-dark:#efd08f;
+}
+#libraryPanel.prayers-art #libraryContent .other-prayer-spiritual{
+  --prayer-cat:#68875c;
+  --prayer-cat-rgb:104,135,92;
+  --prayer-cat-dark:#b9d7aa;
+}
+#libraryPanel.prayers-art #libraryContent .other-prayer-morning-night{
+  --prayer-cat:#6674a8;
+  --prayer-cat-rgb:102,116,168;
+  --prayer-cat-dark:#c7ccf0;
+}
+#libraryPanel.prayers-art #libraryContent .other-prayer-jesus-family{
+  --prayer-cat:#a85f63;
+  --prayer-cat-rgb:168,95,99;
+  --prayer-cat-dark:#efbdc1;
+}
+#libraryPanel.prayers-art #libraryContent .other-prayer-mary{
+  --prayer-cat:#4f7fb2;
+  --prayer-cat-rgb:79,127,178;
+  --prayer-cat-dark:#b9daf4;
+}
+#libraryPanel.prayers-art #libraryContent .other-prayer-guidance{
+  --prayer-cat:#8567a4;
+  --prayer-cat-rgb:133,103,164;
+  --prayer-cat-dark:#d7c3eb;
+}
+
+#libraryPanel.prayers-art #libraryContent .other-prayer-group-head{
+  margin-bottom:14px!important;
+  padding-bottom:12px!important;
+  border-bottom:1px solid rgba(var(--prayer-cat-rgb),.22)!important;
+}
+#libraryPanel.prayers-art #libraryContent .other-prayer-group-head span{
+  display:grid!important;
+  place-items:center!important;
+  width:34px!important;
+  height:34px!important;
+  flex:0 0 34px!important;
+  margin:0!important;
+  border-radius:50%!important;
+  background:rgba(var(--prayer-cat-rgb),.13)!important;
+  font-size:1.22rem!important;
+}
+#libraryPanel.prayers-art #libraryContent .other-prayer-group-head h3{
+  color:var(--prayer-cat)!important;
+  font-size:20px!important;
+  line-height:1.2!important;
+  font-weight:800!important;
+}
+
+/* Individual prayer cards: one shared format for every category. */
+#libraryPanel.prayers-art #libraryContent .other-prayer-group-list{
+  gap:10px!important;
+}
+#libraryPanel.prayers-art #libraryContent .other-prayer-item{
+  width:100%!important;
+  margin:0!important;
+  padding:15px 14px!important;
+  border:1px solid rgba(var(--prayer-cat-rgb),.23)!important;
+  border-radius:14px!important;
+  background:rgba(255,253,249,.86)!important;
+  box-shadow:0 4px 14px rgba(52,38,25,.035)!important;
+  text-align:center!important;
+}
+#libraryPanel.prayers-art #libraryContent .other-prayer-icon{
+  display:block!important;
+  margin:0 auto 8px!important;
+  font-size:1.65rem!important;
+  line-height:1!important;
+}
+#libraryPanel.prayers-art #libraryContent .other-prayer-item > b{
+  display:block!important;
+  margin:0 0 10px!important;
+  color:var(--prayer-cat)!important;
+  font-size:17px!important;
+  line-height:1.28!important;
+  font-weight:800!important;
+  text-align:center!important;
+}
+#libraryPanel.prayers-art #libraryContent .other-prayer-text{
+  display:block!important;
+  margin:0!important;
+  color:var(--ink)!important;
+  font-size:16px!important;
+  line-height:1.68!important;
+  white-space:normal!important;
+  text-align:center!important;
+}
+
+[data-theme='dark'] #libraryPanel.prayers-art #libraryContent .other-prayer-group{
+  border-color:rgba(var(--prayer-cat-rgb),.42)!important;
+  background:rgba(var(--prayer-cat-rgb),.11)!important;
+  box-shadow:none!important;
+}
+[data-theme='dark'] #libraryPanel.prayers-art #libraryContent .other-prayer-group-head{
+  border-bottom-color:rgba(var(--prayer-cat-rgb),.34)!important;
+}
+[data-theme='dark'] #libraryPanel.prayers-art #libraryContent .other-prayer-group-head span{
+  background:rgba(var(--prayer-cat-rgb),.20)!important;
+}
+[data-theme='dark'] #libraryPanel.prayers-art #libraryContent .other-prayer-group-head h3,
+[data-theme='dark'] #libraryPanel.prayers-art #libraryContent .other-prayer-item > b{
+  color:var(--prayer-cat-dark)!important;
+}
+[data-theme='dark'] #libraryPanel.prayers-art #libraryContent .other-prayer-item{
+  border-color:rgba(var(--prayer-cat-rgb),.34)!important;
+  background:rgba(49,42,39,.88)!important;
+  box-shadow:none!important;
+}
+[data-theme='dark'] #libraryPanel.prayers-art #libraryContent .other-prayer-text{
+  color:var(--ink)!important;
+}
+
+@media(max-width:540px){
+  #libraryPanel.prayers-art #libraryContent .other-prayer-group{
+    padding:14px!important;
+  }
+  #libraryPanel.prayers-art #libraryContent .other-prayer-group-head{
+    margin-bottom:12px!important;
+    padding-bottom:10px!important;
+  }
+  #libraryPanel.prayers-art #libraryContent .other-prayer-group-head h3{
+    font-size:18px!important;
+  }
+  #libraryPanel.prayers-art #libraryContent .other-prayer-item{
+    padding:14px 12px!important;
+  }
+  #libraryPanel.prayers-art #libraryContent .other-prayer-item > b{
+    font-size:16px!important;
+  }
+  #libraryPanel.prayers-art #libraryContent .other-prayer-text{
+    font-size:15px!important;
+  }
+}
+
 /* ---- cpc-share-safety ---- */
 #devotionPanel.prayers-art #devotionContent .share-safety-note{
   margin-top:24px!important;
@@ -3953,6 +4104,48 @@ body .app .topbar .topbar-actions .topbar-btn:focus-visible::before{
 }
 </style>
 
+
+<style id="cpc-hero-compact-v14">
+/* Home hero card: approximately 30% less vertical footprint, full width retained. */
+#home .hero{
+  padding:18px !important;
+  margin-bottom:15px !important;
+  border-radius:20px !important;
+}
+#home .hero .hero-title-stack{
+  gap:6px !important;
+  margin-bottom:11px !important;
+}
+#home .hero .hero-title-stack .hero-title-icon{
+  font-size:1.45rem !important;
+}
+#home .hero .hero-title-stack h1{
+  font-size:clamp(27px,6.2vw,38px) !important;
+  line-height:1.08 !important;
+}
+#home .hero .daily-quote{
+  font-size:16px !important;
+  line-height:1.45 !important;
+  margin:0 0 12px !important;
+}
+#home .hero .daily-quote cite{
+  margin-top:5px !important;
+}
+#home .hero .actions{
+  gap:8px !important;
+}
+#home .hero .today-rosary-btn{
+  padding:10px 14px !important;
+}
+@media(max-width:540px){
+  #home .hero{padding:14px !important;margin-bottom:14px !important;border-radius:18px !important;}
+  #home .hero .hero-title-stack{gap:5px !important;margin-bottom:9px !important;}
+  #home .hero .hero-title-stack .hero-title-icon{font-size:1.35rem !important;}
+  #home .hero .hero-title-stack h1{font-size:26px !important;}
+  #home .hero .daily-quote{font-size:15px !important;line-height:1.42 !important;margin-bottom:9px !important;}
+  #home .hero .daily-quote cite{margin-top:4px !important;}
+}
+</style>
 </head>
 <body>
 <div class="app">
