@@ -4814,6 +4814,146 @@ body.cpc-prayer-screen-active #devotions.active{
   #devotions .prayer-outside-controls{margin-top:7px!important;gap:6px;padding:0 1px;}
 }
 </style>
+
+<style id="cpc-balanced-density-v23">
+/* v23 — denser prayer + Home content without shrinking settled typography. */
+
+/* Rosary / Divine Mercy / Angelus: reduce empty space while retaining a calm reading rhythm. */
+#prayer .rosary-screen-heading{
+  padding:11px 14px 8px!important;
+}
+#prayer .rosary-screen-heading::after{
+  margin-top:8px!important;
+}
+#prayer #prayerContent{
+  padding:11px 15px 13px!important;
+}
+#devotionPanel.mercy-art,
+#devotionPanel.angelus-art{
+  padding:15px!important;
+}
+#devotionPanel.mercy-art > #devotionContent,
+#devotionPanel.angelus-art > #devotionContent{
+  margin-top:9px!important;
+  padding-top:11px!important;
+}
+#prayer #prayerContent > .eyebrow,
+#devotionPanel.mercy-art #devotionContent > .eyebrow,
+#devotionPanel.angelus-art #devotionContent > .eyebrow{
+  margin-bottom:4px!important;
+}
+#prayer #prayerContent .mystery-title,
+#devotionPanel.mercy-art #devotionContent .mystery-title,
+#devotionPanel.angelus-art #devotionContent .mystery-title{
+  margin-bottom:8px!important;
+}
+#prayer #prayerContent .mystery-desc{
+  margin-bottom:9px!important;
+  line-height:1.5!important;
+}
+#prayer #prayerContent .ref{
+  margin-bottom:10px!important;
+}
+#prayer #prayerContent .section-label{
+  margin-top:12px!important;
+  margin-bottom:5px!important;
+}
+#prayer #prayerContent .reading,
+#prayer #prayerContent .meditation,
+#prayer #prayerContent .prayer-text,
+#devotionPanel.mercy-art #devotionContent .prayer-text,
+#devotionPanel.angelus-art #devotionContent .prayer-text{
+  margin-top:0!important;
+  margin-bottom:10px!important;
+  line-height:1.52!important;
+}
+#devotionPanel.angelus-art #devotionContent .angelus-line{
+  margin:0 0 7px!important;
+  padding:9px 10px!important;
+  line-height:1.48!important;
+}
+#prayer #prayerContent .beads,
+#devotionPanel.mercy-art #devotionContent .beads{
+  margin-top:10px!important;
+  margin-bottom:6px!important;
+  gap:6px!important;
+}
+#prayer #prayerContent .status,
+#devotionPanel.mercy-art #devotionContent .status{
+  margin-top:4px!important;
+  margin-bottom:6px!important;
+}
+#prayer .prayer-outside-controls,
+#devotions .prayer-outside-controls{
+  margin-top:6px!important;
+  gap:5px!important;
+}
+#prayer .prayer-outside-controls .tap-anywhere-hint,
+#devotions .prayer-outside-controls .tap-anywhere-hint{
+  line-height:1.3!important;
+}
+
+/* Home hero: preserve sizes, simply tighten the vertical rhythm. */
+#home .hero .hero-title-stack{
+  gap:3px!important;
+  margin-bottom:6px!important;
+}
+#home .hero .daily-quote{
+  line-height:1.34!important;
+  margin-bottom:6px!important;
+}
+#home .hero .daily-quote cite{
+  margin-top:3px!important;
+}
+#home .hero .actions{
+  gap:4px!important;
+}
+
+/* All ten Home cards: bring icon + title together without changing card/title sizes. */
+#home .grid > .card > strong{
+  gap:2px!important;
+  line-height:1.05!important;
+}
+#home .grid > .card .home-icon{
+  line-height:1!important;
+  margin:0!important;
+}
+#home .grid > .card .home-title-text{
+  line-height:1.08!important;
+  margin:0!important;
+}
+
+/* Continue-prayer strip: slightly denser internals, same overall usability. */
+#home .resume-strip-main{
+  gap:8px!important;
+}
+#home .resume-strip-copy{
+  gap:1px!important;
+}
+#home .resume-strip-title{
+  line-height:1.15!important;
+}
+#home .resume-strip-sub{
+  line-height:1.28!important;
+}
+
+@media(max-width:540px){
+  #prayer .rosary-screen-heading{padding:10px 13px 7px!important;}
+  #prayer #prayerContent{padding:10px 13px 12px!important;}
+  #devotionPanel.mercy-art,
+  #devotionPanel.angelus-art{padding:14px!important;}
+  #devotionPanel.mercy-art > #devotionContent,
+  #devotionPanel.angelus-art > #devotionContent{margin-top:8px!important;padding-top:10px!important;}
+  #prayer #prayerContent .reading,
+  #prayer #prayerContent .meditation,
+  #prayer #prayerContent .prayer-text,
+  #devotionPanel.mercy-art #devotionContent .prayer-text,
+  #devotionPanel.angelus-art #devotionContent .prayer-text{line-height:1.5!important;margin-bottom:9px!important;}
+  #home .hero .hero-title-stack{margin-bottom:5px!important;}
+  #home .hero .daily-quote{margin-bottom:5px!important;}
+  #home .grid > .card > strong{gap:2px!important;}
+}
+</style>
 </head>
 <body>
 <div class="app">
