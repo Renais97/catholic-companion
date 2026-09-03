@@ -3858,11 +3858,46 @@ html,body{
   #home .grid > .card .home-title-text{font-size:13px!important;letter-spacing:-.075em!important;}
 }
 </style>
+
+<style id="cpc-topbar-brand-v10">
+/* v10: cleaner header — no decorative app mark; title stays on one line */
+body .app .topbar .brand{
+  gap:0!important;
+  flex:1 1 0!important;
+  min-width:0!important;
+  overflow:hidden!important;
+}
+body .app .topbar .brand .mark{display:none!important;}
+body .app .topbar .brand > span{
+  display:block!important;
+  max-width:100%!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  font-size:20px!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+}
+@media(max-width:540px){
+  body .app .topbar .brand > span{font-size:19px!important;}
+}
+@media(max-width:400px){
+  body .app .topbar .brand > span{font-size:18px!important;}
+}
+@media(max-width:360px){
+  body .app .topbar .brand > span{font-size:16px!important;}
+}
+@media(max-width:330px){
+  body .app .topbar .brand > span{font-size:13px!important;}
+  body .app .topbar .topbar-actions{gap:5px!important;}
+  body .app .topbar .topbar-actions .topbar-btn{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;}
+}
+</style>
 </head>
 <body>
 <div class="app">
   <div class="topbar">
-    <div class="brand"><div class="mark" aria-hidden="true">👼</div><span>Catholic Companion</span></div>
+    <div class="brand"><span>Catholic Companion</span></div>
     <div class="topbar-actions">
       <button class="iconbtn topbar-btn" id="settingsTopBtn" type="button" aria-label="App settings"><span class="topbar-btn-icon" aria-hidden="true">⚙️</span><span class="topbar-btn-text">Settings</span></button>
       <button class="iconbtn topbar-btn" id="themeToggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode"><span class="topbar-btn-icon" id="themeIcon" aria-hidden="true">🌙</span><span class="topbar-btn-text" id="themeText">Dark</span></button>
