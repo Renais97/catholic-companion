@@ -4638,6 +4638,46 @@ body.cpc-prayer-screen-active #devotions.active{
   }
 }
 </style>
+
+<style id="cpc-home-card-height-v20">
+/* v20 — Home grid cards 30% shorter than v19/v15; hero unchanged. */
+#home .grid > .card{
+  height:77px!important;
+  min-height:77px!important;
+  padding:5px 4px!important;
+  border-radius:11px!important;
+}
+#home .grid > .card > strong{
+  gap:4px!important;
+}
+#home .grid > .card .home-icon{
+  font-size:23px!important;
+}
+/* Keep the Home-card title typography chosen previously. */
+#home .grid > .card .home-title-text{
+  font-size:15px!important;
+}
+@media(max-width:540px){
+  #home .grid > .card{
+    height:84px!important;
+    min-height:84px!important;
+    padding:5px 1px!important;
+    border-radius:11px!important;
+  }
+  #home .grid > .card > strong{
+    gap:4px!important;
+  }
+  #home .grid > .card .home-icon{
+    font-size:22px!important;
+  }
+}
+@media(max-width:360px){
+  #home .grid > .card .home-title-text{font-size:14px!important;}
+}
+@media(max-width:330px){
+  #home .grid > .card .home-title-text{font-size:13px!important;}
+}
+</style>
 </head>
 <body>
 <div class="app">
