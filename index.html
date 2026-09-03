@@ -4248,6 +4248,144 @@ body .app .topbar .topbar-actions .topbar-btn:focus-visible::before{
 }
 </style>
 
+
+
+<style id="cpc-prayer-title-settings-compact-v16">
+/* v16: smaller prayer names in Rosary, Divine Mercy and Angelus. */
+#prayer #prayerContent .mystery-title,
+#devotionPanel.mercy-art #devotionContent .mystery-title,
+#devotionPanel.angelus-art #devotionContent .mystery-title{
+  font-size:27.2px!important; /* 20% smaller than the 34px devotion title */
+  line-height:1.14!important;
+  margin-top:0!important;
+  margin-bottom:14px!important;
+}
+/* Preserve a useful accessibility increase when Large Text is enabled. */
+body.cpc-large-text #prayer #prayerContent .mystery-title,
+body.cpc-large-text #devotionPanel.mercy-art #devotionContent .mystery-title,
+body.cpc-large-text #devotionPanel.angelus-art #devotionContent .mystery-title{
+  font-size:30px!important;
+}
+
+/* Prayer Settings: tighter shell and consistently spaced controls. */
+#prayer .prayer-settings-drawer,
+#devotionPanel.mercy-art .prayer-settings-drawer,
+#devotionPanel.angelus-art .prayer-settings-drawer{
+  margin-top:18px!important;
+}
+#prayer .prayer-settings-drawer > summary,
+#devotionPanel.mercy-art .prayer-settings-drawer > summary,
+#devotionPanel.angelus-art .prayer-settings-drawer > summary{
+  padding:6px 10px!important;
+  font-size:11px!important;
+}
+#prayer .prayer-settings-drawer[open],
+#devotionPanel.mercy-art .prayer-settings-drawer[open],
+#devotionPanel.angelus-art .prayer-settings-drawer[open]{
+  border-radius:13px!important;
+}
+#prayer .prayer-settings-drawer[open] > summary,
+#devotionPanel.mercy-art .prayer-settings-drawer[open] > summary,
+#devotionPanel.angelus-art .prayer-settings-drawer[open] > summary{
+  margin:6px auto 4px!important;
+}
+.prayer-settings-content{
+  padding:2px 8px 8px!important;
+}
+.prayer-settings-content .prayer-settings-playback{
+  padding:2px 0 5px!important;
+}
+.prayer-settings-content .compact-audio-row{
+  gap:5px!important;
+}
+.prayer-settings-content .compact-audio-row button{
+  min-height:32px!important;
+  padding:6px 5px!important;
+  font-size:11px!important;
+  gap:4px!important;
+}
+.prayer-settings-content .prayer-bottom-settings{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:5px!important;
+}
+.prayer-settings-content .prayer-setting,
+.prayer-settings-content .prayer-setting.compact-speed-setting{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  grid-template-rows:18px 18px 14px!important;
+  align-content:center!important;
+  align-items:center!important;
+  justify-items:center!important;
+  row-gap:3px!important;
+  min-height:58px!important;
+  padding:5px 5px!important;
+  box-sizing:border-box!important;
+}
+.prayer-settings-content .prayer-setting .setting-icon,
+.prayer-settings-content .prayer-setting .speed-rate-icon{
+  grid-row:1!important;
+  width:100%!important;
+  margin:0!important;
+  font-size:15px!important;
+  line-height:18px!important;
+}
+.prayer-settings-content .prayer-setting .setting-label,
+.prayer-settings-content .prayer-setting .speed-title{
+  grid-row:2!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  min-height:18px!important;
+  margin:0!important;
+  padding:0 1px!important;
+  font-size:10.5px!important;
+  line-height:18px!important;
+  white-space:nowrap!important;
+}
+.prayer-settings-content .prayer-setting .setting-state,
+.prayer-settings-content .prayer-setting .speed-visible{
+  grid-row:3!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  min-height:14px!important;
+  margin:0!important;
+  font-size:10px!important;
+  line-height:14px!important;
+}
+@media(max-width:380px){
+  .prayer-settings-content .prayer-bottom-settings{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:4px!important;
+  }
+  .prayer-settings-content .prayer-setting,
+  .prayer-settings-content .prayer-setting.compact-speed-setting{
+    grid-template-rows:17px 17px 13px!important;
+    row-gap:2px!important;
+    min-height:53px!important;
+    padding:4px 3px!important;
+  }
+  .prayer-settings-content .prayer-setting .setting-label,
+  .prayer-settings-content .prayer-setting .speed-title{
+    min-height:17px!important;
+    font-size:10px!important;
+    line-height:17px!important;
+  }
+  .prayer-settings-content .prayer-setting .setting-state,
+  .prayer-settings-content .prayer-setting .speed-visible{
+    min-height:13px!important;
+    font-size:9.5px!important;
+    line-height:13px!important;
+  }
+  .prayer-settings-content .compact-audio-row button{
+    padding:5px 3px!important;
+    font-size:10.5px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
