@@ -5261,6 +5261,24 @@ function setPanelArt(id, classes){
 }
 function goHome({fromHistory=false}={}){releasePrayerWakeLock();stopSpeech();save();updateHomeTrackers();setScreen('home',{fromHistory});}
 function todayKey(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function cpcLocalDayKeyFromTimestamp(ts){
+ const d=new Date(Number(ts));
+ if(!Number.isFinite(d.getTime()))return '';
+ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function cpcPrayerStateDayKey(x){
+ if(!x||typeof x!=='object')return '';
+ const saved=String(x.dayKey||'');
+ if(/^\d{4}-\d{2}-\d{2}$/.test(saved))return saved;
+ return x.updatedAt?cpcLocalDayKeyFromTimestamp(x.updatedAt):'';
+}
+function cpcPrayerStateIsToday(x){return cpcPrayerStateDayKey(x)===todayKey()}
+function cpcStampPrayerState(x){
+ if(!x||typeof x!=='object')return x;
+ x.dayKey=todayKey();
+ x.updatedAt=Date.now();
+ return x;
+}
 function markComplete(kind){
  localStorage.setItem(`cpc-complete-${kind}`,todayKey());
  updateHomeTrackers();
@@ -5271,7 +5289,7 @@ function completionMoment(message='Prayer offered with love'){return `<div class
 function setTracker(kind,pct,label,complete=false){const fill=document.getElementById(`${kind}TrackerFill`),lab=document.getElementById(`${kind}TrackerLabel`),wrap=document.getElementById(`${kind}Tracker`),track=document.getElementById(`${kind}TrackerTrack`);const p=Math.max(0,Math.min(100,pct));if(fill)fill.style.width=`${p}%`;if(track)track.style.setProperty('--marker-left',`${Math.max(3,Math.min(97,p))}%`);if(lab)lab.textContent=label;if(wrap)wrap.classList.toggle('complete',complete)}
 function updateHomeTrackers(){
  let rs=null;try{rs=JSON.parse(localStorage.getItem('rosaryState')||'null')}catch(e){}
- const rosDone=isCompleteToday('rosary');const total=33;const rp=rosDone?100:(rs&&rs.setKey?Math.min(99,Math.round(((rs.step||0)/total)*100)):0);
+ const rosDone=isCompleteToday('rosary');const total=33;const rsToday=rs&&cpcPrayerStateIsToday(rs);const rp=rosDone?100:(rsToday&&rs.setKey?Math.min(99,Math.round(((rs.step||0)/total)*100)):0);
  setTracker('rosary',rp,rosDone?'Prayer offered with love ✝':(rp?'In prayer':'A quiet moment awaits'),rosDone);
  const mercyDone=isCompleteToday('mercy');const mp=mercyDone?100:Math.min(99,Math.round(((mercyState.step||0)/16)*100));
  setTracker('mercy',mp,mercyDone?'Prayer offered with love ✝':(mp?'In prayer':'A quiet moment awaits'),mercyDone);
@@ -5848,6 +5866,23 @@ async function downloadCompleteBible(){
   if(btn){btn.textContent='Downloaded';btn.disabled=true}if(bar)setTimeout(()=>bar.style.display='none',700);await updateBibleOfflineStatus();
  }catch(e){if(btn){btn.disabled=false;btn.textContent='Resume download'}const st=document.getElementById('bibleOfflineStatus');if(st)st.textContent=`Download paused after ${done} of ${bibleBooks.length} books. Check your connection and tap Resume.`}
 }
+function liturgicalTypeLabel(value){
+ const raw=String(value||'').trim();
+ if(!raw)return '';
+ const key=raw.toUpperCase().replace(/[\s-]+/g,'_');
+ const labels={
+  OPT_MEMORIAL:'Optional Memorial',
+  OPTIONAL_MEMORIAL:'Optional Memorial',
+  MEMORIAL:'Memorial',
+  FEAST:'Feast',
+  SOLEMNITY:'Solemnity',
+  FERIA:'Feria',
+  SUNDAY:'Sunday',
+  WEEKDAY:'Weekday'
+ };
+ if(labels[key])return labels[key];
+ return raw.replace(/_/g,' ').replace(/\s+/g,' ').trim().toLowerCase().replace(/\b\w/g,ch=>ch.toUpperCase());
+}
 async function renderSaintOfDay(){
  const c=document.getElementById('devotionContent'),d=new Date(),p=apiDateParts(d),cacheKey=`cpc-saint-${todayKey()}`;
  const dateText=d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
@@ -5870,7 +5905,7 @@ async function renderSaintOfDay(){
 
  const cel=cal.celebration||{};
  const name=cel.name||'Today in the Liturgical Calendar';
- const type=cel.type||cal.season||'Feria';
+ const type=liturgicalTypeLabel(cel.type)||cal.season||'Feria';
  const hasBio=Boolean(cel.description);
  const desc=cel.description||'No biographical note is available for this celebration in the current calendar source.';
  const quote=cel.quote||'';
@@ -6298,7 +6333,7 @@ async function renderDailyReadings(){
  try{
   const [rr,cr]=await Promise.all([fetch(`https://cpbjr.github.io/catholic-readings-api/readings/${p.y}/${p.md}.json`),fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`)]);
   if(!rr.ok) throw new Error('readings'); const r=await rr.json(); const cal=cr.ok?await cr.json():null; const x=r.readings||{}; const cards=renderReadingSet(x,cal);
-  c.innerHTML=`${cal&&cal.celebration?`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><h3 class="today-liturgical-title" style="--lit-title:${liturgicalColour(cal).hex}">${esc(cal.celebration.name)}</h3><div class="muted">${esc(cal.celebration.type||'')}${cal.season?' · '+esc(cal.season):''} · <span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div></button>`:`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><div class="muted">${esc(r.season||'')}</div></button>`}
+  c.innerHTML=`${cal&&cal.celebration?`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><h3 class="today-liturgical-title" style="--lit-title:${liturgicalColour(cal).hex}">${esc(cal.celebration.name)}</h3><div class="muted">${esc(liturgicalTypeLabel(cal.celebration.type))}${cal.season?' · '+esc(cal.season):''} · <span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div></button>`:`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><div class="muted">${esc(r.season||'')}</div></button>`}
   ${officialMassReadingSources(d)}
   ${cards}
   ${dailyGospelReflection(cal,x,d)}
@@ -6320,7 +6355,7 @@ function liturgicalColour(data){
  if(season.includes('ordinary')) return {key:'green',hex:'#4f7b58',label:'Green',textLight:'#35643f',textDark:'#94d3a1'};
  if(season.includes('easter')||season.includes('christmas')) return {key:'white',hex:'#d6b75e',label:'White / Gold',textLight:'#8b6a16',textDark:'#f0d784'};
  // Most solemnities/feasts of Our Lord, Our Lady, angels and non-martyr saints use white.
- if(cel.type && ['SOLEMNITY','FEAST','MEMORIAL','OPTIONAL MEMORIAL'].includes(String(cel.type).toUpperCase())) return {key:'white',hex:'#d6b75e',label:'White / Gold',textLight:'#8b6a16',textDark:'#f0d784'};
+ if(cel.type && ['SOLEMNITY','FEAST','MEMORIAL','OPTIONAL_MEMORIAL','OPT_MEMORIAL'].includes(String(cel.type).trim().toUpperCase().replace(/[\s-]+/g,'_'))) return {key:'white',hex:'#d6b75e',label:'White / Gold',textLight:'#8b6a16',textDark:'#f0d784'};
  return {key:'neutral',hex:'#c8beb4',label:'Liturgical day',textLight:'#6f6258',textDark:'#d9cdc4'};
 }
 function liturgicalLegend(){
@@ -6387,7 +6422,7 @@ function showCalendarPopup(y,m,n){
  const d=new Date(y,m,n);
  const lc=liturgicalColour(data);
  const name=data&&data.celebration?data.celebration.name:(data&&data.season?data.season:'Liturgical day');
- const type=data&&data.celebration&&data.celebration.type?data.celebration.type:'';
+ const type=data&&data.celebration&&data.celebration.type?liturgicalTypeLabel(data.celebration.type):'';
  const desc=data&&data.celebration&&data.celebration.description?data.celebration.description:'';
  const season=data&&data.season?data.season:'';
  const old=document.getElementById('calendarDayPopup'); if(old)old.remove();
@@ -6415,7 +6450,7 @@ async function showCalendarDay(y,m,n){
  const d=new Date(y,m,n),p=apiDateParts(d),c=document.getElementById('devotionContent');c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><h3>${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</h3><div class="notice">Loading liturgical information and reading references…</div>`;
  try{
   const [cr,rr]=await Promise.all([fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`),fetch(`https://cpbjr.github.io/catholic-readings-api/readings/${p.y}/${p.md}.json`)]);const cal=cr.ok?await cr.json():null,r=rr.ok?await rr.json():null,x=r&&r.readings?r.readings:{};const cards=r?renderReadingSet(x,cal):'';
-  c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><h3>${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</h3>${cal&&cal.celebration?`<div class="reading-card"><div class="eyebrow">${esc(cal.celebration.type||'Celebration')}</div><h3>${esc(cal.celebration.name)}</h3><div class="muted">${esc(cal.season||'')} · <span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div>${cal.celebration.description?`<p>${esc(cal.celebration.description)}</p>`:''}</div>`:`<div class="reading-card"><div class="muted">${esc(cal&&cal.season?cal.season:(r&&r.season?r.season:'Liturgical day'))}</div></div>`}${officialMassReadingSources(d)}${cards}${r?dailyReflection(cal,x):''}`;
+  c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><h3>${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</h3>${cal&&cal.celebration?`<div class="reading-card"><div class="eyebrow">${esc(liturgicalTypeLabel(cal.celebration.type)||'Celebration')}</div><h3>${esc(cal.celebration.name)}</h3><div class="muted">${esc(cal.season||'')} · <span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div>${cal.celebration.description?`<p>${esc(cal.celebration.description)}</p>`:''}</div>`:`<div class="reading-card"><div class="muted">${esc(cal&&cal.season?cal.season:(r&&r.season?r.season:'Liturgical day'))}</div></div>`}${officialMassReadingSources(d)}${cards}${r?dailyReflection(cal,x):''}`;
  }catch(e){c.innerHTML+=`<div class="notice">Information for this day could not be loaded.</div>`}
 }
 
@@ -6506,12 +6541,39 @@ window.testCpcHaptics=function(){
 };
 
 /* Persist every prayer session, not just the Rosary. */
-try{const x=safeJSON('cpc-mercy-state',null);if(x&&typeof mercyState==='object')Object.assign(mercyState,x)}catch(_){ }
-try{const x=safeJSON('cpc-angelus-state',null);if(x&&typeof angelusState==='object')Object.assign(angelusState,x)}catch(_){ }
+try{
+ const x=safeJSON('cpc-mercy-state',null);
+ if(x&&cpcPrayerStateIsToday(x)&&typeof mercyState==='object')Object.assign(mercyState,x);
+ else if(x)localStorage.removeItem('cpc-mercy-state');
+}catch(_){ }
+try{
+ const x=safeJSON('cpc-angelus-state',null);
+ if(x&&cpcPrayerStateIsToday(x)&&typeof angelusState==='object')Object.assign(angelusState,x);
+ else if(x)localStorage.removeItem('cpc-angelus-state');
+}catch(_){ }
+try{
+ const x=safeJSON('rosaryState',null);
+ if(x&&!cpcPrayerStateIsToday(x))localStorage.removeItem('rosaryState');
+}catch(_){ }
 const baseSave = save;
-window.save = function(){state.updatedAt=Date.now();baseSave();updateResumeStrip()};
-function saveMercyState(){mercyState.updatedAt=Date.now();localStorage.setItem('cpc-mercy-state',JSON.stringify(mercyState));updateResumeStrip()}
-function saveAngelusState(){angelusState.updatedAt=Date.now();localStorage.setItem('cpc-angelus-state',JSON.stringify(angelusState));updateResumeStrip()}
+window.save = function(){
+ const savedDay=cpcPrayerStateDayKey(state);
+ if(!savedDay||savedDay===todayKey())cpcStampPrayerState(state);
+ baseSave();
+ updateResumeStrip();
+};
+function saveMercyState(){
+ const savedDay=cpcPrayerStateDayKey(mercyState);
+ if(!savedDay||savedDay===todayKey())cpcStampPrayerState(mercyState);
+ localStorage.setItem('cpc-mercy-state',JSON.stringify(mercyState));
+ updateResumeStrip();
+}
+function saveAngelusState(){
+ const savedDay=cpcPrayerStateDayKey(angelusState);
+ if(!savedDay||savedDay===todayKey())cpcStampPrayerState(angelusState);
+ localStorage.setItem('cpc-angelus-state',JSON.stringify(angelusState));
+ updateResumeStrip();
+}
 
 function wrapStateFunction(name,after){const old=window[name];if(typeof old!=='function')return;window[name]=function(...args){const out=old.apply(this,args);try{after?.(out,args)}catch(_){}return out}}
 ['mercyNext','advanceMercyBead','retreatMercyBead','previousMercy','autoMercySmall','autoMercyHoly'].forEach(n=>wrapStateFunction(n,()=>saveMercyState()));
@@ -6552,9 +6614,9 @@ function mercyStepName(ms){const s=ms?.step||0;if(s<4)return mercyOpeningTitles[
 function angelusStepName(as){const steps=activeMarianSteps();return steps[Math.min(as?.step||0,steps.length-1)]?.title||currentMarianPrayerName()}
 function activeSessions(){
  const rs=safeJSON('rosaryState',null),ms=safeJSON('cpc-mercy-state',null),as=safeJSON('cpc-angelus-state',null),list=[];
- if(rs?.setKey&&!isCompleteToday('rosary'))list.push({kind:'rosary',at:rs.updatedAt||0,label:`Rosary · ${rosaryStepName(rs)}`});
- if(ms&&ms.step>0&&!isCompleteToday('mercy'))list.push({kind:'mercy',at:ms.updatedAt||0,label:`Divine Mercy · ${mercyStepName(ms)}`});
- if(as&&as.step>0&&!isCompleteToday('angelus'))list.push({kind:'angelus',at:as.updatedAt||0,label:`${currentMarianPrayerName()} · ${angelusStepName(as)}`});
+ if(rs?.setKey&&cpcPrayerStateIsToday(rs)&&!isCompleteToday('rosary'))list.push({kind:'rosary',at:rs.updatedAt||0,label:`Rosary · ${rosaryStepName(rs)}`});
+ if(ms&&cpcPrayerStateIsToday(ms)&&ms.step>0&&!isCompleteToday('mercy'))list.push({kind:'mercy',at:ms.updatedAt||0,label:`Divine Mercy · ${mercyStepName(ms)}`});
+ if(as&&cpcPrayerStateIsToday(as)&&as.step>0&&!isCompleteToday('angelus'))list.push({kind:'angelus',at:as.updatedAt||0,label:`${currentMarianPrayerName()} · ${angelusStepName(as)}`});
  return list.sort((a,b)=>b.at-a.at);
 }
 function updateResumeStrip(){
@@ -6564,7 +6626,7 @@ function updateResumeStrip(){
 }
 window.resumePrayer=function(){
  const x=activeSessions()[0];if(!x){startToday();return}
- if(x.kind==='rosary'){const rs=safeJSON('rosaryState',null);if(rs){Object.assign(state,rs);requestPrayerWakeLock();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=state.setKey;setPanelArt('prayerContent',`panel-art rosary-art ${state.setKey}-art`);renderPrayer();setScreen('prayer',{routeKey:'prayer:rosary'});return}}
+ if(x.kind==='rosary'){const rs=safeJSON('rosaryState',null);if(rs&&cpcPrayerStateIsToday(rs)){Object.assign(state,rs);requestPrayerWakeLock();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=state.setKey;setPanelArt('prayerContent',`panel-art rosary-art ${state.setKey}-art`);renderPrayer();setScreen('prayer',{routeKey:'prayer:rosary'});return}}
  if(x.kind==='mercy'){const ms=safeJSON('cpc-mercy-state',null);if(ms)Object.assign(mercyState,ms);showDevotion('divineMercy');return}
  if(x.kind==='angelus'){const as=safeJSON('cpc-angelus-state',null);if(as)Object.assign(angelusState,as);showDevotion('angelus');return}
 };
@@ -6674,22 +6736,28 @@ window.showDevotion=function(type,{fromHistory=false}={}){
    if(type==='settings'){releasePrayerWakeLock();e.textContent='Preferences';t.textContent='App Settings';renderCpcSettings();return}
    if(type==='divineMercy'){
      e.textContent='Devotion';t.textContent='Chaplet of Divine Mercy';
-     if(isCompleteToday('mercy')&&!fromHistory){
+     const x=safeJSON('cpc-mercy-state',null);
+     const sameDay=!!(x&&cpcPrayerStateIsToday(x));
+     if((isCompleteToday('mercy')&&!fromHistory)||!sameDay){
        mercyState={step:0,decade:0,small:0,holy:0};
+       cpcStampPrayerState(mercyState);
        localStorage.setItem('cpc-mercy-state',JSON.stringify(mercyState));
      }else{
-       const x=safeJSON('cpc-mercy-state',null);if(x)Object.assign(mercyState,x);
+       Object.assign(mercyState,x);
      }
      requestPrayerWakeLock();renderMercy();return
    }
    if(type==='angelus'){
      e.textContent='Marian prayer';t.textContent=currentMarianPrayerName();
-     if(isCompleteToday('angelus')&&!fromHistory){
+     const x=safeJSON('cpc-angelus-state',null);
+     const sameDay=!!(x&&cpcPrayerStateIsToday(x));
+     if((isCompleteToday('angelus')&&!fromHistory)||!sameDay){
        angelusState={step:0};
+       cpcStampPrayerState(angelusState);
        localStorage.setItem('cpc-angelus-state',JSON.stringify(angelusState));
        localStorage.setItem('cpc-started-angelus',todayKey());
      }else{
-       const x=safeJSON('cpc-angelus-state',null);if(x)Object.assign(angelusState,x);
+       Object.assign(angelusState,x);
        if(!isCompleteToday('angelus'))localStorage.setItem('cpc-started-angelus',todayKey());
      }
      requestPrayerWakeLock();updateHomeTrackers();window.renderAngelus();return
@@ -6897,7 +6965,7 @@ let cpcBibleSearchTimer = null;
         <h3>${cpcEsc(title)}</h3>
         <div class="cpc-day-sub">${cpcEsc(dateText)}</div>
         ${season ? `<div class="cpc-day-row"><strong>Season:</strong> ${cpcEsc(season)}</div>` : ''}
-        ${rank ? `<div class="cpc-day-row"><strong>Celebration:</strong> ${cpcEsc(rank)}</div>` : ''}
+        ${rank ? `<div class="cpc-day-row"><strong>Celebration:</strong> ${cpcEsc(typeof liturgicalTypeLabel==='function'?liturgicalTypeLabel(rank):rank)}</div>` : ''}
         ${color ? `<div class="cpc-day-row"><strong>Liturgical colour:</strong> ${cpcEsc(color)}</div>` : ''}
         <div class="cpc-day-hint">Tap to open Mass readings</div>
       </div>`;
