@@ -1,4 +1,4 @@
-const CACHE_NAME = 'catholic-companion-release-v31';
+const CACHE_NAME = 'catholic-companion-release-v32';
 const APP_SHELL = [
   './',
   './index.html',

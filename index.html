@@ -5880,7 +5880,7 @@ function liturgicalTypeLabel(value){
   SUNDAY:'Sunday',
   WEEKDAY:'Weekday'
  };
- if(labels[key])return labels[key];
+ if(Object.prototype.hasOwnProperty.call(labels,key))return labels[key];
  return raw.replace(/_/g,' ').replace(/\s+/g,' ').trim().toLowerCase().replace(/\b\w/g,ch=>ch.toUpperCase());
 }
 function liturgicalMetaText(cal){
