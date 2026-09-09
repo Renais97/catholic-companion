@@ -4987,6 +4987,61 @@ body.cpc-prayer-screen-active #devotions.active{
 }
 </style>
 
+
+<style id="cpc-mass-cycle-v33">
+/* Daily Mass Readings — compact three-year Sunday lectionary cycle */
+#devotionPanel.readings-art .mass-cycle-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  margin-top:10px;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+#devotionPanel.readings-art .mass-cycle-caption{
+  color:var(--muted);
+  font-size:.69rem;
+  line-height:1;
+  font-weight:750;
+  letter-spacing:.095em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+#devotionPanel.readings-art .mass-cycle-options{
+  display:inline-grid;
+  grid-template-columns:repeat(3,30px);
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:color-mix(in srgb,var(--panel) 90%,var(--soft) 10%);
+}
+#devotionPanel.readings-art .mass-cycle-option{
+  display:grid;
+  place-items:center;
+  min-height:26px;
+  padding:0 5px;
+  color:var(--muted);
+  font-size:.76rem;
+  line-height:1;
+  font-weight:800;
+}
+#devotionPanel.readings-art .mass-cycle-option + .mass-cycle-option{
+  border-left:1px solid var(--line);
+}
+#devotionPanel.readings-art .mass-cycle-option.active{
+  background:var(--accent);
+  color:#fff;
+}
+[data-theme="dark"] #devotionPanel.readings-art .mass-cycle-option.active{
+  color:#241d1a;
+}
+@media(max-width:360px){
+  #devotionPanel.readings-art .mass-cycle-row{gap:7px;margin-top:9px}
+  #devotionPanel.readings-art .mass-cycle-options{grid-template-columns:repeat(3,28px)}
+  #devotionPanel.readings-art .mass-cycle-option{min-height:25px;font-size:.73rem}
+}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -5888,6 +5943,27 @@ function liturgicalMetaText(cal){
  const season=cal&&cal.season?String(cal.season):'';
  return [type,season].filter(Boolean).join(' · ');
 }
+function firstSundayOfAdvent(year){
+ const d=new Date(year,10,27);
+ d.setHours(0,0,0,0);
+ d.setDate(d.getDate()+((7-d.getDay())%7));
+ return d;
+}
+function liturgicalYearForDate(date){
+ const d=new Date(date.getFullYear(),date.getMonth(),date.getDate());
+ const civilYear=d.getFullYear();
+ return d>=firstSundayOfAdvent(civilYear)?civilYear+1:civilYear;
+}
+function sundayLectionaryCycle(date){
+ const y=liturgicalYearForDate(date);
+ const mod=((y%3)+3)%3;
+ return mod===1?'A':mod===2?'B':'C';
+}
+function massLectionaryCycleHtml(date){
+ const active=sundayLectionaryCycle(date);
+ const pills=['A','B','C'].map(letter=>`<span class="mass-cycle-option${letter===active?' active':''}"${letter===active?' aria-current="true"':''}>${letter}</span>`).join('');
+ return `<div class="mass-cycle-row" aria-label="Sunday lectionary cycle: Year ${active}"><span class="mass-cycle-caption">Sunday cycle</span><span class="mass-cycle-options" aria-hidden="true">${pills}</span></div>`;
+}
 async function renderSaintOfDay(){
  const c=document.getElementById('devotionContent'),d=new Date(),p=apiDateParts(d),cacheKey=`cpc-saint-${todayKey()}`;
  const dateText=d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
@@ -6338,7 +6414,7 @@ async function renderDailyReadings(){
  try{
   const [rr,cr]=await Promise.all([fetch(`https://cpbjr.github.io/catholic-readings-api/readings/${p.y}/${p.md}.json`),fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`)]);
   if(!rr.ok) throw new Error('readings'); const r=await rr.json(); const cal=cr.ok?await cr.json():null; const x=r.readings||{}; const cards=renderReadingSet(x,cal); const litMeta=liturgicalMetaText(cal);
-  c.innerHTML=`${cal&&cal.celebration?`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><h3 class="today-liturgical-title" style="--lit-title:${liturgicalColour(cal).hex}">${esc(cal.celebration.name)}</h3><div class="muted">${litMeta?esc(litMeta)+' · ':''}<span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div></button>`:`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><div class="muted">${esc(r.season||'')}</div></button>`}
+  c.innerHTML=`${cal&&cal.celebration?`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><h3 class="today-liturgical-title" style="--lit-title:${liturgicalColour(cal).hex}">${esc(cal.celebration.name)}</h3><div class="muted">${litMeta?esc(litMeta)+' · ':''}<span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div>${massLectionaryCycleHtml(d)}</button>`:`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><div class="muted">${esc(r.season||'')}</div>${massLectionaryCycleHtml(d)}</button>`}
   ${officialMassReadingSources(d)}
   ${cards}
   ${dailyGospelReflection(cal,x,d)}
