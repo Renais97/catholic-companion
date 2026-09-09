@@ -5871,8 +5871,8 @@ function liturgicalTypeLabel(value){
  if(!raw)return '';
  const key=raw.toUpperCase().replace(/[\s-]+/g,'_');
  const labels={
-  OPT_MEMORIAL:'Optional Memorial',
-  OPTIONAL_MEMORIAL:'Optional Memorial',
+  OPT_MEMORIAL:'',
+  OPTIONAL_MEMORIAL:'',
   MEMORIAL:'Memorial',
   FEAST:'Feast',
   SOLEMNITY:'Solemnity',
@@ -5882,6 +5882,11 @@ function liturgicalTypeLabel(value){
  };
  if(labels[key])return labels[key];
  return raw.replace(/_/g,' ').replace(/\s+/g,' ').trim().toLowerCase().replace(/\b\w/g,ch=>ch.toUpperCase());
+}
+function liturgicalMetaText(cal){
+ const type=cal&&cal.celebration?liturgicalTypeLabel(cal.celebration.type):'';
+ const season=cal&&cal.season?String(cal.season):'';
+ return [type,season].filter(Boolean).join(' · ');
 }
 async function renderSaintOfDay(){
  const c=document.getElementById('devotionContent'),d=new Date(),p=apiDateParts(d),cacheKey=`cpc-saint-${todayKey()}`;
@@ -5905,7 +5910,7 @@ async function renderSaintOfDay(){
 
  const cel=cal.celebration||{};
  const name=cel.name||'Today in the Liturgical Calendar';
- const type=liturgicalTypeLabel(cel.type)||cal.season||'Feria';
+ const type=liturgicalTypeLabel(cel.type)||(!cel.type?(cal.season||'Feria'):'');
  const hasBio=Boolean(cel.description);
  const desc=cel.description||'No biographical note is available for this celebration in the current calendar source.';
  const quote=cel.quote||'';
@@ -5913,7 +5918,7 @@ async function renderSaintOfDay(){
  const colour=liturgicalColour(cal);
 
  c.innerHTML=`<div class="saint-card-detail">
-   <div class="saint-type-line">${esc(type)}</div>
+   ${type?`<div class="saint-type-line">${esc(type)}</div>`:''}
    <div class="saint-liturgical-colour" aria-label="${esc(colour.label)}${cal.season?` · ${esc(cal.season)}`:''}"><span class="lit-dot" style="--lit:${colour.hex}"></span><span>${esc(colour.label)}${cal.season?` · ${esc(cal.season)}`:''}</span></div>
    <div class="saint-liturgical-date">${dateText}</div>
    <h2 class="mystery-title">${esc(name)}</h2>
@@ -6332,8 +6337,8 @@ async function renderDailyReadings(){
  c.innerHTML=`<div class="notice">Loading today’s liturgical information and reading references…</div>`;
  try{
   const [rr,cr]=await Promise.all([fetch(`https://cpbjr.github.io/catholic-readings-api/readings/${p.y}/${p.md}.json`),fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`)]);
-  if(!rr.ok) throw new Error('readings'); const r=await rr.json(); const cal=cr.ok?await cr.json():null; const x=r.readings||{}; const cards=renderReadingSet(x,cal);
-  c.innerHTML=`${cal&&cal.celebration?`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><h3 class="today-liturgical-title" style="--lit-title:${liturgicalColour(cal).hex}">${esc(cal.celebration.name)}</h3><div class="muted">${esc(liturgicalTypeLabel(cal.celebration.type))}${cal.season?' · '+esc(cal.season):''} · <span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div></button>`:`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><div class="muted">${esc(r.season||'')}</div></button>`}
+  if(!rr.ok) throw new Error('readings'); const r=await rr.json(); const cal=cr.ok?await cr.json():null; const x=r.readings||{}; const cards=renderReadingSet(x,cal); const litMeta=liturgicalMetaText(cal);
+  c.innerHTML=`${cal&&cal.celebration?`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><h3 class="today-liturgical-title" style="--lit-title:${liturgicalColour(cal).hex}">${esc(cal.celebration.name)}</h3><div class="muted">${litMeta?esc(litMeta)+' · ':''}<span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div></button>`:`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><div class="muted">${esc(r.season||'')}</div></button>`}
   ${officialMassReadingSources(d)}
   ${cards}
   ${dailyGospelReflection(cal,x,d)}
@@ -6449,8 +6454,8 @@ function changeWeek(n){calDate=new Date(calDate.getFullYear(),calDate.getMonth()
 async function showCalendarDay(y,m,n){
  const d=new Date(y,m,n),p=apiDateParts(d),c=document.getElementById('devotionContent');c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><h3>${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</h3><div class="notice">Loading liturgical information and reading references…</div>`;
  try{
-  const [cr,rr]=await Promise.all([fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`),fetch(`https://cpbjr.github.io/catholic-readings-api/readings/${p.y}/${p.md}.json`)]);const cal=cr.ok?await cr.json():null,r=rr.ok?await rr.json():null,x=r&&r.readings?r.readings:{};const cards=r?renderReadingSet(x,cal):'';
-  c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><h3>${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</h3>${cal&&cal.celebration?`<div class="reading-card"><div class="eyebrow">${esc(liturgicalTypeLabel(cal.celebration.type)||'Celebration')}</div><h3>${esc(cal.celebration.name)}</h3><div class="muted">${esc(cal.season||'')} · <span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div>${cal.celebration.description?`<p>${esc(cal.celebration.description)}</p>`:''}</div>`:`<div class="reading-card"><div class="muted">${esc(cal&&cal.season?cal.season:(r&&r.season?r.season:'Liturgical day'))}</div></div>`}${officialMassReadingSources(d)}${cards}${r?dailyReflection(cal,x):''}`;
+  const [cr,rr]=await Promise.all([fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`),fetch(`https://cpbjr.github.io/catholic-readings-api/readings/${p.y}/${p.md}.json`)]);const cal=cr.ok?await cr.json():null,r=rr.ok?await rr.json():null,x=r&&r.readings?r.readings:{};const cards=r?renderReadingSet(x,cal):'';const calType=cal&&cal.celebration?liturgicalTypeLabel(cal.celebration.type):'';
+  c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><h3>${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</h3>${cal&&cal.celebration?`<div class="reading-card">${calType?`<div class="eyebrow">${esc(calType)}</div>`:''}<h3>${esc(cal.celebration.name)}</h3><div class="muted">${esc(cal.season||'')} · <span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div>${cal.celebration.description?`<p>${esc(cal.celebration.description)}</p>`:''}</div>`:`<div class="reading-card"><div class="muted">${esc(cal&&cal.season?cal.season:(r&&r.season?r.season:'Liturgical day'))}</div></div>`}${officialMassReadingSources(d)}${cards}${r?dailyReflection(cal,x):''}`;
  }catch(e){c.innerHTML+=`<div class="notice">Information for this day could not be loaded.</div>`}
 }
 
@@ -6952,6 +6957,7 @@ let cpcBibleSearchTimer = null;
 
     const season = data?.season || data?.liturgicalSeason || '';
     const rank = data?.rank || data?.type || data?.grade || '';
+    const rankLabel = rank ? (typeof liturgicalTypeLabel==='function'?liturgicalTypeLabel(rank):rank) : '';
     const color = data?.color || data?.colour || data?.liturgicalColor || data?.liturgicalColour || '';
 
     const dateText = dateObj
@@ -6965,7 +6971,7 @@ let cpcBibleSearchTimer = null;
         <h3>${cpcEsc(title)}</h3>
         <div class="cpc-day-sub">${cpcEsc(dateText)}</div>
         ${season ? `<div class="cpc-day-row"><strong>Season:</strong> ${cpcEsc(season)}</div>` : ''}
-        ${rank ? `<div class="cpc-day-row"><strong>Celebration:</strong> ${cpcEsc(typeof liturgicalTypeLabel==='function'?liturgicalTypeLabel(rank):rank)}</div>` : ''}
+        ${rankLabel ? `<div class="cpc-day-row"><strong>Celebration:</strong> ${cpcEsc(rankLabel)}</div>` : ''}
         ${color ? `<div class="cpc-day-row"><strong>Liturgical colour:</strong> ${cpcEsc(color)}</div>` : ''}
         <div class="cpc-day-hint">Tap to open Mass readings</div>
       </div>`;
