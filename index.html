@@ -547,7 +547,7 @@ button::after,.primary::after,.secondary::after,.ghost::after,.card::after,.tab:
 #home .hero .daily-quote-source:hover,#home .hero .daily-quote-source:focus-visible{opacity:.8;outline:none}
 
 
-/* Catholic Bible + Saint of the Day */
+/* Catholic Bible */
 .bible-toolbar{display:grid;grid-template-columns:1fr 120px;gap:10px;margin:16px 0 12px}
 .bible-toolbar select,.bible-toolbar button{width:100%}
 .bible-offline-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:10px 0 18px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--soft)}
@@ -559,11 +559,6 @@ button::after,.primary::after,.secondary::after,.ghost::after,.card::after,.tab:
 .bible-verse sup{font-family:system-ui,-apple-system,sans-serif;font-size:10px;font-weight:800;color:var(--accent);margin-right:5px;vertical-align:super}
 .bible-download-progress{height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:8px;display:none}
 .bible-download-progress span{display:block;height:100%;width:0;background:var(--accent);transition:width .2s ease}
-.saint-card-detail{text-align:center;padding:8px 0 2px}
-.saint-image{display:block;width:min(220px,70vw);aspect-ratio:1/1;object-fit:cover;border-radius:24px;margin:14px auto 18px;border:1px solid var(--line);box-shadow:var(--shadow)}
-.saint-quote{font-family:Georgia,'Times New Roman',serif;font-size:18px;line-height:1.55;font-style:italic;margin:18px auto;max-width:560px;padding:14px 18px;border-left:3px solid var(--accent);text-align:left;background:var(--soft);border-radius:0 14px 14px 0}
-.saint-description{font-size:16px;line-height:1.7;text-align:left;max-width:650px;margin:16px auto}
-.saint-description.no-biographical-note{text-align:center}
 @media(max-width:520px){.bible-toolbar{grid-template-columns:1fr 104px}.bible-verse{font-size:16.5px}.bible-offline-row{align-items:stretch}.bible-offline-row button{width:100%}}
 
 
@@ -1301,13 +1296,11 @@ body.dark .cpc-day-modal-backdrop {
 #devotionContent .daily-mass-header,
 #devotionContent .calendar-header,
 #devotionContent .offline-bible-header,
-#devotionContent .saint-day-header,
 #devotionContent > .eyebrow,
 #devotionContent > h2,
 #devotionContent > h3,
 #biblePanel > h2,
 #calendarPanel > h2,
-#saintPanel > h2,
 #readingsPanel > h2,
 .rosary-page-header{
   text-align:center !important;
@@ -3620,37 +3613,6 @@ body .app .topbar::before{
   color:var(--accent);
 }
 
-/* ---- cpc-saint-liturgical-order-fixed ---- */
-.saint-card-detail .saint-type-line{
-  margin:0 auto 5px!important;
-  text-align:center!important;
-  color:var(--muted)!important;
-  font:800 12px/1.3 system-ui,sans-serif!important;
-  text-transform:uppercase!important;
-  letter-spacing:.08em!important;
-}
-.saint-card-detail .saint-liturgical-colour{
-  display:inline-flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  gap:6px!important;
-  margin:0 auto 5px!important;
-  color:var(--muted)!important;
-  font:700 12px/1.3 system-ui,sans-serif!important;
-}
-.saint-card-detail .saint-liturgical-colour .lit-dot{
-  margin:0!important;
-  flex:0 0 auto!important;
-}
-.saint-card-detail .saint-liturgical-date{
-  margin:0 auto 14px!important;
-  color:var(--muted)!important;
-  text-align:center!important;
-  font:600 13px/1.4 system-ui,sans-serif!important;
-}
-.saint-card-detail .saint-season{
-  margin-top:14px!important;
-}
 
 /* ---- cpc-mass-reading-reference-line-cleanup ---- */
 /* Keep Mass Reading/Gospel references clickable without the dotted line beneath them. */
@@ -3825,7 +3787,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,[r
   outline:3px solid color-mix(in srgb,var(--accent) 72%, transparent);
   outline-offset:3px;
 }
-.prayer-text,.scripture,.meditation,.saint-description,.saint-quote,.notice,.subtitle{
+.prayer-text,.scripture,.meditation,.notice,.subtitle{
   overflow-wrap:anywhere;
   word-break:normal;
 }
@@ -5042,6 +5004,216 @@ body.cpc-prayer-screen-active #devotions.active{
 }
 </style>
 
+
+<style id="cpc-novenas-v35">
+/* Catholic Companion v35 — dedicated Novenas section */
+#home .grid > .novenas-home-card{
+  grid-column:auto;
+  background:linear-gradient(180deg,rgba(247,241,252,.98),rgba(255,253,249,.99));
+  border-color:rgba(132,103,164,.28);
+}
+#home .grid > .novenas-home-card .home-icon{filter:saturate(.92)}
+[data-theme="dark"] #home .grid > .novenas-home-card{
+  background:linear-gradient(180deg,rgba(75,60,86,.78),rgba(46,39,48,.96));
+  border-color:rgba(195,169,217,.30);
+}
+
+#libraryPanel.novenas-art{
+  --novena-accent:#795c96;
+  --novena-accent-rgb:121,92,150;
+  border-color:rgba(var(--novena-accent-rgb),.26)!important;
+  background:linear-gradient(180deg,rgba(250,247,252,.98),rgba(255,253,249,.98))!important;
+}
+#libraryPanel.novenas-art > h2{color:var(--novena-accent)!important}
+[data-theme="dark"] #libraryPanel.novenas-art{
+  --novena-accent:#d6c0ea;
+  --novena-accent-rgb:196,165,221;
+  background:linear-gradient(180deg,rgba(52,44,58,.98),rgba(40,35,42,.98))!important;
+}
+.novena-page-intro{
+  max-width:680px;
+  margin:0 auto 18px;
+  color:var(--muted);
+  text-align:center;
+  line-height:1.55;
+}
+.novena-continue-card{
+  width:100%;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:11px;
+  margin:0 0 18px;
+  padding:13px 14px;
+  border:1px solid rgba(var(--novena-accent-rgb),.25);
+  border-radius:16px;
+  background:rgba(var(--novena-accent-rgb),.09);
+  color:var(--text);
+  text-align:left;
+}
+.novena-continue-icon{font-size:1.55rem;line-height:1}
+.novena-continue-copy{min-width:0}
+.novena-continue-copy strong{display:block;color:var(--novena-accent);font-size:.95rem;line-height:1.25}
+.novena-continue-copy small{display:block;margin-top:3px;color:var(--muted);font-size:.78rem;line-height:1.25}
+.novena-continue-arrow{font-size:1.55rem;color:var(--novena-accent)}
+
+.novena-groups{display:grid;gap:18px}
+.novena-group{
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:color-mix(in srgb,var(--panel) 95%,var(--soft) 5%);
+}
+.novena-group-head{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin:0 0 12px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--line);
+  text-align:center;
+}
+.novena-group-head span{font-size:1.25rem;line-height:1}
+.novena-group-head h3{margin:0;color:var(--novena-accent);font-size:1rem;line-height:1.2}
+.novena-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.novena-card{
+  min-width:0;
+  min-height:118px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:12px 10px;
+  border:1px solid rgba(var(--novena-accent-rgb),.20);
+  border-radius:15px;
+  background:rgba(var(--novena-accent-rgb),.055);
+  text-align:center;
+  color:var(--text);
+}
+.novena-card-icon{font-size:1.7rem;line-height:1}
+.novena-card-title{font-weight:800;font-size:.9rem;line-height:1.25;color:var(--novena-accent)}
+.novena-card-status{font-size:.72rem;line-height:1.25;color:var(--muted)}
+.novena-mini-progress{display:flex;justify-content:center;gap:3px;margin-top:2px}
+.novena-mini-dot{width:5px;height:5px;border-radius:50%;background:var(--line)}
+.novena-mini-dot.done{background:var(--novena-accent)}
+.novena-mini-dot.today{box-shadow:0 0 0 2px rgba(var(--novena-accent-rgb),.18)}
+
+#libraryPanel.novena-detail > .eyebrow{display:none!important}
+#libraryPanel.novena-detail > #libraryTitle{font-size:clamp(1.45rem,5vw,1.85rem)!important;line-height:1.15!important;margin-bottom:14px!important}
+.novena-detail-top{display:flex;justify-content:flex-start;margin-bottom:11px}
+.novena-back-btn{min-height:38px!important;padding:7px 11px!important;font-size:.82rem!important}
+.novena-day-meta{text-align:center;margin:0 0 8px;color:var(--muted);font-size:.76rem;font-weight:750;letter-spacing:.05em;text-transform:uppercase}
+.novena-day-title{text-align:center!important;margin:0!important;color:var(--novena-accent)!important;font-size:1.32rem!important;line-height:1.22!important}
+.novena-day-reflection{max-width:620px;margin:9px auto 15px;padding:11px 13px;border-radius:14px;background:rgba(var(--novena-accent-rgb),.07);color:var(--text);text-align:center;line-height:1.5;font-size:.92rem}
+.novena-nine-days{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin:0 0 15px}
+.novena-day-chip{
+  min-width:0!important;
+  height:31px!important;
+  min-height:31px!important;
+  padding:0!important;
+  border-radius:9px!important;
+  font-size:.72rem!important;
+  font-weight:800!important;
+  background:var(--panel)!important;
+  border:1px solid var(--line)!important;
+  color:var(--muted)!important;
+}
+.novena-day-chip.done{background:rgba(var(--novena-accent-rgb),.12)!important;color:var(--novena-accent)!important;border-color:rgba(var(--novena-accent-rgb),.30)!important}
+.novena-day-chip.scheduled{box-shadow:0 0 0 2px rgba(var(--novena-accent-rgb),.15)!important}
+.novena-day-chip.active{background:var(--novena-accent)!important;color:#fff!important;border-color:var(--novena-accent)!important}
+[data-theme="dark"] .novena-day-chip.active{color:#261f29!important}
+.novena-prayer-card{padding:15px 14px;border:1px solid rgba(var(--novena-accent-rgb),.18);border-radius:17px;background:rgba(var(--novena-accent-rgb),.045)}
+.novena-prayer-label{text-align:center;color:var(--muted);font-size:.72rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;margin-bottom:9px}
+.novena-prayer-text{text-align:center;line-height:1.62;font-size:1rem}
+.novena-day-actions{display:grid;grid-template-columns:1fr 1.45fr 1fr;gap:7px;margin-top:13px}
+.novena-day-actions button{min-height:42px!important;padding:8px 9px!important;font-size:.8rem!important}
+.novena-mark-btn.done{opacity:.76}
+.novena-complete-note{margin:13px 0 0;text-align:center;color:var(--novena-accent);font-weight:800}
+.novena-restart-row{display:flex;justify-content:center;margin-top:12px}
+.novena-restart-row button{min-height:36px!important;padding:7px 10px!important;font-size:.76rem!important}
+.novena-not-started{max-width:600px;margin:0 auto;text-align:center}
+.novena-not-started p{color:var(--muted);line-height:1.55}
+.novena-start-btn{margin-top:5px}
+
+@media(max-width:540px){
+  .novena-page-intro{margin-bottom:15px;font-size:.9rem}
+  .novena-groups{gap:14px}
+  .novena-group{padding:11px}
+  .novena-card-grid{gap:7px}
+  .novena-card{min-height:106px;padding:10px 8px}
+  .novena-card-icon{font-size:1.55rem}
+  .novena-card-title{font-size:.84rem}
+  .novena-card-status{font-size:.68rem}
+  .novena-nine-days{gap:3px}
+  .novena-day-chip{height:29px!important;min-height:29px!important;font-size:.68rem!important}
+  .novena-prayer-card{padding:13px 11px}
+  .novena-prayer-text{font-size:.96rem;line-height:1.58}
+  .novena-day-actions{grid-template-columns:1fr 1.35fr 1fr;gap:5px}
+  .novena-day-actions button{font-size:.73rem!important;padding:7px 5px!important}
+}
+@media(max-width:350px){
+  .novena-card-grid{grid-template-columns:1fr}
+  .novena-day-chip{font-size:.63rem!important}
+  .novena-day-actions{grid-template-columns:1fr 1fr}
+  .novena-day-actions .novena-mark-btn{grid-column:1/-1;grid-row:1}
+}
+</style>
+
+
+<!-- Catholic Companion v36: daily-saint feature removed -->
+
+<style id="cpc-novena-feast-v38">
+/* v38 — feast-day-aware Novenas */
+.novena-feast-feature{
+  display:grid;grid-template-columns:auto 1fr;align-items:center;gap:11px;
+  margin:0 0 14px;padding:11px 13px;border:1px solid rgba(var(--novena-accent-rgb),.22);
+  border-radius:15px;background:rgba(var(--novena-accent-rgb),.075);text-align:left;
+}
+.novena-feast-feature-icon{font-size:1.55rem;line-height:1}
+.novena-feast-feature small,.novena-feast-feature strong,.novena-feast-feature em{display:block}
+.novena-feast-feature small{font-size:.68rem;font-weight:800;letter-spacing:.045em;text-transform:uppercase;color:var(--muted)}
+.novena-feast-feature strong{margin-top:2px;font-size:.91rem;line-height:1.2;color:var(--novena-accent)}
+.novena-feast-feature em{margin-top:3px;font-size:.72rem;line-height:1.3;color:var(--muted);font-style:normal}
+.novena-card-feast{
+  display:flex;flex-direction:column;align-items:center;gap:1px;margin-top:-1px;
+  font-size:.66rem;line-height:1.2;color:var(--muted);
+}
+.novena-feast-window{font-size:.62rem;opacity:.92}
+.novena-feast-badge{
+  display:inline-flex;align-items:center;justify-content:center;margin-top:3px;padding:2px 6px;
+  border-radius:999px;background:rgba(var(--novena-accent-rgb),.12);color:var(--novena-accent);
+  font-size:.6rem;font-weight:800;line-height:1.25;
+}
+.novena-card{min-height:136px!important;gap:5px!important;padding:11px 9px!important}
+.novena-detail-feast{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:5px 9px;
+  margin:-4px 0 10px;padding:7px 10px;border-radius:12px;background:rgba(var(--novena-accent-rgb),.07);
+  color:var(--muted);font-size:.73rem;line-height:1.3;text-align:center;
+}
+.novena-detail-feast .novena-feast-window{font-size:inherit}
+.novena-detail-feast .novena-feast-badge{margin-top:0}
+@media(max-width:390px){
+  .novena-card{min-height:132px!important;padding:10px 7px!important}
+  .novena-card-title{font-size:.86rem!important}
+  .novena-card-feast{font-size:.63rem}
+  .novena-feast-window{font-size:.59rem}
+}
+</style>
+
+
+<style id="cpc-novena-library-v39">
+.novena-search-wrap{display:flex;align-items:center;gap:8px;margin:0 0 14px;padding:8px 11px;border:1px solid rgba(var(--novena-accent-rgb),.22);border-radius:14px;background:rgba(var(--novena-accent-rgb),.055)}
+.novena-search-wrap>span{font-size:1.1rem;color:var(--novena-accent);line-height:1}
+.novena-search-wrap input{width:100%;min-width:0;border:0!important;outline:0!important;background:transparent!important;color:var(--text)!important;font:inherit;padding:3px 0!important;box-shadow:none!important}
+.novena-search-wrap input::placeholder{color:var(--muted)}
+.novena-search-empty{text-align:center;color:var(--muted);font-size:.86rem;padding:10px 0 16px}
+.novena-source-note{max-width:620px;margin:0 auto 10px;text-align:center;color:var(--muted);font-size:.74rem;line-height:1.4}
+.novena-card[hidden],.novena-group[hidden]{display:none!important}
+@media(max-width:420px){.novena-search-wrap{margin-bottom:11px;padding:7px 9px}.novena-source-note{font-size:.7rem;margin-bottom:8px}}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -5071,11 +5243,11 @@ body.cpc-prayer-screen-active #devotions.active{
 <div class="grid">
       <button class="card" onclick="showDevotion('angelus')"><strong><span class="home-title-text">Angelus</span><span class="home-icon" aria-hidden="true"><span class="devotion-glyph">🕊️</span></span></strong></button>
       <button class="card" onclick="showDevotion('divineMercy')"><strong><span class="home-title-text">Divine Mercy</span><span class="home-icon" aria-hidden="true"><span class="devotion-glyph">❤️</span></span></strong></button>
-      <button class="card" onclick="showDevotion('readings')"><strong><span class="home-title-text">Daily Mass Readings</span><span class="home-icon" aria-hidden="true">📖</span></strong></button>
-      <button class="card" onclick="showDevotion('calendar')"><strong><span class="home-title-text">Liturgical Calendar</span><span class="home-icon" aria-hidden="true">🗓️</span></strong></button>
-      <button class="card" onclick="showDevotion('bible')"><strong><span class="home-title-text">Catholic Bible</span><span class="home-icon" aria-hidden="true">✝️</span></strong></button>
-      <button class="card" onclick="showDevotion('saint')"><strong><span class="home-title-text">Saint of the Day</span><span class="home-icon" aria-hidden="true">😇</span></strong></button>
       <button class="card" onclick="showLibrary('prayers')"><strong><span class="home-title-text">Daily Prayers</span><span class="home-icon" aria-hidden="true">🙏</span></strong></button>
+      <button class="card novenas-home-card" onclick="showLibrary('novenas')"><strong><span class="home-title-text">Novenas</span><span class="home-icon" aria-hidden="true">🕯️</span></strong></button>
+      <button class="card" onclick="showDevotion('readings')"><strong><span class="home-title-text">Daily Mass Readings</span><span class="home-icon" aria-hidden="true">📖</span></strong></button>
+      <button class="card" onclick="showDevotion('bible')"><strong><span class="home-title-text">Catholic Bible</span><span class="home-icon" aria-hidden="true">✝️</span></strong></button>
+      <button class="card" onclick="showDevotion('calendar')"><strong><span class="home-title-text">Liturgical Calendar</span><span class="home-icon" aria-hidden="true">🗓️</span></strong></button>
       <button class="card" onclick="showLibrary('parables')"><strong><span class="home-title-text">Parables of Jesus</span><span class="home-icon" aria-hidden="true">🕯️</span></strong></button>
       <button class="card" onclick="showLibrary('mysteries')"><strong><span class="home-title-text">Rosary Mysteries</span><span class="home-icon" aria-hidden="true">🌹</span></strong></button>
       <button class="card promises-home-card" onclick="showLibrary('promises')">
@@ -5613,9 +5785,292 @@ function renderEnding(c,key,index){c.innerHTML=`<div class="eyebrow">Closing pra
 function speakMystery(idx,allowAuto=false){const m=sets[state.setKey].items[idx];if(allowAuto)playPrayerAudio(`${m.title}. ${m.meditation}`,'rosary','next');else speakText(`${m.title}. ${m.meditation}`)}
 
 
+/* ---- Catholic Companion v35: Novenas ---- */
+const novenas={
+  sacredHeart:{
+    title:'Novena to the Sacred Heart of Jesus',short:'Sacred Heart of Jesus',icon:'❤️',group:'jesus',feastRule:'sacredHeart',feastName:'Sacred Heart of Jesus',
+    note:'A nine-day devotion using the Sacred Heart prayer already included in Catholic Companion.',
+    prayer:`Most holy heart of Jesus, fountain of every blessing, I adore you, I love you, and with lively sorrow for my sins I offer you this poor heart of mine. Make me humble, patient, pure and wholly obedient to your will.<br><br>Grant, Good Jesus, that I may live in you and for you. Protect me in the midst of danger. Comfort me in my afflictions. Give me health of body, assistance in my temporal needs, your blessing on all that I do, and the grace of a holy death. Amen.`,
+    days:[
+      ['Receiving His love','Rest in the love of Jesus and ask for the grace to receive His love more deeply.'],
+      ['Repentance','Bring your weaknesses and sins to the mercy of the Sacred Heart with confidence.'],
+      ['Trust','Entrust the situations you cannot control to Jesus and ask for a peaceful heart.'],
+      ['Humility','Ask to become gentle, patient and ready to follow the will of God.'],
+      ['Healing','Place wounds of body, mind and spirit before the Heart of Jesus.'],
+      ['Family','Pray that your home and loved ones may be drawn together in charity and faith.'],
+      ['Work and service','Offer your work, responsibilities and ordinary duties to God with love.'],
+      ['Surrender','Place your plans and fears in Jesus’ hands and ask for grace to accept His timing.'],
+      ['Thanksgiving','Give thanks for every grace received and renew your desire to live in Christ.']
+    ]
+  },
+  lourdes:{
+    title:'Novena to Our Lady of Lourdes',short:'Our Lady of Lourdes',icon:'💙',group:'mary',feast:{month:2,day:11},feastName:'Our Lady of Lourdes',
+    note:'A nine-day devotion using the Lourdes prayer already included in Catholic Companion.',
+    prayer:`O Holy Virgin, in the midst of your days of glory, do not forget the sorrows of this earth. Cast a merciful glance upon those who are suffering, struggling against difficulties, with their lips constantly pressed against life's bitter cup.<br><br>Have pity on those who love each other and are separated.<br>Have pity on our rebellious hearts.<br>Have pity on our weak faith.<br>Have pity on those we love.<br>Have pity on those who weep, on those who pray, on those who fear.<br>Grant hope and peace to all. Amen.`,
+    days:[
+      ['Mary’s intercession','Ask Our Lady to bring your needs tenderly before her Son.'],
+      ['Healing of the body','Pray for those living with illness, pain or physical weakness.'],
+      ['Healing of the heart','Entrust grief, anxiety, loneliness and hidden wounds to God’s mercy.'],
+      ['Consolation in suffering','Pray for grace to recognise Christ’s presence in difficult days.'],
+      ['Caregivers','Remember families, clinicians and caregivers who accompany the sick.'],
+      ['Faith in uncertainty','Ask for a steadier faith when answers are delayed or unclear.'],
+      ['Hope','Pray for those who feel discouraged and for renewed confidence in God.'],
+      ['Peace','Ask Our Lady to obtain peace in your heart, home and relationships.'],
+      ['Thanksgiving','Thank God for His care and for every grace received through Mary’s intercession.']
+    ]
+  },
+  stJude:{
+    title:'Novena to St. Jude',short:'St. Jude',icon:'🕯️',group:'saints',feast:{month:10,day:28},feastName:'Saints Simon and Jude',
+    note:'A nine-day devotion using the St. Jude prayer already included in Catholic Companion.',
+    prayer:`Most holy Apostle, St. Jude, faithful servant and friend of Jesus, the Church honours and invokes you universally, as the patron of difficult cases, of things almost despaired of. Pray for me, I am so helpless and alone. Intercede with God for me that He bring visible and speedy help where help is almost despaired of.<br><br>Come to my assistance in this great need that I may receive the consolation and help of heaven in all my necessities, tribulations, and sufferings, particularly — (make your request here) — and that I may praise God with you and all the saints forever.<br><br>I promise, O Blessed St. Jude, to be ever mindful of this great favour granted me by God and to always honour you as my special and powerful patron, and to gratefully encourage devotion to you. Amen.`,
+    days:[
+      ['Hope in difficult circumstances','Bring to God the situation that feels most difficult or nearly impossible.'],
+      ['Trust in providence','Ask for confidence that God remains at work even when the way forward is hidden.'],
+      ['Courage','Pray for courage to take the next faithful step without being ruled by fear.'],
+      ['Healing of the heart','Entrust disappointments, losses and discouragement to the mercy of God.'],
+      ['Relationships','Pray for reconciliation, patience and charity in strained relationships.'],
+      ['Work and responsibilities','Ask for help in duties, decisions, finances and practical needs.'],
+      ['Protection in trials','Pray for protection from despair and for strength in temptation or adversity.'],
+      ['Perseverance','Ask for the grace to continue praying and doing good while you wait.'],
+      ['Thanksgiving','Thank God for heard and unheard graces, trusting that His wisdom is greater than yours.']
+    ]
+  },
+  stAnne:{
+    title:'Novena to St. Anne for Special Favours',short:'St. Anne',icon:'🌹',group:'saints',feast:{month:7,day:26},feastName:'Saints Joachim and Anne',
+    note:'A nine-day devotion using the St. Anne prayer already included in Catholic Companion.',
+    prayer:`Glorious St. Anne filled with compassion for those who invoke thee, and with love for those who suffer, heavily laden with the weight of my troubles I cast myself at thy feet and humbly beg of thee to take the present affair which I recommend to thee under thy special protection.<br><br>(Mention your intentions and petitions here in silence)<br><br>Vouchsafe to recommend it to thy Daughter, the Blessed Virgin Mary, and lay it before the throne of Jesus, so that He may bring it to a happy issue.<br><br>Cease not to intercede for me until my request is granted.<br><br>Above all, obtain for me the grace of one day beholding my God face to face, and with thee and Mary and all the Saints, praising and blessing Him to all eternity.<br><br>Good St. Anne, mother of her who is our Life, our Sweetness and our Hope, pray to her for us, and obtain our request. (3 times)<br><br>(Pray 3 Hail Marys)<br><br>Good Saint Anne! Pray for us! Amen!`,
+    days:[
+      ['Present your petition','Place your special intention before God simply and sincerely.'],
+      ['Patience','Ask for patience while waiting and freedom from the urge to force an answer.'],
+      ['Family','Pray for unity, protection and deeper love within your family.'],
+      ['Faith','Ask St. Anne to help you remain faithful when circumstances are uncertain.'],
+      ['Hope','Pray for renewed hope in the goodness and timing of God.'],
+      ['Wisdom','Ask for wisdom to recognise what is truly good and to choose it.'],
+      ['Healing','Remember those who are sick, hurting or carrying hidden burdens.'],
+      ['Surrender','Offer your desired outcome to God and ask for grace to accept His will.'],
+      ['Thanksgiving','Thank God for His providence and for the intercession of St. Anne and Our Lady.']
+    ]
+  },
+  archangels:{
+    title:'Novena to Saints Michael, Gabriel and Raphael',short:'The Archangels',icon:'🪽',group:'angels',feast:{month:9,day:29},feastName:'Saints Michael, Gabriel and Raphael',
+    note:'A nine-day devotion using the Archangels prayer already included in Catholic Companion.',
+    prayer:`Heavenly King, You have given us archangels to assist us during our pilgrimage on Earth.<br><br>Saint Michael is our protector; I ask him to come to my aid, fight for all my loved ones, and protect us from danger.<br><br>Saint Gabriel is a messenger of the Good News; I ask him to help me clearly hear Your voice and to teach me the truth.<br><br>Saint Raphael is the healing angel; I ask him to take my need for healing and that of everyone I know, lift it up to Your throne of grace, and deliver us back to the gift of recovery.<br><br>Help us, O Lord, to realize more fully the reality of archangels and their desire to serve us. Holy angels, pray for us. Amen.`,
+    days:[
+      ['God’s protection','Entrust yourself and your loved ones to the protection and providence of God.'],
+      ['With St. Michael','Pray for courage against evil, temptation and everything that draws you from God.'],
+      ['With St. Gabriel','Ask for ears ready to hear God’s word and courage to respond to it.'],
+      ['With St. Raphael','Pray for healing of body, mind, relationships and spirit.'],
+      ['Discernment','Ask the Lord to guide your decisions and help you recognise truth clearly.'],
+      ['Loved ones','Place family and friends under God’s care, especially those facing difficulty.'],
+      ['Journeys','Pray for safety and grace in travel and in every transition of life.'],
+      ['Healing and truth','Ask that healing and truth may work together wherever there is confusion or hurt.'],
+      ['Thanksgiving','Praise God for the ministry of His angels and for His constant care.']
+    ]
+  },
+  cupertino:{
+    title:'Novena to St. Joseph of Cupertino for Studies and Examinations',short:'St. Joseph of Cupertino',icon:'🎓',group:'saints',feast:{month:9,day:18},feastName:'St. Joseph of Cupertino',
+    note:'A nine-day devotion using the examination prayer already included in Catholic Companion.',
+    prayer:`O humble St. Joseph of Cupertino, singularly favored by God in overcoming the difficulties of study and the worries of examinations, implore the Holy Spirit to enlighten my mind and strengthen my memory in the search of His truth and wisdom. Help me especially in the decisive moments of this examination, protecting me from that forgetfulness and disturbing anxiety which often affect me. May I succeed in offering God my finest work and may I grow in knowledge, understanding, humility and charity. May everything that I attempt to learn in life be offered in faithful service to God, from whom flows that wisdom which leads to eternal life. Amen.<br><br>St. Joseph of Cupertino pray for me,<br>Our Lady of Good Studies pray for me,<br>Holy Spirit enlighten me!`,
+    days:[
+      ['Wisdom','Ask the Holy Spirit for wisdom and a sincere desire to learn what is true.'],
+      ['Focus','Pray for freedom from distraction and grace to use your study time well.'],
+      ['Memory','Ask for a calm and reliable memory, strengthened by good preparation.'],
+      ['Peace in anxiety','Place examination worries before God and ask for steadiness of mind.'],
+      ['Perseverance','Pray for discipline to continue preparing even when motivation is low.'],
+      ['Integrity','Ask for honesty, humility and the desire to offer your best work to God.'],
+      ['Preparation','Pray for wisdom to prioritise what remains and for restful, healthy preparation.'],
+      ['The examination','Ask for clarity, calm, good judgement and the ability to recall what you have learned.'],
+      ['Gratitude and service','Give thanks for the opportunity to learn and offer your knowledge in service to others.']
+    ]
+  }
+};
+
+/* ---- Catholic Companion v39: expanded novena library ----
+   There is no finite universal catalogue of every Catholic novena. These additions
+   provide a broad library of common nine-day devotions. Newly added texts below are
+   concise Catholic Companion prayers rather than copied modern proprietary versions. */
+function cpcNovenaDays(name,focus){
+  const f=focus||'the grace I seek';
+  return [
+    ['Opening the heart',`Begin this novena in God’s presence. Entrust ${f} to Him with simplicity and confidence.`],
+    ['Faith',`Ask for deeper faith and for the grace to recognise God at work while praying for ${f}.`],
+    ['Hope',`Place discouragement and uncertainty before God. Ask for steady hope concerning ${f}.`],
+    ['Charity',`Ask that this intention may draw you into greater love of God and more generous love of neighbour.`],
+    ['Healing',`Bring before the Lord every wound, fear or weakness connected with ${f}, asking for healing according to His will.`],
+    ['Family and community',`Pray for your family, friends and community, especially anyone who also needs grace in relation to ${f}.`],
+    ['Work and vocation',`Offer your duties, studies, vocation and service to God, asking that ${f} may bear fruit in faithful action.`],
+    ['Surrender',`Entrust the outcome completely to God. Ask for freedom to receive His answer, timing and providence with peace.`],
+    ['Thanksgiving',`Give thanks for every grace received during these nine days and renew your trust in God beyond this novena.`]
+  ];
+}
+function cpcNovenaPrayer(kind,name,focus){
+  const f=focus||'the intention I carry in my heart';
+  if(kind==='mary')return `Blessed Virgin Mary, honoured as ${name}, lead me more closely to your Son, Jesus. I entrust to your motherly intercession ${f}. Pray that I may receive the graces God knows I need, grow in faith, hope and charity, and accept His will with peace. Keep me close to Christ throughout these nine days and always. Amen.`;
+  if(kind==='angel')return `O God, who sends Your holy angels to guard, guide and serve according to Your will, grant me through their ministry the grace I seek for ${f}. Protect me from evil, lead me in truth, strengthen me in charity, and bring me safely along the path that leads to You. Holy angels of God, pray for us. Amen.`;
+  if(kind==='saint')return `O God, source of every grace and holiness, I thank You for the witness of ${name}. Through this saint’s intercession, I place before You ${f}. Grant me what is truly for my good and Your glory, deepen my faith, strengthen my hope, enlarge my charity, and help me follow Christ faithfully. Through Christ our Lord. Amen.`;
+  return `Lord Jesus Christ, I come before You during this novena honouring ${name}. I place in Your loving hands ${f}. Draw me closer to Your Heart, strengthen my faith, purify my desires, and grant what is according to the Father’s will. Help me to trust Your mercy, follow You faithfully, and live these nine days with gratitude and love. Amen.`;
+}
+function cpcMakeNovena({title,short,icon,group,feast,feastRule,feastName,kind='saint',focus}){
+  return {title,short,icon,group,feast,feastRule,feastName,note:'A concise Catholic Companion nine-day prayer with feast-day guidance.',prayer:cpcNovenaPrayer(kind,short,focus),days:cpcNovenaDays(short,focus)};
+}
+Object.assign(novenas,{
+  divineMercy:cpcMakeNovena({title:'Divine Mercy Novena',short:'Divine Mercy',icon:'❤️‍🔥',group:'jesus',feastRule:'divineMercy',feastName:'Divine Mercy Sunday',kind:'jesus',focus:'trust in the mercy of Jesus and the needs of the whole world'}),
+  holySpirit:cpcMakeNovena({title:'Novena to the Holy Spirit',short:'Holy Spirit',icon:'🕊️',group:'jesus',feastRule:'pentecost',feastName:'Pentecost Sunday',kind:'jesus',focus:'the gifts, fruits and guidance of the Holy Spirit'}),
+  christKing:cpcMakeNovena({title:'Novena to Christ the King',short:'Christ the King',icon:'👑',group:'jesus',feastRule:'christKing',feastName:'Our Lord Jesus Christ, King of the Universe',kind:'jesus',focus:'the reign of Christ in my heart, family and world'}),
+  holyName:cpcMakeNovena({title:'Novena to the Holy Name of Jesus',short:'Holy Name of Jesus',icon:'IHS',group:'jesus',feast:{month:1,day:3},feastName:'Most Holy Name of Jesus',kind:'jesus',focus:'reverence for the Holy Name and deeper union with Jesus'}),
+  holyCross:cpcMakeNovena({title:'Novena of the Holy Cross',short:'Holy Cross',icon:'✝️',group:'jesus',feast:{month:9,day:14},feastName:'Exaltation of the Holy Cross',kind:'jesus',focus:'grace to carry my crosses faithfully with Christ'}),
+  christmas:cpcMakeNovena({title:'Christmas Novena',short:'Christmas',icon:'⭐',group:'jesus',feast:{month:12,day:25},feastName:'Nativity of the Lord',kind:'jesus',focus:'preparation of my heart to welcome Christ at Christmas'}),
+
+  immaculateConception:cpcMakeNovena({title:'Novena to the Immaculate Conception',short:'Immaculate Conception',icon:'🤍',group:'mary',feast:{month:12,day:8},feastName:'Immaculate Conception of the Blessed Virgin Mary',kind:'mary',focus:'purity of heart and faithful response to God’s grace'}),
+  guadalupe:cpcMakeNovena({title:'Novena to Our Lady of Guadalupe',short:'Our Lady of Guadalupe',icon:'🌹',group:'mary',feast:{month:12,day:12},feastName:'Our Lady of Guadalupe',kind:'mary',focus:'the needs of families, the vulnerable and all who seek Mary’s maternal care'}),
+  fatima:cpcMakeNovena({title:'Novena to Our Lady of Fatima',short:'Our Lady of Fatima',icon:'☀️',group:'mary',feast:{month:5,day:13},feastName:'Our Lady of Fatima',kind:'mary',focus:'conversion, peace, prayer and reparation'}),
+  mountCarmel:cpcMakeNovena({title:'Novena to Our Lady of Mount Carmel',short:'Our Lady of Mount Carmel',icon:'🤎',group:'mary',feast:{month:7,day:16},feastName:'Our Lady of Mount Carmel',kind:'mary',focus:'perseverance in prayer and closeness to Christ through Mary'}),
+  assumption:cpcMakeNovena({title:'Novena for the Assumption of Mary',short:'Assumption of Mary',icon:'🌤️',group:'mary',feast:{month:8,day:15},feastName:'Assumption of the Blessed Virgin Mary',kind:'mary',focus:'hope of heaven and faithful discipleship on earth'}),
+  nativityMary:cpcMakeNovena({title:'Novena for the Nativity of Mary',short:'Nativity of Mary',icon:'🌸',group:'mary',feast:{month:9,day:8},feastName:'Nativity of the Blessed Virgin Mary',kind:'mary',focus:'gratitude for Mary and a more generous yes to God'}),
+  ourLadySorrows:cpcMakeNovena({title:'Novena to Our Lady of Sorrows',short:'Our Lady of Sorrows',icon:'💙',group:'mary',feast:{month:9,day:15},feastName:'Our Lady of Sorrows',kind:'mary',focus:'consolation in suffering and union with Christ in every sorrow'}),
+  immaculateHeart:cpcMakeNovena({title:'Novena to the Immaculate Heart of Mary',short:'Immaculate Heart of Mary',icon:'💙',group:'mary',feastRule:'immaculateHeart',feastName:'Immaculate Heart of the Blessed Virgin Mary',kind:'mary',focus:'a pure, prayerful and compassionate heart united to Jesus'}),
+  perpetualHelp:cpcMakeNovena({title:'Novena to Our Lady of Perpetual Help',short:'Our Lady of Perpetual Help',icon:'🕯️',group:'mary',feast:{month:6,day:27},feastName:'Our Lady of Perpetual Help',kind:'mary',focus:'help in present needs and perseverance in faith'}),
+  maryHelp:cpcMakeNovena({title:'Novena to Mary Help of Christians',short:'Mary Help of Christians',icon:'👑',group:'mary',feast:{month:5,day:24},feastName:'Mary Help of Christians',kind:'mary',focus:'the protection of families, the Church and all Christians'}),
+
+  stJoseph:cpcMakeNovena({title:'Novena to St. Joseph',short:'St. Joseph',icon:'🪚',group:'saints',feast:{month:3,day:19},feastName:'Saint Joseph, Spouse of the Blessed Virgin Mary',focus:'families, work, purity of heart and a peaceful death'}),
+  stAnthony:cpcMakeNovena({title:'Novena to St. Anthony of Padua',short:'St. Anthony of Padua',icon:'📖',group:'saints',feast:{month:6,day:13},feastName:'Saint Anthony of Padua',focus:'finding what is lost, wisdom, charity and confidence in God'}),
+  stRita:cpcMakeNovena({title:'Novena to St. Rita of Cascia',short:'St. Rita of Cascia',icon:'🌹',group:'saints',feast:{month:5,day:22},feastName:'Saint Rita of Cascia',focus:'difficult situations, reconciliation and perseverance'}),
+  stPeregrine:cpcMakeNovena({title:'Novena to St. Peregrine',short:'St. Peregrine',icon:'🩺',group:'saints',feast:{month:5,day:4},feastName:'Saint Peregrine Laziosi',focus:'those living with cancer, serious illness and long treatment'}),
+  stDymphna:cpcMakeNovena({title:'Novena to St. Dymphna',short:'St. Dymphna',icon:'🌿',group:'saints',feast:{month:5,day:15},feastName:'Saint Dymphna',focus:'peace of mind, emotional distress and those who care for the suffering'}),
+  stTherese:cpcMakeNovena({title:'Novena to St. Thérèse of Lisieux',short:'St. Thérèse of Lisieux',icon:'🌹',group:'saints',feast:{month:10,day:1},feastName:'Saint Thérèse of the Child Jesus',focus:'spiritual childhood, trust and doing small things with great love'}),
+  stFrancisAssisi:cpcMakeNovena({title:'Novena to St. Francis of Assisi',short:'St. Francis of Assisi',icon:'🕊️',group:'saints',feast:{month:10,day:4},feastName:'Saint Francis of Assisi',focus:'peace, simplicity, care for creation and joyful discipleship'}),
+  stFaustina:cpcMakeNovena({title:'Novena to St. Faustina',short:'St. Faustina',icon:'❤️‍🔥',group:'saints',feast:{month:10,day:5},feastName:'Saint Faustina Kowalska',focus:'trust in Divine Mercy and mercy toward others'}),
+  stJohnPaulII:cpcMakeNovena({title:'Novena to St. John Paul II',short:'St. John Paul II',icon:'🌍',group:'saints',feast:{month:10,day:22},feastName:'Saint John Paul II',focus:'courage, vocation, families and fidelity to Christ'}),
+  padrePio:cpcMakeNovena({title:'Novena to St. Pio of Pietrelcina',short:'St. Padre Pio',icon:'🕊️',group:'saints',feast:{month:9,day:23},feastName:'Saint Pio of Pietrelcina',focus:'healing, confession, prayer and patient endurance'}),
+  vincentDePaul:cpcMakeNovena({title:'Novena to St. Vincent de Paul',short:'St. Vincent de Paul',icon:'🤲',group:'saints',feast:{month:9,day:27},feastName:'Saint Vincent de Paul',focus:'the poor, works of mercy and generous service'}),
+  teresaAvila:cpcMakeNovena({title:'Novena to St. Teresa of Ávila',short:'St. Teresa of Ávila',icon:'📖',group:'saints',feast:{month:10,day:15},feastName:'Saint Teresa of Jesus',focus:'interior prayer, courage and friendship with Christ'}),
+  stMonica:cpcMakeNovena({title:'Novena to St. Monica',short:'St. Monica',icon:'🙏',group:'saints',feast:{month:8,day:27},feastName:'Saint Monica',focus:'children, family members and loved ones who are far from faith'}),
+  stAugustine:cpcMakeNovena({title:'Novena to St. Augustine',short:'St. Augustine',icon:'🔥',group:'saints',feast:{month:8,day:28},feastName:'Saint Augustine of Hippo',focus:'conversion, truth, restless hearts and deeper love of God'}),
+  stBenedict:cpcMakeNovena({title:'Novena to St. Benedict',short:'St. Benedict',icon:'🛡️',group:'saints',feast:{month:7,day:11},feastName:'Saint Benedict',focus:'protection, ordered prayer, work and perseverance'}),
+  stDominic:cpcMakeNovena({title:'Novena to St. Dominic',short:'St. Dominic',icon:'⭐',group:'saints',feast:{month:8,day:8},feastName:'Saint Dominic',focus:'truth, preaching, the Rosary and zeal for souls'}),
+  stClare:cpcMakeNovena({title:'Novena to St. Clare of Assisi',short:'St. Clare of Assisi',icon:'✨',group:'saints',feast:{month:8,day:11},feastName:'Saint Clare of Assisi',focus:'poverty of spirit, contemplation and trust in providence'}),
+  maximilianKolbe:cpcMakeNovena({title:'Novena to St. Maximilian Kolbe',short:'St. Maximilian Kolbe',icon:'❤️',group:'saints',feast:{month:8,day:14},feastName:'Saint Maximilian Mary Kolbe',focus:'self-giving love, purity, families and those facing addiction or imprisonment'}),
+  ignatius:cpcMakeNovena({title:'Novena to St. Ignatius of Loyola',short:'St. Ignatius of Loyola',icon:'🔥',group:'saints',feast:{month:7,day:31},feastName:'Saint Ignatius of Loyola',focus:'discernment, freedom, mission and finding God in all things'}),
+  johnVianney:cpcMakeNovena({title:'Novena to St. John Vianney',short:'St. John Vianney',icon:'⛪',group:'saints',feast:{month:8,day:4},feastName:'Saint John Mary Vianney',focus:'priests, vocations, confession and holiness in parish life'}),
+  teresaCalcutta:cpcMakeNovena({title:'Novena to St. Teresa of Calcutta',short:'St. Teresa of Calcutta',icon:'🤍',group:'saints',feast:{month:9,day:5},feastName:'Saint Teresa of Calcutta',focus:'love for Jesus in the poor, lonely and forgotten'}),
+  francisXavier:cpcMakeNovena({title:'Novena to St. Francis Xavier',short:'St. Francis Xavier',icon:'🌏',group:'saints',feast:{month:12,day:3},feastName:'Saint Francis Xavier',focus:'missionaries, evangelisation and courage to share the Gospel'}),
+  stAndrew:cpcMakeNovena({title:'Novena to St. Andrew',short:'St. Andrew',icon:'✝️',group:'saints',feast:{month:11,day:30},feastName:'Saint Andrew, Apostle',focus:'readiness to follow Christ and bring others to Him'}),
+  stCecilia:cpcMakeNovena({title:'Novena to St. Cecilia',short:'St. Cecilia',icon:'🎵',group:'saints',feast:{month:11,day:22},feastName:'Saint Cecilia',focus:'musicians, worship and joyful witness to Christ'}),
+  stNicholas:cpcMakeNovena({title:'Novena to St. Nicholas',short:'St. Nicholas',icon:'🎁',group:'saints',feast:{month:12,day:6},feastName:'Saint Nicholas',focus:'generosity, children, families and care for those in need'}),
+  stLucy:cpcMakeNovena({title:'Novena to St. Lucy',short:'St. Lucy',icon:'🕯️',group:'saints',feast:{month:12,day:13},feastName:'Saint Lucy',focus:'light in darkness, purity, courage and those with eye disease'}),
+  thomasAquinas:cpcMakeNovena({title:'Novena to St. Thomas Aquinas',short:'St. Thomas Aquinas',icon:'📚',group:'saints',feast:{month:1,day:28},feastName:'Saint Thomas Aquinas',focus:'students, teachers, wisdom and harmony of faith and reason'}),
+
+  guardianAngels:cpcMakeNovena({title:'Novena to the Holy Guardian Angels',short:'Guardian Angels',icon:'👼',group:'angels',feast:{month:10,day:2},feastName:'Holy Guardian Angels',kind:'angel',focus:'protection, guidance and faithful response to God’s will'})
+});
+function filterNovenaCards(value){
+  const term=String(value||'').trim().toLocaleLowerCase();
+  document.querySelectorAll('#libraryContent .novena-group').forEach(group=>{
+    let visible=0;
+    group.querySelectorAll('.novena-card').forEach(card=>{
+      const show=!term||card.textContent.toLocaleLowerCase().includes(term);
+      card.hidden=!show;if(show)visible++;
+    });
+    group.hidden=visible===0;
+  });
+  const empty=document.getElementById('novenaSearchEmpty');if(empty)empty.hidden=[...document.querySelectorAll('#libraryContent .novena-card')].some(c=>!c.hidden);
+}
+const novenaGroups=[
+  {key:'jesus',label:'Jesus & the Holy Spirit',icon:'✝️'},
+  {key:'mary',label:'Our Lady',icon:'💙'},
+  {key:'saints',label:'Saints',icon:'🌿'},
+  {key:'angels',label:'Angels',icon:'🪽'}
+];
+
+/* Feast-day awareness: fixed Roman-calendar dates plus the movable Sacred Heart solemnity. */
+function novenaKeyFromUtcMs(ms){const d=new Date(ms);return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`}
+function novenaKeyForYmd(y,m,d){return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`}
+function novenaAddDays(key,days){const n=novenaDateNumber(key);return Number.isFinite(n)?novenaKeyFromUtcMs(n+(Number(days)||0)*86400000):key}
+function novenaGregorianEasterUtc(year){
+  const a=year%19,b=Math.floor(year/100),c=year%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),month=Math.floor((h+l-7*m+114)/31),day=((h+l-7*m+114)%31)+1;
+  return Date.UTC(year,month-1,day);
+}
+function novenaFirstAdventUtc(year){const start=Date.UTC(year,10,27),dow=new Date(start).getUTCDay();return start+((7-dow)%7)*86400000}
+function novenaFeastKeyForYear(n,year){
+  const easter=novenaGregorianEasterUtc(year),rule=n?.feastRule;
+  if(rule==='sacredHeart')return novenaKeyFromUtcMs(easter+68*86400000);
+  if(rule==='divineMercy')return novenaKeyFromUtcMs(easter+7*86400000);
+  if(rule==='pentecost')return novenaKeyFromUtcMs(easter+49*86400000);
+  if(rule==='immaculateHeart')return novenaKeyFromUtcMs(easter+69*86400000);
+  if(rule==='christKing')return novenaKeyFromUtcMs(novenaFirstAdventUtc(year)-7*86400000);
+  if(n?.feast)return novenaKeyForYmd(year,n.feast.month,n.feast.day);
+  return '';
+}
+function novenaFeastMeta(n,reference=todayKey()){
+  const y=Number(String(reference).slice(0,4))||new Date().getFullYear();
+  let feastKey=novenaFeastKeyForYear(n,y);
+  if(feastKey&&novenaDateNumber(feastKey)<novenaDateNumber(reference))feastKey=novenaFeastKeyForYear(n,y+1);
+  const startKey=feastKey?novenaAddDays(feastKey,-9):'';
+  return {feastKey,startKey,endKey:feastKey?novenaAddDays(feastKey,-1):''};
+}
+function novenaFormatDate(key,{year=false}={}){
+  const n=novenaDateNumber(key);if(!Number.isFinite(n))return '';
+  return new Intl.DateTimeFormat(undefined,{day:'numeric',month:'short',...(year?{year:'numeric'}:{}),timeZone:'UTC'}).format(new Date(n));
+}
+function novenaFeastStatus(n,reference=todayKey()){
+  const meta=novenaFeastMeta(n,reference),now=novenaDateNumber(reference),start=novenaDateNumber(meta.startKey),end=novenaDateNumber(meta.endKey),feast=novenaDateNumber(meta.feastKey);
+  if(!Number.isFinite(feast))return {...meta,badge:'',seasonDay:0};
+  if(now===feast)return {...meta,badge:'Feast today',seasonDay:0};
+  if(now>=start&&now<=end){const seasonDay=novenaDaysBetween(meta.startKey,reference)+1;return {...meta,badge:`Feast novena · Day ${seasonDay}`,seasonDay};}
+  const untilStart=novenaDaysBetween(reference,meta.startKey);
+  if(untilStart>=0&&untilStart<=14)return {...meta,badge:untilStart===0?'Begins today':`Begins in ${untilStart} day${untilStart===1?'':'s'}`,seasonDay:0};
+  return {...meta,badge:'',seasonDay:0};
+}
+function novenaFeastLine(n,detail=false){
+  const f=novenaFeastStatus(n),sameYear=String(f.feastKey).slice(0,4)===String(todayKey()).slice(0,4),feastDate=novenaFormatDate(f.feastKey,{year:!sameYear}),startDate=novenaFormatDate(f.startKey,{year:!sameYear}),endDate=novenaFormatDate(f.endKey,{year:!sameYear});
+  if(!f.feastKey)return '';
+  const badge=f.badge?`<span class="novena-feast-badge">${f.badge}</span>`:'';
+  return `<span class="${detail?'novena-detail-feast':'novena-card-feast'}"><span>${detail?(n.feastName||n.short)+' · ':''}Feast ${feastDate}</span><span class="novena-feast-window">Novena ${startDate}–${endDate}</span>${badge}</span>`;
+}
+function novenaUpcomingFeast(){
+  return Object.entries(novenas).map(([slug,n])=>({slug,n,f:novenaFeastStatus(n)})).filter(x=>x.f.feastKey).sort((a,b)=>novenaDateNumber(a.f.feastKey)-novenaDateNumber(b.f.feastKey))[0]||null;
+}
+function novenaUpcomingFeastHtml(){
+  const x=novenaUpcomingFeast();if(!x)return '';
+  const inWindow=!!x.f.seasonDay,heading=x.f.badge==='Feast today'?'Feast today':inWindow?'Pray for the upcoming feast':'Next feast-day novena';
+  const action=inWindow?`Day ${x.f.seasonDay} of the traditional nine-day window`:`Begin ${novenaFormatDate(x.f.startKey,{year:String(x.f.startKey).slice(0,4)!==String(todayKey()).slice(0,4)})}`;
+  return `<div class="novena-feast-feature"><span class="novena-feast-feature-icon" aria-hidden="true">${x.n.icon}</span><span><small>${heading}</small><strong>${x.n.feastName||x.n.short}</strong><em>${action} · Feast ${novenaFormatDate(x.f.feastKey,{year:String(x.f.feastKey).slice(0,4)!==String(todayKey()).slice(0,4)})}</em></span></div>`;
+}
+function novenaStore(){try{return JSON.parse(localStorage.getItem('cpc-novena-progress')||'{}')||{}}catch(_){return {}}}
+function saveNovenaStore(s){localStorage.setItem('cpc-novena-progress',JSON.stringify(s))}
+function novenaDateNumber(key){const m=String(key||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?Date.UTC(+m[1],+m[2]-1,+m[3]):NaN}
+function novenaDaysBetween(a,b){const x=novenaDateNumber(a),y=novenaDateNumber(b);return Number.isFinite(x)&&Number.isFinite(y)?Math.floor((y-x)/86400000):0}
+function novenaScheduledDay(progress){if(!progress||!progress.startDate)return 1;return Math.max(1,Math.min(9,novenaDaysBetween(progress.startDate,todayKey())+1))}
+function novenaCompleted(progress){const a=Array.isArray(progress&&progress.completedDays)?progress.completedDays:[];return [1,2,3,4,5,6,7,8,9].every(n=>a.includes(n))}
+function novenaProgressDots(progress){const done=new Set(Array.isArray(progress&&progress.completedDays)?progress.completedDays:[]),today=progress?novenaScheduledDay(progress):0;return `<span class="novena-mini-progress" aria-hidden="true">${Array.from({length:9},(_,i)=>{const d=i+1;return `<span class="novena-mini-dot ${done.has(d)?'done':''} ${today===d?'today':''}"></span>`}).join('')}</span>`}
+function novenaLatestActive(){const s=novenaStore();return Object.entries(s).filter(([slug,p])=>novenas[slug]&&p&&p.startDate&&!novenaCompleted(p)).sort((a,b)=>(b[1].updatedAt||0)-(a[1].updatedAt||0))[0]||null}
+function renderNovenasLibrary(){
+  const panel=document.getElementById('libraryPanel'),title=document.getElementById('libraryTitle'),tabs=document.getElementById('libraryTabs'),lc=document.getElementById('libraryContent');
+  panel.classList.remove('novena-detail');title.textContent='Novenas';tabs.innerHTML='';
+  const store=novenaStore(),latest=novenaLatestActive();
+  const cont=latest?(()=>{const [slug,p]=latest,n=novenas[slug],d=novenaScheduledDay(p);return `<button class="novena-continue-card" type="button" onclick="openNovena('${slug}')"><span class="novena-continue-icon" aria-hidden="true">▶️</span><span class="novena-continue-copy"><strong>Continue ${n.short}</strong><small>Day ${d} of 9 · ${p.completedDays?.length||0} day${(p.completedDays?.length||0)===1?'':'s'} prayed</small></span><span class="novena-continue-arrow" aria-hidden="true">›</span></button>`})():'';
+  const groups=novenaGroups.map(g=>{const items=Object.entries(novenas).filter(([,n])=>n.group===g.key).sort((a,b)=>novenaDateNumber(novenaFeastMeta(a[1]).feastKey)-novenaDateNumber(novenaFeastMeta(b[1]).feastKey));if(!items.length)return '';return `<section class="novena-group"><div class="novena-group-head"><span aria-hidden="true">${g.icon}</span><h3>${g.label}</h3></div><div class="novena-card-grid">${items.map(([slug,n])=>{const p=store[slug],started=!!(p&&p.startDate),done=started&&novenaCompleted(p),day=started?novenaScheduledDay(p):1,status=done?'Completed · open to pray again':started?`Day ${day} of 9`:'Begin a nine-day prayer';return `<button class="novena-card" type="button" onclick="${started?`openNovena('${slug}')`:`startNovena('${slug}')`}"><span class="novena-card-icon" aria-hidden="true">${n.icon}</span><span class="novena-card-title">${n.short}</span>${novenaFeastLine(n)}<span class="novena-card-status">${status}</span>${started?novenaProgressDots(p):''}</button>`}).join('')}</div></section>`}).join('');
+  lc.innerHTML=`<p class="novena-page-intro">Browse ${Object.keys(novenas).length} common nine-day novenas. Feast dates show the traditional nine-day window ending on the eve of the feast. Novena traditions vary; newly added entries use concise Catholic Companion prayers, and you can begin any novena whenever you wish.</p><div class="novena-search-wrap"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search novenas…" aria-label="Search novenas" oninput="filterNovenaCards(this.value)"></div><div id="novenaSearchEmpty" class="novena-search-empty" hidden>No novenas match that search.</div>${novenaUpcomingFeastHtml()}${cont}<div class="novena-groups">${groups}</div>`;
+}
+function startNovena(slug){if(!novenas[slug])return;const s=novenaStore();s[slug]={startDate:todayKey(),completedDays:[],updatedAt:Date.now()};saveNovenaStore(s);openNovena(slug,1)}
+function restartNovena(slug){if(!novenas[slug])return;if(!confirm('Start this novena again from Day 1 today?'))return;const s=novenaStore();s[slug]={startDate:todayKey(),completedDays:[],updatedAt:Date.now()};saveNovenaStore(s);renderNovenaDay(slug,1)}
+function openNovena(slug,day=null,{fromHistory=false}={}){const s=novenaStore(),p=s[slug];if(!p||!p.startDate){startNovena(slug);return}p.updatedAt=Date.now();s[slug]=p;saveNovenaStore(s);renderNovenaDay(slug,day||novenaScheduledDay(p),{fromHistory})}
+function markNovenaDay(slug,day){const s=novenaStore(),p=s[slug];if(!p)return;const set=new Set(Array.isArray(p.completedDays)?p.completedDays:[]);set.add(Number(day));p.completedDays=[...set].filter(n=>n>=1&&n<=9).sort((a,b)=>a-b);p.updatedAt=Date.now();s[slug]=p;saveNovenaStore(s);renderNovenaDay(slug,day,{fromHistory:true})}
+function returnToNovenas(){stopSpeech();if(history.state?.cpcRoute?.startsWith('library:novena:')&&history.length>1){history.back()}else{showLibrary('novenas')}}
+function renderNovenaDay(slug,day=null,{fromHistory=false}={}){
+  const n=novenas[slug];if(!n){showLibrary('novenas',{fromHistory});return}
+  const s=novenaStore(),p=s[slug];if(!p||!p.startDate){startNovena(slug);return}
+  const d=Math.max(1,Math.min(9,Number(day)||novenaScheduledDay(p))),scheduled=novenaScheduledDay(p),entry=n.days[d-1],doneDays=new Set(Array.isArray(p.completedDays)?p.completedDays:[]),allDone=novenaCompleted(p);
+  const panel=document.getElementById('libraryPanel'),title=document.getElementById('libraryTitle'),tabs=document.getElementById('libraryTabs'),lc=document.getElementById('libraryContent');
+  setPanelArt('libraryPanel','panel-art novenas-art');panel.classList.add('novena-detail');title.textContent=n.title;tabs.innerHTML='';
+  lc.innerHTML=`<div class="novena-detail-top"><button class="ghost novena-back-btn" type="button" onclick="returnToNovenas()">← All novenas</button></div>${novenaFeastLine(n,true)}${n.note?`<div class="novena-source-note">${n.note}</div>`:''}<div class="novena-day-meta">Day ${d} of 9${d===scheduled?' · Today':''}</div><h3 class="novena-day-title">${entry[0]}</h3><div class="novena-day-reflection">${entry[1]}</div><div class="novena-nine-days" aria-label="Novena days">${Array.from({length:9},(_,i)=>{const x=i+1;return `<button type="button" class="novena-day-chip ${doneDays.has(x)?'done':''} ${scheduled===x?'scheduled':''} ${d===x?'active':''}" onclick="renderNovenaDay('${slug}',${x},{fromHistory:true})" aria-label="Day ${x}${doneDays.has(x)?', prayed':''}${scheduled===x?', scheduled for today':''}">${x}</button>`}).join('')}</div><div class="novena-prayer-card"><div class="novena-prayer-label">Daily prayer</div><div class="novena-prayer-text">${n.prayer}</div></div><div class="novena-day-actions"><button class="ghost" type="button" ${d<=1?'disabled':''} onclick="renderNovenaDay('${slug}',${d-1},{fromHistory:true})">← Previous</button><button class="primary novena-mark-btn ${doneDays.has(d)?'done':''}" type="button" ${doneDays.has(d)?'disabled':''} onclick="markNovenaDay('${slug}',${d})">${doneDays.has(d)?'✓ Day prayed':`Mark Day ${d} prayed`}</button><button class="ghost" type="button" ${d>=9?'disabled':''} onclick="renderNovenaDay('${slug}',${d+1},{fromHistory:true})">Next →</button></div>${allDone?'<div class="novena-complete-note">Nine days completed ✝</div>':''}<div class="novena-restart-row"><button class="ghost" type="button" onclick="restartNovena('${slug}')">Start again from today</button></div>`;
+  setScreen('library',{fromHistory:true,routeKey:`library:novena:${slug}`});
+  if(!fromHistory&&history.state?.cpcRoute!==`library:novena:${slug}`)history.pushState({cpcScreen:'library',cpcRoute:`library:novena:${slug}`},'');
+}
 
 
-function showLibrary(type,{fromHistory=false}={}){stopSpeech();const libraryPanel=document.getElementById('libraryPanel');libraryPanel.classList.remove('bp-unboxed','parables-unboxed');if(type==='promises')libraryPanel.classList.add('bp-unboxed');if(type==='parables')libraryPanel.classList.add('parables-unboxed');const artMap={mysteries:'mysteries-art',prayers:'prayers-art',promises:'promises-art',blessings:'blessings-art',parables:'prayers-art'};setPanelArt('libraryPanel',`panel-art ${artMap[type]||'prayers-art'}`);document.getElementById('libraryTabs').innerHTML='';const lc=document.getElementById('libraryContent');const title=document.getElementById('libraryTitle');
+
+
+function showLibrary(type,{fromHistory=false}={}){stopSpeech();const libraryPanel=document.getElementById('libraryPanel');libraryPanel.classList.remove('bp-unboxed','parables-unboxed','novena-detail');if(type==='promises')libraryPanel.classList.add('bp-unboxed');if(type==='parables')libraryPanel.classList.add('parables-unboxed');const artMap={mysteries:'mysteries-art',prayers:'prayers-art',promises:'promises-art',blessings:'blessings-art',parables:'prayers-art',novenas:'novenas-art'};setPanelArt('libraryPanel',`panel-art ${artMap[type]||'prayers-art'}`);document.getElementById('libraryTabs').innerHTML='';const lc=document.getElementById('libraryContent');const title=document.getElementById('libraryTitle');
  if(type==='promises'){title.textContent='';lc.innerHTML=`<div class="bp-page-header"><h2>Rosary Promises &amp; Blessings</h2></div><div class="cpc-bp-panels"><section class="cpc-bp-panel"><div class="cpc-bp-head"><div class="cpc-bp-title-row"><h3 class="cpc-bp-title">Promises of the Rosary</h3></div><p class="cpc-bp-subtext">The Fifteen Promises are traditionally associated with devotion to the Holy Rosary and express the spiritual graces and help entrusted to those who pray it faithfully.</p></div><div class="cpc-bp-list"><div class="cpc-bp-item"><b>1.</b> Whoever shall faithfully serve me by the recitation of the Rosary, shall receive powerful graces.</div><div class="cpc-bp-item"><b>2.</b> I promise my special protection and the greatest graces to all those who shall recite the Rosary.</div><div class="cpc-bp-item"><b>3.</b> The Rosary shall be a powerful armor against hell, it will destroy vice, decrease sin, and defeat heresies.</div><div class="cpc-bp-item"><b>4.</b> It will cause virtue and good works to flourish; it will obtain for souls the abundant mercy of God; it will withdraw the hearts of people from the love of the world and its vanities, and will lift them to the desire of eternal things. Oh, that souls would sanctify themselves by this means.</div><div class="cpc-bp-item"><b>5.</b> The soul which recommends itself to me by the recitation of the Rosary, shall not perish.</div><div class="cpc-bp-item"><b>6.</b> Whoever shall recite the Rosary devoutly, applying himself to the consideration of its Sacred Mysteries shall never be conquered by misfortune. God will not chastise him in His justice, he shall not perish by an unprovided death; if he be just, he shall remain in the grace of God, and become worthy of eternal life.</div><div class="cpc-bp-item"><b>7.</b> Whoever shall have a true devotion for the Rosary shall not die without the Sacraments of the Church.</div><div class="cpc-bp-item"><b>8.</b> Those who are faithful to recite the Rosary shall have during their life and at their death the light of God and the plentitude of His graces; at the moment of death they shall participate in the merits of the Saints in Paradise.</div><div class="cpc-bp-item"><b>9.</b> I shall deliver from purgatory those who have been devoted to the Rosary.</div><div class="cpc-bp-item"><b>10.</b> The faithful children of the Rosary shall merit a high degree of glory in Heaven.</div><div class="cpc-bp-item"><b>11.</b> You shall obtain all you ask of me by the recitation of the Rosary.</div><div class="cpc-bp-item"><b>12.</b> All those who propagate the Holy Rosary shall be aided by me in their necessities.</div><div class="cpc-bp-item"><b>13.</b> I have obtained from my Divine Son that all the advocates of the Rosary shall have for intercessors the entire celestial court during their life and at the hour of death.</div><div class="cpc-bp-item"><b>14.</b> All who recite the Rosary are my children, and brothers and sisters of my only Son, Jesus Christ.</div><div class="cpc-bp-item"><b>15.</b> Devotion of my Rosary is a great sign of predestination.</div></div></section><section class="cpc-bp-panel"><div class="cpc-bp-head"><div class="cpc-bp-title-row"><h3 class="cpc-bp-title">Blessings of the Rosary</h3></div><p class="cpc-bp-subtext">These blessings describe the spiritual fruits traditionally associated with praying the Rosary, including conversion, consolation, peace, growth in faith, and help for the faithful departed.</p></div><div class="cpc-bp-list"><div class="cpc-bp-item"><b>1.</b> Sinners are forgiven.</div><div class="cpc-bp-item"><b>2.</b> Souls that thirst are refreshed.</div><div class="cpc-bp-item"><b>3.</b> Those who are fettered have their bonds broken.</div><div class="cpc-bp-item"><b>4.</b> Those who weep find happiness.</div><div class="cpc-bp-item"><b>5.</b> Those who are tempted find peace.</div><div class="cpc-bp-item"><b>6.</b> The poor find help.</div><div class="cpc-bp-item"><b>7.</b> Religions are reformed.</div><div class="cpc-bp-item"><b>8.</b> Those who are ignorant are instructed.</div><div class="cpc-bp-item"><b>9.</b> The living learn to overcome pride.</div><div class="cpc-bp-item"><b>10.</b> The Holy Souls in Purgatory have their pains eased by suffrages.</div></div></section></div>`}
 
  if(type==='parables'){title.textContent='';lc.innerHTML=`<div class="cpc-parables-head"><h2>Parables of Jesus</h2><div class="cpc-parables-overview">Jesus used parables - simple stories with deeper meaning - to teach us about God, His Kingdom, and how we are called to live.</div></div><div class="cpc-parables-grid"><section class="cpc-parable-panel">
@@ -5796,6 +6251,7 @@ function showLibrary(type,{fromHistory=false}={}){stopSpeech();const libraryPane
       ['🌹','Hail Mary',`Hail Mary, full of grace! The Lord is with thee. Blessed art thou among women, and blessed is the fruit of Thy womb, Jesus.<br><br>Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen.`],
       ['✨','Glory Be',`Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning is now, and ever shall be, world without end. Amen.`],
       ['✝️',"Apostles' Creed",`I believe in God the Father Almighty, Creator of heaven and earth, And in Jesus Christ, his only Son, our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died, and was buried. He descended into hell, the third day He rose again from the dead.<br><br>He ascended into heaven and sits at the right hand of God the Father Almighty. From thence He shall come to judge the living and the dead. I believe in the Holy Spirit, the Holy Catholic Church, the Communion of Saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen.`],
+      ['🕊️','Anima Christi',`Soul of Christ, be my sanctification. Body of Christ, be my salvation. Blood of Christ, fill all my veins. Water of Christ's side, wash out my stains. Passion of Christ, my comfort be. O good Jesus, listen to me. In Thy wounds I fain would hide, Ne'er to be parted from Thy side, Guard me, should the foe assail me. Call me when my life shall fail me. Bid me come to Thee above, With Thy saints to sing Thy love, World without end. Amen.`],
       ['🍞','Grace Before Meals',`Bless us, O Lord, and these Thy gifts, which we are about to receive from Thy bounty. Through Christ our Lord. Amen.`]
     ]},
     {key:'spiritual',label:'Faith, Hope & Love',icon:'🕊️',items:[
@@ -5834,24 +6290,26 @@ function showLibrary(type,{fromHistory=false}={}){stopSpeech();const libraryPane
       ['🎓','Prayer to St. Joseph of Cupertino For Success in Examinations',`O humble St. Joseph of Cupertino, singularly favored by God in overcoming the difficulties of study and the worries of examinations, implore the Holy Spirit to enlighten my mind and strengthen my memory in the search of His truth and wisdom. Help me especially in the decisive moments of this examination, protecting me from that forgetfulness and disturbing anxiety which often affect me. May I succeed in offering God my finest work and may I grow in knowledge, understanding, humility and charity. May everything that I attempt to learn in life be offered in faithful service to God, from whom flows that wisdom which leads to eternal life. Amen.<br><br>St. Joseph of Cupertino pray for me,<br>Our Lady of Good Studies pray for me,<br>Holy Spirit enlighten me!`],
       ['🕯️','Prayer to St. Jude',`Most holy Apostle, St. Jude, faithful servant and friend of Jesus, the Church honours and invokes you universally, as the patron of difficult cases, of things almost despaired of. Pray for me, I am so helpless and alone. Intercede with God for me that He bring visible and speedy help where help is almost despaired of.<br><br>Come to my assistance in this great need that I may receive the consolation and help of heaven in all my necessities, tribulations, and sufferings, particularly - (make your request here) - and that I may praise God with you and all the saints forever.<br><br>I promise, O Blessed St. Jude, to be ever mindful of this great favour granted me by God and to always honour you as my special and powerful patron, and to gratefully encourage devotion to you. Amen.`],
       ['✈️','Prayer to Saint Raphael Before a Trip',`Dear St. Raphael, your lovely name means “God heals.” The Lord sent you to young Tobias to guide him throughout a long journey. Upon his return you taught him how to cure his father's blindness.<br><br>How natural therefore, for Christians to pray for your powerful help for safe travel and a happy return. This is what we ask for ourselves as well as for all who are far from home. Amen.`],
+      ['🪽','Prayer to Saint Michael, Gabriel and Raphael, Archangels',`Heavenly King, You have given us archangels to assist us during our pilgrimage on Earth.<br><br>Saint Michael is our protector; I ask him to come to my aid, fight for all my loved ones, and protect us from danger.<br><br>Saint Gabriel is a messenger of the Good News; I ask him to help me clearly hear Your voice and to teach me the truth.<br><br>Saint Raphael is the healing angel; I ask him to take my need for healing and that of everyone I know, lift it up to Your throne of grace, and deliver us back to the gift of recovery.<br><br>Help us, O Lord, to realize more fully the reality of archangels and their desire to serve us. Holy angels, pray for us. Amen.`],
       ['👼','Prayer to My Guardian Angel',`Angel of God, my Guardian dear, God's love for me has sent you here. Ever this day be at my side, to light and guard, to rule and guide.<br><br>My dear Guardian Angel, teach me to know God, to love and serve Him and save my soul. Keep me from all danger and lead me to heaven.`],
       ['🤝','Prayer for My Friends',`Jesus, when I am playing with other boys and girls, help me remember how You played as a Child. Help me make my playmates happy in our games, because You have taught me to love my neighbor as myself. Jesus bless my friends!`]
     ]}
   ];
   lc.innerHTML=`<div class="other-prayer-groups">${groups.map(g=>`<section class="other-prayer-group other-prayer-${g.key}"><div class="other-prayer-group-head"><span aria-hidden="true">${g.icon}</span><h3>${g.label}</h3></div><div class="other-prayer-group-list">${g.items.map(([i,n,t])=>`<div class="list-item other-prayer-item"><div class="other-prayer-icon" aria-hidden="true">${i}</div><b>${n}</b><div class="other-prayer-text">${t}</div></div>`).join('')}</div></section>`).join('')}</div>`
 }
+ if(type==='novenas'){renderNovenasLibrary()}
+
  if(type==='mysteries'){const todayMysterySet=todaySetKey();setPanelArt('libraryPanel',`panel-art mysteries-art ${todayMysterySet}-art`);title.textContent='Rosary Mysteries';document.getElementById('libraryTabs').className='';lc.innerHTML=`<p class="muted mystery-overview-intro">Explore the four Rosary mysteries, with the events and stories of each mystery set, their Gospel readings, and meditations.</p><div class="mystery-set-grid">${Object.entries(sets).map(([k,s])=>`<button class="mystery-set-card" data-set="${k}" onclick="renderMysteryLibrary('${k}')"><b>${s.name}</b><span class="muted">${s.days}</span><div class="picker-mystery-inline">${s.items.map(m=>m.title).join(' · ')}</div></button>`).join('')}</div>`}
  setScreen('library',{fromHistory,routeKey:`library:${type}`})}
 function renderMysteryLibrary(k,{fromHistory=false}={}){setPanelArt('libraryPanel',`panel-art mysteries-art ${k}-art`);const s=sets[k];document.getElementById('libraryTitle').textContent=s.name;document.getElementById('libraryTabs').innerHTML='';document.getElementById('libraryContent').innerHTML=`<p class="muted mystery-library-subtitle">${s.days}</p><div class="list">${s.items.map((m,i)=>`<div class="list-item mystery-detail-item"><b>${i+1}. ${m.title}</b><br><span class="muted">${m.desc}</span><button class="mystery-scripture-link" type="button" onclick='openBibleReference(${JSON.stringify(JSON.stringify(String(m.ref)))})'><span>${m.ref}</span><span aria-hidden="true">→</span></button><div class="reading">${m.reading}</div><div class="section-label">Meditation</div><div class="meditation">${m.meditation}</div></div>`).join('')}</div><div class="mystery-start-zone" role="button" tabindex="0" onclick="startSet('${k}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();startSet('${k}')}"><div><strong>📿 Pray ${s.name.replace('The ','')}</strong><small>Tap this area to begin the Rosary.</small></div></div>`;if(!fromHistory&&history.state?.cpcRoute!==`library:mystery:${k}`)history.pushState({cpcScreen:'library',cpcRoute:`library:mystery:${k}`},'')}
 
-function showDevotion(type,{fromHistory=false}={}){stopSpeech();if(type!=='divineMercy'&&type!=='angelus')releasePrayerWakeLock();currentDevotion=type;const artMap={divineMercy:'mercy-art',angelus:'angelus-art',readings:'readings-art',calendar:'calendar-art',bible:'readings-art',saint:'blessings-art'};setPanelArt('devotionPanel',`panel-art ${artMap[type]||'prayers-art'}`);setScreen('devotions',{fromHistory,routeKey:`devotion:${type}`});
+function showDevotion(type,{fromHistory=false}={}){stopSpeech();if(type!=='divineMercy'&&type!=='angelus')releasePrayerWakeLock();currentDevotion=type;const artMap={divineMercy:'mercy-art',angelus:'angelus-art',readings:'readings-art',calendar:'calendar-art',bible:'readings-art'};setPanelArt('devotionPanel',`panel-art ${artMap[type]||'prayers-art'}`);setScreen('devotions',{fromHistory,routeKey:`devotion:${type}`});
  const t=document.getElementById('devotionTitle'), e=document.getElementById('devotionEyebrow');
  if(type==='divineMercy'){e.textContent='Devotion';t.textContent='Chaplet of Divine Mercy';renderMercy();}
  if(type==='angelus'){if(!isCompleteToday('angelus'))localStorage.setItem('cpc-started-angelus',todayKey());updateHomeTrackers();e.textContent='Marian prayer';t.textContent='The Angelus';try{const saved=JSON.parse(localStorage.getItem('cpc-angelus-state')||'null');if(saved&&!isCompleteToday('angelus'))Object.assign(angelusState,saved)}catch(_){}window.renderAngelus();}
  if(type==='readings'){e.textContent='Liturgy of the Word';t.textContent='Daily Mass Readings';renderDailyReadings();}
  if(type==='calendar'){e.textContent='Liturgical year';t.textContent='Catholic Liturgical Calendar';calDate=new Date();renderCalendar();}
  if(type==='bible'){e.textContent='Sacred Scripture';t.textContent='Catholic Bible';window.renderBible();}
- if(type==='saint'){e.textContent='Communion of Saints';t.textContent='Saint of the Day';renderSaintOfDay();}
 }
 
 const bibleBooks=[
@@ -5964,47 +6422,6 @@ function massLectionaryCycleHtml(date){
  const pills=['A','B','C'].map(letter=>`<span class="mass-cycle-option${letter===active?' active':''}"${letter===active?' aria-current="true"':''}>${letter}</span>`).join('');
  return `<div class="mass-cycle-row" aria-label="Sunday lectionary cycle: Year ${active}"><span class="mass-cycle-caption">Sunday cycle</span><span class="mass-cycle-options" aria-hidden="true">${pills}</span></div>`;
 }
-async function renderSaintOfDay(){
- const c=document.getElementById('devotionContent'),d=new Date(),p=apiDateParts(d),cacheKey=`cpc-saint-${todayKey()}`;
- const dateText=d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
- c.innerHTML=`<div class="saint-card-detail"><div class="saint-liturgical-date">${dateText}</div><div class="notice">Loading today’s saint or liturgical celebration…</div></div>`;
-
- let cal=null;
- try{
-   const r=await fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);
-   if(!r.ok)throw new Error('saint');
-   cal=await r.json();
-   localStorage.setItem(cacheKey,JSON.stringify(cal));
- }catch(e){
-   try{cal=JSON.parse(localStorage.getItem(cacheKey)||'null')}catch(_){}
- }
-
- if(!cal){
-   c.innerHTML=`<div class="notice">Saint of the Day could not be loaded. Connect to the internet once to save today’s entry for offline viewing.</div><div class="actions"><button class="primary" onclick="renderSaintOfDay()">Try again</button></div>`;
-   return;
- }
-
- const cel=cal.celebration||{};
- const name=cel.name||'Today in the Liturgical Calendar';
- const type=liturgicalTypeLabel(cel.type)||(!cel.type?(cal.season||'Feria'):'');
- const hasBio=Boolean(cel.description);
- const desc=cel.description||'No biographical note is available for this celebration in the current calendar source.';
- const quote=cel.quote||'';
- const img=cel.image||'';
- const colour=liturgicalColour(cal);
-
- c.innerHTML=`<div class="saint-card-detail">
-   ${type?`<div class="saint-type-line">${esc(type)}</div>`:''}
-   <div class="saint-liturgical-colour" aria-label="${esc(colour.label)}${cal.season?` · ${esc(cal.season)}`:''}"><span class="lit-dot" style="--lit:${colour.hex}"></span><span>${esc(colour.label)}${cal.season?` · ${esc(cal.season)}`:''}</span></div>
-   <div class="saint-liturgical-date">${dateText}</div>
-   <h2 class="mystery-title">${esc(name)}</h2>
-   ${img?`<img class="saint-image" src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'">`:''}
-   ${quote?`<div class="saint-quote">“${esc(quote)}”</div>`:''}
-   <div class="saint-description${hasBio?'':' no-biographical-note'}">${esc(desc)}</div>
- </div>
- <p class="footer-note">Saint and feast information follows the General Roman Calendar source used by the app.</p>`;
-}
-
 const angelusFinalPrayer=`Pour forth, we beseech Thee, O Lord, Thy grace into our hearts, that we to whom the Incarnation of Christ Thy Son was made known by the message of an angel, may by His Passion and Cross be brought to the glory of His Resurrection. Through the same Christ our Lord. Amen.`;
 const angelusSteps=[
  {eyebrow:'The Angelus · 1 of 8',title:'The Angel of the Lord',versicle:angelus[0][0],response:angelus[0][1]},
@@ -6555,6 +6972,7 @@ function restoreAppRoute(route){
   if(route==='prayer:rosary'){requestPrayerWakeLock();const k=state.setKey||todaySetKey();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=k;setPanelArt('prayerContent',`panel-art rosary-art ${k}-art`);renderPrayer();setScreen('prayer',{fromHistory:true,routeKey:route});return;}
   if(route.startsWith('devotion:')){showDevotion(route.slice(9),{fromHistory:true});return;}
   if(route.startsWith('library:mystery:')){const k=route.slice('library:mystery:'.length);showLibrary('mysteries',{fromHistory:true});renderMysteryLibrary(k,{fromHistory:true});return;}
+  if(route.startsWith('library:novena:')){const slug=route.slice('library:novena:'.length);showLibrary('novenas',{fromHistory:true});openNovena(slug,null,{fromHistory:true});return;}
   if(route.startsWith('library:')){showLibrary(route.slice(8),{fromHistory:true});return;}
   goHome({fromHistory:true});
 }
@@ -6808,8 +7226,12 @@ window.importPrayerData=function(input){const f=input.files?.[0];if(!f)return;co
 window.renderCpcSettings=function(){const c=document.getElementById('devotionContent');if(!c)return;c.innerHTML=`<div class="settings-list"><label class="settings-row"><span><b>🔎 Larger prayer text</b><small>Increase prayer, Scripture and meditation text.</small></span><input type="checkbox" ${CPC.settings.largeText?'checked':''} onchange="toggleCpcSetting('largeText',this.checked)"></label><label class="settings-row"><span><b>◐ Higher contrast</b><small>Strengthen borders and text contrast.</small></span><input type="checkbox" ${CPC.settings.highContrast?'checked':''} onchange="toggleCpcSetting('highContrast',this.checked)"></label><label class="settings-row"><span><b>〰 Reduced motion</b><small>Minimise animations and smooth scrolling.</small></span><input type="checkbox" ${CPC.settings.reducedMotion?'checked':''} onchange="toggleCpcSetting('reducedMotion',this.checked)"></label><label class="settings-row"><span><b>☀️ Keep screen on</b><small>Prevent the screen from sleeping while you are actively praying, when supported by your browser.</small></span><input type="checkbox" ${CPC.settings.keepScreenOn?'checked':''} onchange="toggleCpcSetting('keepScreenOn',this.checked)"></label><label class="settings-row"><span><b>📳 Gentle haptics</b><small>Light vibration when supported by your phone.</small></span><input type="checkbox" ${CPC.settings.haptics?'checked':''} onchange="toggleCpcSetting('haptics',this.checked)"></label><div class="settings-row"><span><b>📳 Haptic test</b><small id="hapticTestStatus">Use this to check whether your current browser allows vibration.</small></span><button class="ghost" type="button" onclick="testCpcHaptics()">Test</button></div></div><div class="settings-actions"><button class="secondary" onclick="exportPrayerData()">⬇ Export prayer data</button><label class="secondary import-label">⬆ Import prayer data<input type="file" accept="application/json" onchange="importPrayerData(this)"></label></div><div class="share-safety-note"><b>Sharing the app is safe.</b><span>Your prayer progress, bookmarks and preferences stay in this browser and are not stored inside the app file. They are transferred only if you separately export and share a prayer-data backup.</span></div><p class="footer-note">Prayer-data backups include progress, bookmarks and preferences. Downloaded Bible books are not included because they can be downloaded again.</p>`};
 
 /* Devotion routing extension + persistent Marian/Divine Mercy state. */
+
+try{Object.keys(localStorage).filter(k=>k.startsWith('cpc-saint-')).forEach(k=>localStorage.removeItem(k))}catch(_){}
 const baseShowDevotion=showDevotion;
+const cpcValidDevotions=new Set(['settings','angelus','divineMercy','readings','calendar','bible']);
 window.showDevotion=function(type,{fromHistory=false}={}){
+ if(!cpcValidDevotions.has(type)){goHome({fromHistory:true});return;}
  const devotionAux=document.getElementById('devotionPrayerAux');
  if(devotionAux){devotionAux.replaceChildren();devotionAux.hidden=true;}
  if(type==='settings'||type==='angelus'||type==='divineMercy'){
