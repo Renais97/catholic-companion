@@ -5215,6 +5215,10 @@ body.cpc-prayer-screen-active #devotions.active{
 </style>
 
 
+<style id="cpc-home-icons-audit-v42">
+/* v42 — remove duplicate home icons and keep distinct, suitable symbols across Home cards. */
+#home .grid > .card[onclick*="showLibrary('parables')"] .home-icon{filter:saturate(1.02);}
+</style>
 <style id="cpc-catholicsg-scripture-reflection-v40">
 #devotionPanel.readings-art .catholic-sg-reflection-card{
   text-align:center;
@@ -5278,7 +5282,7 @@ body.cpc-prayer-screen-active #devotions.active{
       <button class="card" onclick="showDevotion('readings')"><strong><span class="home-title-text">Daily Mass Readings</span><span class="home-icon" aria-hidden="true">📖</span></strong></button>
       <button class="card" onclick="showDevotion('bible')"><strong><span class="home-title-text">Catholic Bible</span><span class="home-icon" aria-hidden="true">✝️</span></strong></button>
       <button class="card" onclick="showDevotion('calendar')"><strong><span class="home-title-text">Liturgical Calendar</span><span class="home-icon" aria-hidden="true">🗓️</span></strong></button>
-      <button class="card" onclick="showLibrary('parables')"><strong><span class="home-title-text">Parables of Jesus</span><span class="home-icon" aria-hidden="true">🕯️</span></strong></button>
+      <button class="card" onclick="showLibrary('parables')"><strong><span class="home-title-text">Parables of Jesus</span><span class="home-icon" aria-hidden="true">🌾</span></strong></button>
       <button class="card" onclick="showLibrary('mysteries')"><strong><span class="home-title-text">Rosary Mysteries</span><span class="home-icon" aria-hidden="true">🌹</span></strong></button>
       <button class="card promises-home-card" onclick="showLibrary('promises')">
   <strong>
@@ -5947,7 +5951,7 @@ Object.assign(novenas,{
   divineMercy:cpcMakeNovena({title:'Divine Mercy Novena',short:'Divine Mercy',icon:'❤️‍🔥',group:'jesus',feastRule:'divineMercy',feastName:'Divine Mercy Sunday',kind:'jesus',focus:'trust in the mercy of Jesus and the needs of the whole world'}),
   holySpirit:cpcMakeNovena({title:'Novena to the Holy Spirit',short:'Holy Spirit',icon:'🕊️',group:'jesus',feastRule:'pentecost',feastName:'Pentecost Sunday',kind:'jesus',focus:'the gifts, fruits and guidance of the Holy Spirit'}),
   christKing:cpcMakeNovena({title:'Novena to Christ the King',short:'Christ the King',icon:'👑',group:'jesus',feastRule:'christKing',feastName:'Our Lord Jesus Christ, King of the Universe',kind:'jesus',focus:'the reign of Christ in my heart, family and world'}),
-  holyName:cpcMakeNovena({title:'Novena to the Holy Name of Jesus',short:'Holy Name of Jesus',icon:'IHS',group:'jesus',feast:{month:1,day:3},feastName:'Most Holy Name of Jesus',kind:'jesus',focus:'reverence for the Holy Name and deeper union with Jesus'}),
+  holyName:cpcMakeNovena({title:'Novena to the Holy Name of Jesus',short:'Holy Name of Jesus',icon:'✝️',group:'jesus',feast:{month:1,day:3},feastName:'Most Holy Name of Jesus',kind:'jesus',focus:'reverence for the Holy Name and deeper union with Jesus'}),
   holyCross:cpcMakeNovena({title:'Novena of the Holy Cross',short:'Holy Cross',icon:'✝️',group:'jesus',feast:{month:9,day:14},feastName:'Exaltation of the Holy Cross',kind:'jesus',focus:'grace to carry my crosses faithfully with Christ'}),
   christmas:cpcMakeNovena({title:'Christmas Novena',short:'Christmas',icon:'⭐',group:'jesus',feast:{month:12,day:25},feastName:'Nativity of the Lord',kind:'jesus',focus:'preparation of my heart to welcome Christ at Christmas'}),
 
