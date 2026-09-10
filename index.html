@@ -6787,16 +6787,29 @@ function catholicSGScriptureReflectionCard(readingDate=new Date()){
  const dateLabel=d.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
  return `<div class="reading-card catholic-sg-reflection-card"><div class="eyebrow">Scripture Reflection</div><h3>Reflect on today’s Word</h3><p>Continue your prayer with the Scripture Reflection from the Roman Catholic Archdiocese of Singapore.</p><a class="primary catholic-sg-reflection-link" href="https://www.catholic.sg/scripture-reflection/" target="_blank" rel="noopener noreferrer" aria-label="Open CatholicSG Scripture Reflection for ${esc(dateLabel)}">Read Scripture Reflection <span aria-hidden="true">↗</span></a><div class="catholic-sg-reflection-source">CatholicSG · Archdiocese of Singapore</div></div>`;
 }
+function massReadingsPageHtml(d,r,cal,{eyebrow='Today',cardAction="showDevotion('calendar')",cardAria='Open liturgical calendar'}={}){
+ const x=r&&r.readings?r.readings:{};
+ const cards=r?renderReadingSet(x,cal):'';
+ const litMeta=liturgicalMetaText(cal);
+ const lc=liturgicalColour(cal);
+ const dateText=d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+ const seasonText=(r&&r.season)||((cal&&cal.season)||'');
+ const action=cardAction?` onclick="${cardAction}"`:'';
+ const aria=cardAria?` aria-label="${esc(cardAria)}"`:'';
+ const topCard=cal&&cal.celebration
+  ?`<button class="reading-card today-liturgical-card" type="button"${action}${aria}><div class="eyebrow">${esc(eyebrow)}</div><div class="today-liturgical-date">${dateText}</div><h3 class="today-liturgical-title" style="--lit-title:${lc.hex}">${esc(cal.celebration.name)}</h3><div class="muted">${litMeta?esc(litMeta)+' · ':''}<span class="lit-dot" style="--lit:${lc.hex}"></span> ${lc.label}</div>${massLectionaryCycleHtml(d)}</button>`
+  :`<button class="reading-card today-liturgical-card" type="button"${action}${aria}><div class="eyebrow">${esc(eyebrow)}</div><div class="today-liturgical-date">${dateText}</div><div class="muted">${esc(seasonText)}</div>${massLectionaryCycleHtml(d)}</button>`;
+ return `${topCard}${officialMassReadingSources(d)}${cards}${r?catholicSGScriptureReflectionCard(d):''}`;
+}
+
 async function renderDailyReadings(){
  const c=document.getElementById('devotionContent'), d=new Date(), p=apiDateParts(d);
  c.innerHTML=`<div class="notice">Loading today’s liturgical information and reading references…</div>`;
  try{
   const [rr,cr]=await Promise.all([fetch(`https://cpbjr.github.io/catholic-readings-api/readings/${p.y}/${p.md}.json`),fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`)]);
-  if(!rr.ok) throw new Error('readings'); const r=await rr.json(); const cal=cr.ok?await cr.json():null; const x=r.readings||{}; const cards=renderReadingSet(x,cal); const litMeta=liturgicalMetaText(cal);
-  c.innerHTML=`${cal&&cal.celebration?`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><h3 class="today-liturgical-title" style="--lit-title:${liturgicalColour(cal).hex}">${esc(cal.celebration.name)}</h3><div class="muted">${litMeta?esc(litMeta)+' · ':''}<span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div>${massLectionaryCycleHtml(d)}</button>`:`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><div class="muted">${esc(r.season||'')}</div>${massLectionaryCycleHtml(d)}</button>`}
-  ${officialMassReadingSources(d)}
-  ${cards}
-  ${catholicSGScriptureReflectionCard(d)}`;
+  if(!rr.ok) throw new Error('readings');
+  const r=await rr.json(), cal=cr.ok?await cr.json():null;
+  c.innerHTML=massReadingsPageHtml(d,r,cal);
  }catch(err){c.innerHTML=`<div class="notice">Daily readings could not be loaded. Check your internet connection and try again.</div><div class="actions"><button class="primary" onclick="renderDailyReadings()">Try again</button></div>`}
 }
 
@@ -6848,6 +6861,10 @@ function weekRangeLabel(start){
  return `${start.getDate()} ${start.toLocaleDateString(undefined,{month:'short'})} ${start.getFullYear()} – ${end.getDate()} ${end.toLocaleDateString(undefined,{month:'short'})} ${end.getFullYear()}`;
 }
 async function renderCalendar(){
+ const t=document.getElementById('devotionTitle'), e=document.getElementById('devotionEyebrow');
+ if(e)e.textContent='Liturgical year';
+ if(t)t.textContent='Catholic Liturgical Calendar';
+ setPanelArt('devotionPanel','panel-art calendar-art');
  if(calView==='month') return renderCalendarMonth();
  return renderCalendarWeek();
 }
@@ -6906,11 +6923,17 @@ function showCalendarPopup(y,m,n){
 function changeMonth(n){calDate=new Date(calDate.getFullYear(),calDate.getMonth()+n,1);renderCalendar()}
 function changeWeek(n){calDate=new Date(calDate.getFullYear(),calDate.getMonth(),calDate.getDate()+(n*7));renderCalendar()}
 async function showCalendarDay(y,m,n){
- const d=new Date(y,m,n),p=apiDateParts(d),c=document.getElementById('devotionContent');c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><h3>${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</h3><div class="notice">Loading liturgical information and reading references…</div>`;
+ const d=new Date(y,m,n),p=apiDateParts(d),c=document.getElementById('devotionContent');
+ const t=document.getElementById('devotionTitle'), e=document.getElementById('devotionEyebrow');
+ if(e)e.textContent='Liturgy of the Word';
+ if(t)t.textContent='Daily Mass Readings';
+ setPanelArt('devotionPanel','panel-art readings-art');
+ c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><div class="notice">Loading liturgical information and reading references…</div>`;
  try{
-  const [cr,rr]=await Promise.all([fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`),fetch(`https://cpbjr.github.io/catholic-readings-api/readings/${p.y}/${p.md}.json`)]);const cal=cr.ok?await cr.json():null,r=rr.ok?await rr.json():null,x=r&&r.readings?r.readings:{};const cards=r?renderReadingSet(x,cal):'';const calType=cal&&cal.celebration?liturgicalTypeLabel(cal.celebration.type):'';
-  c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><h3>${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</h3>${cal&&cal.celebration?`<div class="reading-card">${calType?`<div class="eyebrow">${esc(calType)}</div>`:''}<h3>${esc(cal.celebration.name)}</h3><div class="muted">${esc(cal.season||'')} · <span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div>${cal.celebration.description?`<p>${esc(cal.celebration.description)}</p>`:''}</div>`:`<div class="reading-card"><div class="muted">${esc(cal&&cal.season?cal.season:(r&&r.season?r.season:'Liturgical day'))}</div></div>`}${officialMassReadingSources(d)}${cards}${r?catholicSGScriptureReflectionCard(d):''}`;
- }catch(e){c.innerHTML+=`<div class="notice">Information for this day could not be loaded.</div>`}
+  const [cr,rr]=await Promise.all([fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`),fetch(`https://cpbjr.github.io/catholic-readings-api/readings/${p.y}/${p.md}.json`)]);
+  const cal=cr.ok?await cr.json():null, r=rr.ok?await rr.json():null;
+  c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button>${massReadingsPageHtml(d,r,cal,{eyebrow:'Selected date',cardAction:'renderCalendar()',cardAria:'Back to liturgical calendar'})}`;
+ }catch(e){c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><div class="notice">Information for this day could not be loaded.</div>`}
 }
 
 function enableTapEffects(){
