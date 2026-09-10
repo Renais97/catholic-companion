@@ -5214,6 +5214,36 @@ body.cpc-prayer-screen-active #devotions.active{
 @media(max-width:420px){.novena-search-wrap{margin-bottom:11px;padding:7px 9px}.novena-source-note{font-size:.7rem;margin-bottom:8px}}
 </style>
 
+
+<style id="cpc-catholicsg-scripture-reflection-v40">
+#devotionPanel.readings-art .catholic-sg-reflection-card{
+  text-align:center;
+  padding:17px 16px 15px;
+}
+#devotionPanel.readings-art .catholic-sg-reflection-card h3{
+  margin:5px 0 7px;
+}
+#devotionPanel.readings-art .catholic-sg-reflection-card p{
+  max-width:560px;
+  margin:0 auto 13px;
+  color:var(--muted);
+  line-height:1.55;
+}
+#devotionPanel.readings-art .catholic-sg-reflection-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  min-height:42px;
+  padding:9px 15px;
+  text-decoration:none;
+}
+#devotionPanel.readings-art .catholic-sg-reflection-source{
+  margin-top:9px;
+  color:var(--muted);
+  font:12px/1.35 system-ui,sans-serif;
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -6752,78 +6782,10 @@ function renderReadingSet(x,cal){
  ].join('');
 }
 
-function dailyGospelReflection(cal,x,readingDate=new Date()){
- const season=String((cal&&cal.season)||'').toLowerCase();
- const celebration=(cal&&cal.celebration&&cal.celebration.name)||'';
- const gospel=(x&&x.gospel)||'today’s Gospel';
+function catholicSGScriptureReflectionCard(readingDate=new Date()){
  const d=readingDate instanceof Date?readingDate:new Date(readingDate);
- const start=new Date(d.getFullYear(),0,0);
- const dayOfYear=Math.floor((d-start)/86400000);
-
- const openings=[
-  `Today the Church places <b>${esc(gospel)}</b> before us. Listen for the word, invitation, or challenge that Christ is placing before you today.`,
-  `In <b>${esc(gospel)}</b>, the Gospel is not merely something to understand but something to receive. Ask what this passage reveals about Christ and about your own response to Him.`,
-  `The Church gives us <b>${esc(gospel)}</b> today as a living word. Notice what draws your attention: a person, an action, a question, a command, or a promise.`,
-  `Today’s Gospel, <b>${esc(gospel)}</b>, invites us to bring ordinary life into the light of Christ. The Word becomes fruitful when it changes the way we choose and love.`
- ];
- const middles=[
-  `Grace asks for a response. Christ may console, correct, call, heal, or invite, but discipleship becomes concrete when listening turns into action.`,
-  `God often works through ordinary encounters rather than dramatic moments. A conversation, interruption, difficult person, or quiet decision can become a place where faith deepens.`,
-  `We can hear Scripture without allowing it to disturb our habits. Today’s Word asks where we may be resisting conversion, postponing mercy, or protecting our comfort.`,
-  `Faith is not measured only by what we understand, but by what we entrust to God. Prayer and action belong together: receive grace, then embody it.`,
-  `The Word of God can console and challenge at the same time. It reassures us that God is near while asking us to release what keeps us from loving freely.`,
-  `Holiness usually grows through repeated small choices. Today may call for patience, courage, honesty, forgiveness, gratitude, or renewed trust.`
- ];
- const closes=[
-  `Ask where Christ is inviting you to respond rather than merely agree. One faithful action can turn today’s Gospel from something heard into something lived.`,
-  `Before the day ends, return to one phrase or image from the Gospel and ask God to show you where that Word can become visible in your choices.`,
-  `You do not need to change everything at once. Begin with one response: one person to forgive, one duty to do with love, one fear to surrender, or one opportunity for mercy.`,
-  `Let today’s Gospel accompany you beyond prayer. An unexpected moment later today may be precisely where this Word is asking to take flesh in your life.`
- ];
- const takeaways=[
-  'Choose one concrete response to today’s Gospel and do it before the day ends.',
-  'Carry one phrase from the Gospel with you and return to it when the day becomes busy.',
-  'Ask, “Lord, what are You inviting me to do differently today?” and act on one small answer.',
-  'Offer one ordinary task today as a deliberate act of love and faithfulness.',
-  'Notice one person who needs patience, mercy, or encouragement, and respond generously.'
- ];
-
- // Day-of-year offsets ensure consecutive days do not simply recycle the same combination.
- let opening=openings[dayOfYear%openings.length];
- let middle=middles[(dayOfYear+1)%middles.length];
- let close=closes[(dayOfYear+2)%closes.length];
- let takeaway=takeaways[(dayOfYear+3)%takeaways.length];
-
- if(celebration){
-   opening+=` Today the Church also remembers <b>${esc(celebration)}</b>, which gives the day its particular liturgical character.`;
- }
-
- if(season.includes('advent')){
-  middle=`Advent teaches us to recognise God’s coming before everything is resolved. Today’s readings invite patient attentiveness: a heart made ready through prayer, repentance, and hope.`;
- }else if(season.includes('christmas')){
-  middle=`Christmas proclaims that God has come close. The Incarnation asks us to receive His nearness and carry it into ordinary places where others need tenderness, peace, and hope.`;
- }else if(season.includes('lent')){
-  middle=`Lent exposes the places where our hearts have become divided or distracted. Today’s readings invite us to return to God through prayer, self-denial, mercy, and truth.`;
- }else if(season.includes('easter')){
-  middle=`Easter reminds us that the risen Christ is already at work where we may see only uncertainty or limitation. Today’s Gospel calls us to live from resurrection rather than fear.`;
- }
-
- return `<div class="homily-card"><div class="eyebrow">Daily Gospel Reflection</div><p>${opening}</p><p>${middle}</p><p>${close}</p><div class="homily-takeaway"><b>Takeaway:</b><span>${takeaway}</span></div></div>`;
-}
-
-function dailyReflection(cal,x){
- const season=String((cal&&cal.season)||'').toLowerCase();const celebration=(cal&&cal.celebration&&cal.celebration.name)||'';const gospel=(x&&x.gospel)||'today’s Gospel';
- let theme='faithful discipleship in the ordinary circumstances of life';
- let invitation='Ask where Christ is inviting you to listen more closely and respond with greater love today.';
- if(season.includes('advent')){theme='hope, watchfulness, and making room for Christ';invitation='Where do you need to wait with greater trust rather than trying to control the outcome?'}
- else if(season.includes('christmas')){theme='the nearness of God in the Incarnation';invitation='How can you welcome Christ more consciously in the people and circumstances before you today?'}
- else if(season.includes('lent')){theme='conversion, mercy, and returning to God with an undivided heart';invitation='What is one attachment, habit, or resentment you can place before God today?'}
- else if(season.includes('easter')){theme='resurrection, new life, and the joy of being sent';invitation='Where is God inviting you to live with greater hope because Christ is risen?'}
- else if(season.includes('ordinary')){theme='steady discipleship and holiness in everyday life';invitation='What small act of faithfulness would make today more Christlike?'}
- if(/mary|virgin|assumption|immaculate|annunciation/i.test(celebration)){theme='Mary’s attentive faith and willingness to say yes to God';invitation='What would a simple, trusting “yes” to God look like for you today?'}
- else if(/martyr/i.test(celebration)){theme='courage, fidelity, and love that remains steadfast under pressure';invitation='Where are you being asked to remain faithful even when it costs you something?'}
- const feast=celebration?` On this day the Church also remembers <b>${esc(celebration)}</b>, which can shape your prayer with the readings.`:'';
- return `<div class="reflection-card"><div class="eyebrow">Guided reflection</div><h3>Pause with the Word</h3><p>As you approach <b>${esc(gospel)}</b>, carry the theme of <b>${theme}</b> into prayer.${feast}</p><div class="reflection-prompts"><div class="reflection-prompt"><b>① Read slowly</b><span>What word, phrase, or image stays with you?</span></div><div class="reflection-prompt"><b>② Bring it to prayer</b><span>What might God be revealing, consoling, or challenging in you?</span></div><div class="reflection-prompt"><b>③ Respond</b><span>${invitation}</span></div></div></div>`;
+ const dateLabel=d.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
+ return `<div class="reading-card catholic-sg-reflection-card"><div class="eyebrow">Scripture Reflection</div><h3>Reflect on today’s Word</h3><p>Continue your prayer with the Scripture Reflection from the Roman Catholic Archdiocese of Singapore.</p><a class="primary catholic-sg-reflection-link" href="https://www.catholic.sg/scripture-reflection/" target="_blank" rel="noopener noreferrer" aria-label="Open CatholicSG Scripture Reflection for ${esc(dateLabel)}">Read Scripture Reflection <span aria-hidden="true">↗</span></a><div class="catholic-sg-reflection-source">CatholicSG · Archdiocese of Singapore</div></div>`;
 }
 async function renderDailyReadings(){
  const c=document.getElementById('devotionContent'), d=new Date(), p=apiDateParts(d);
@@ -6834,8 +6796,7 @@ async function renderDailyReadings(){
   c.innerHTML=`${cal&&cal.celebration?`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><h3 class="today-liturgical-title" style="--lit-title:${liturgicalColour(cal).hex}">${esc(cal.celebration.name)}</h3><div class="muted">${litMeta?esc(litMeta)+' · ':''}<span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div>${massLectionaryCycleHtml(d)}</button>`:`<button class="reading-card today-liturgical-card" type="button" onclick="showDevotion('calendar')" aria-label="Open liturgical calendar"><div class="eyebrow">Today</div><div class="today-liturgical-date">${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div><div class="muted">${esc(r.season||'')}</div>${massLectionaryCycleHtml(d)}</button>`}
   ${officialMassReadingSources(d)}
   ${cards}
-  ${dailyGospelReflection(cal,x,d)}
-  ${dailyReflection(cal,x)}`;
+  ${catholicSGScriptureReflectionCard(d)}`;
  }catch(err){c.innerHTML=`<div class="notice">Daily readings could not be loaded. Check your internet connection and try again.</div><div class="actions"><button class="primary" onclick="renderDailyReadings()">Try again</button></div>`}
 }
 
@@ -6948,7 +6909,7 @@ async function showCalendarDay(y,m,n){
  const d=new Date(y,m,n),p=apiDateParts(d),c=document.getElementById('devotionContent');c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><h3>${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</h3><div class="notice">Loading liturgical information and reading references…</div>`;
  try{
   const [cr,rr]=await Promise.all([fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`),fetch(`https://cpbjr.github.io/catholic-readings-api/readings/${p.y}/${p.md}.json`)]);const cal=cr.ok?await cr.json():null,r=rr.ok?await rr.json():null,x=r&&r.readings?r.readings:{};const cards=r?renderReadingSet(x,cal):'';const calType=cal&&cal.celebration?liturgicalTypeLabel(cal.celebration.type):'';
-  c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><h3>${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</h3>${cal&&cal.celebration?`<div class="reading-card">${calType?`<div class="eyebrow">${esc(calType)}</div>`:''}<h3>${esc(cal.celebration.name)}</h3><div class="muted">${esc(cal.season||'')} · <span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div>${cal.celebration.description?`<p>${esc(cal.celebration.description)}</p>`:''}</div>`:`<div class="reading-card"><div class="muted">${esc(cal&&cal.season?cal.season:(r&&r.season?r.season:'Liturgical day'))}</div></div>`}${officialMassReadingSources(d)}${cards}${r?dailyReflection(cal,x):''}`;
+  c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><h3>${d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</h3>${cal&&cal.celebration?`<div class="reading-card">${calType?`<div class="eyebrow">${esc(calType)}</div>`:''}<h3>${esc(cal.celebration.name)}</h3><div class="muted">${esc(cal.season||'')} · <span class="lit-dot" style="--lit:${liturgicalColour(cal).hex}"></span> ${liturgicalColour(cal).label}</div>${cal.celebration.description?`<p>${esc(cal.celebration.description)}</p>`:''}</div>`:`<div class="reading-card"><div class="muted">${esc(cal&&cal.season?cal.season:(r&&r.season?r.season:'Liturgical day'))}</div></div>`}${officialMassReadingSources(d)}${cards}${r?catholicSGScriptureReflectionCard(d):''}`;
  }catch(e){c.innerHTML+=`<div class="notice">Information for this day could not be loaded.</div>`}
 }
 
