@@ -5489,6 +5489,60 @@ async function releasePrayerWakeLock(){
    prayerWakeLock=null
  }
 }
+function prayerFocusEnabled(){
+ try{
+   const saved=JSON.parse(localStorage.getItem('cpc-settings')||'{}');
+   return saved.prayerFocus!==false;
+ }catch(_){return true}
+}
+let prayerFullscreenOwned=false;
+async function requestPrayerFullscreen(){
+ if(!prayerFocusEnabled())return false;
+ const root=document.documentElement;
+ if(document.fullscreenElement||document.webkitFullscreenElement)return true;
+ if(root.requestFullscreen){
+   try{
+     await root.requestFullscreen({navigationUI:'hide'});
+     prayerFullscreenOwned=true;
+     return true;
+   }catch(_){
+     try{
+       await root.requestFullscreen();
+       prayerFullscreenOwned=true;
+       return true;
+     }catch(__){}
+   }
+ }
+ if(root.webkitRequestFullscreen){
+   try{
+     const result=root.webkitRequestFullscreen();
+     if(result&&typeof result.then==='function')await result;
+     prayerFullscreenOwned=true;
+     return true;
+   }catch(_){}
+ }
+ return false;
+}
+async function exitPrayerFullscreen(){
+ if(!prayerFullscreenOwned)return false;
+ try{
+   if(document.fullscreenElement&&document.exitFullscreen){await document.exitFullscreen();prayerFullscreenOwned=false;return true}
+   if(document.webkitFullscreenElement&&document.webkitExitFullscreen){document.webkitExitFullscreen();prayerFullscreenOwned=false;return true}
+ }catch(_){prayerFullscreenOwned=false;return false}
+ prayerFullscreenOwned=false;
+ return false;
+}
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement)prayerFullscreenOwned=false});
+document.addEventListener('webkitfullscreenchange',()=>{if(!document.webkitFullscreenElement)prayerFullscreenOwned=false});
+function enterPrayerFocus(){
+ requestPrayerWakeLock();
+ requestPrayerFullscreen();
+}
+function leavePrayerFocus(){
+ releasePrayerWakeLock();
+ exitPrayerFullscreen();
+ document.body.classList.remove('cpc-novena-prayer-active');
+}
 document.addEventListener('visibilitychange',()=>{
   if(document.visibilityState==='hidden'){stopSpeech();return;}
   if(document.visibilityState==='visible'&&keepAwakeWanted&&keepScreenOnEnabled())requestPrayerWakeLock();
@@ -5520,7 +5574,7 @@ function setPanelArt(id, classes){
  el.dataset.baseClass=base;
  el.className=[base,...activeModes,classes].filter(Boolean).join(' ').trim();
 }
-function goHome({fromHistory=false}={}){releasePrayerWakeLock();stopSpeech();save();updateHomeTrackers();setScreen('home',{fromHistory});}
+function goHome({fromHistory=false}={}){leavePrayerFocus();stopSpeech();save();updateHomeTrackers();setScreen('home',{fromHistory});}
 function todayKey(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function cpcLocalDayKeyFromTimestamp(ts){
  const d=new Date(Number(ts));
@@ -5653,8 +5707,8 @@ function heroDateText(d){const months=['January','February','March','April','May
 async function updateToday(){const hero=document.querySelector('#home .hero');if(hero)hero.dataset.mysterySet=todaySetKey();const el=document.getElementById('todayLabel');const d=new Date();if(el)el.innerHTML=`<span class="today-liturgy"><span class="hero-date-main"><span>${heroDateText(d)}</span></span><span class="hero-liturgical-week"><span id="heroLitWeek">Liturgical week</span><span class="hero-lit-dot" id="heroLitDot" aria-hidden="true"></span></span></span>`;setDailyScripture();try{const p=apiDateParts(d),r=await fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok){const cal=await r.json(),lc=liturgicalColour(cal),dot=document.getElementById('heroLitDot'),week=document.getElementById('heroLitWeek');if(dot)dot.style.setProperty('--hero-lit',lc.hex);if(week)week.textContent=liturgicalWeekLabel(d,cal.season||'');}}catch(e){const week=document.getElementById('heroLitWeek');if(week)week.textContent='';}}
 function startToday(){startSet(todaySetKey())}
 function showMysteryPicker(){showLibrary('mysteries')}
-function startSet(k){requestPrayerWakeLock();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=k;state={setKey:k,step:0,decade:0,hail:0};setPanelArt('prayerContent',`panel-art rosary-art ${k}-art`);save();renderPrayer();setScreen('prayer',{routeKey:'prayer:rosary'})}
-function resumePrayer(){requestPrayerWakeLock();const s=localStorage.getItem('rosaryState');if(s){try{state=JSON.parse(s);if(state.setKey){const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=state.setKey;setPanelArt('prayerContent',`panel-art rosary-art ${state.setKey}-art`);renderPrayer();setScreen('prayer',{routeKey:'prayer:rosary'});return}}catch(e){}}startToday()}
+function startSet(k){enterPrayerFocus();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=k;state={setKey:k,step:0,decade:0,hail:0};setPanelArt('prayerContent',`panel-art rosary-art ${k}-art`);save();renderPrayer();setScreen('prayer',{routeKey:'prayer:rosary'})}
+function resumePrayer(){enterPrayerFocus();const s=localStorage.getItem('rosaryState');if(s){try{state=JSON.parse(s);if(state.setKey){const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=state.setKey;setPanelArt('prayerContent',`panel-art rosary-art ${state.setKey}-art`);renderPrayer();setScreen('prayer',{routeKey:'prayer:rosary'});return}}catch(e){}}startToday()}
 function save(){localStorage.setItem('rosaryState',JSON.stringify(state))}
 let prayerSpeed=parseFloat(localStorage.getItem('cpc-prayer-speed')||'1');
 const prayerSpeedOptions=[[0.75,'Slow'],[1,'Gentle'],[1.5,'Fast'],[2,'Faster']];
@@ -6078,6 +6132,7 @@ function novenaCompleted(progress){const a=Array.isArray(progress&&progress.comp
 function novenaProgressDots(progress){const done=new Set(Array.isArray(progress&&progress.completedDays)?progress.completedDays:[]),today=progress?novenaScheduledDay(progress):0;return `<span class="novena-mini-progress" aria-hidden="true">${Array.from({length:9},(_,i)=>{const d=i+1;return `<span class="novena-mini-dot ${done.has(d)?'done':''} ${today===d?'today':''}"></span>`}).join('')}</span>`}
 function novenaLatestActive(){const s=novenaStore();return Object.entries(s).filter(([slug,p])=>novenas[slug]&&p&&p.startDate&&!novenaCompleted(p)).sort((a,b)=>(b[1].updatedAt||0)-(a[1].updatedAt||0))[0]||null}
 function renderNovenasLibrary(){
+  document.body.classList.remove('cpc-novena-prayer-active');
   const panel=document.getElementById('libraryPanel'),title=document.getElementById('libraryTitle'),tabs=document.getElementById('libraryTabs'),lc=document.getElementById('libraryContent');
   panel.classList.remove('novena-detail');title.textContent='Novenas';tabs.innerHTML='';
   const store=novenaStore(),latest=novenaLatestActive();
@@ -6085,16 +6140,17 @@ function renderNovenasLibrary(){
   const groups=novenaGroups.map(g=>{const items=Object.entries(novenas).filter(([,n])=>n.group===g.key).sort((a,b)=>novenaDateNumber(novenaFeastMeta(a[1]).feastKey)-novenaDateNumber(novenaFeastMeta(b[1]).feastKey));if(!items.length)return '';return `<section class="novena-group"><div class="novena-group-head"><span aria-hidden="true">${g.icon}</span><h3>${g.label}</h3></div><div class="novena-card-grid">${items.map(([slug,n])=>{const p=store[slug],started=!!(p&&p.startDate),done=started&&novenaCompleted(p),day=started?novenaScheduledDay(p):1,status=done?'Completed · open to pray again':started?`Day ${day} of 9`:'Begin a nine-day prayer';return `<button class="novena-card" type="button" onclick="${started?`openNovena('${slug}')`:`startNovena('${slug}')`}"><span class="novena-card-icon" aria-hidden="true">${n.icon}</span><span class="novena-card-title">${n.short}</span>${novenaFeastLine(n)}<span class="novena-card-status">${status}</span>${started?novenaProgressDots(p):''}</button>`}).join('')}</div></section>`}).join('');
   lc.innerHTML=`<p class="novena-page-intro">Browse ${Object.keys(novenas).length} common nine-day novenas. Feast dates show the traditional nine-day window ending on the eve of the feast. Novena traditions vary; newly added entries use concise Catholic Companion prayers, and you can begin any novena whenever you wish.</p><div class="novena-search-wrap"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search novenas…" aria-label="Search novenas" oninput="filterNovenaCards(this.value)"></div><div id="novenaSearchEmpty" class="novena-search-empty" hidden>No novenas match that search.</div>${novenaUpcomingFeastHtml()}${cont}<div class="novena-groups">${groups}</div>`;
 }
-function startNovena(slug){if(!novenas[slug])return;const s=novenaStore();s[slug]={startDate:todayKey(),completedDays:[],updatedAt:Date.now()};saveNovenaStore(s);openNovena(slug,1)}
-function restartNovena(slug){if(!novenas[slug])return;if(!confirm('Start this novena again from Day 1 today?'))return;const s=novenaStore();s[slug]={startDate:todayKey(),completedDays:[],updatedAt:Date.now()};saveNovenaStore(s);renderNovenaDay(slug,1)}
-function openNovena(slug,day=null,{fromHistory=false}={}){const s=novenaStore(),p=s[slug];if(!p||!p.startDate){startNovena(slug);return}p.updatedAt=Date.now();s[slug]=p;saveNovenaStore(s);renderNovenaDay(slug,day||novenaScheduledDay(p),{fromHistory})}
+function startNovena(slug){if(!novenas[slug])return;enterPrayerFocus();const s=novenaStore();s[slug]={startDate:todayKey(),completedDays:[],updatedAt:Date.now()};saveNovenaStore(s);openNovena(slug,1)}
+function restartNovena(slug){if(!novenas[slug])return;if(!confirm('Start this novena again from Day 1 today?'))return;enterPrayerFocus();const s=novenaStore();s[slug]={startDate:todayKey(),completedDays:[],updatedAt:Date.now()};saveNovenaStore(s);renderNovenaDay(slug,1)}
+function openNovena(slug,day=null,{fromHistory=false}={}){enterPrayerFocus();const s=novenaStore(),p=s[slug];if(!p||!p.startDate){startNovena(slug);return}p.updatedAt=Date.now();s[slug]=p;saveNovenaStore(s);renderNovenaDay(slug,day||novenaScheduledDay(p),{fromHistory})}
 function markNovenaDay(slug,day){const s=novenaStore(),p=s[slug];if(!p)return;const set=new Set(Array.isArray(p.completedDays)?p.completedDays:[]);set.add(Number(day));p.completedDays=[...set].filter(n=>n>=1&&n<=9).sort((a,b)=>a-b);p.updatedAt=Date.now();s[slug]=p;saveNovenaStore(s);renderNovenaDay(slug,day,{fromHistory:true})}
-function returnToNovenas(){stopSpeech();if(history.state?.cpcRoute?.startsWith('library:novena:')&&history.length>1){history.back()}else{showLibrary('novenas')}}
+function returnToNovenas(){leavePrayerFocus();stopSpeech();if(history.state?.cpcRoute?.startsWith('library:novena:')&&history.length>1){history.back()}else{showLibrary('novenas')}}
 function renderNovenaDay(slug,day=null,{fromHistory=false}={}){
   const n=novenas[slug];if(!n){showLibrary('novenas',{fromHistory});return}
   const s=novenaStore(),p=s[slug];if(!p||!p.startDate){startNovena(slug);return}
   const d=Math.max(1,Math.min(9,Number(day)||novenaScheduledDay(p))),scheduled=novenaScheduledDay(p),entry=n.days[d-1],doneDays=new Set(Array.isArray(p.completedDays)?p.completedDays:[]),allDone=novenaCompleted(p);
   const panel=document.getElementById('libraryPanel'),title=document.getElementById('libraryTitle'),tabs=document.getElementById('libraryTabs'),lc=document.getElementById('libraryContent');
+  document.body.classList.add('cpc-novena-prayer-active');
   setPanelArt('libraryPanel','panel-art novenas-art');panel.classList.add('novena-detail');title.textContent=n.title;tabs.innerHTML='';
   lc.innerHTML=`<div class="novena-detail-top"><button class="ghost novena-back-btn" type="button" onclick="returnToNovenas()">← All novenas</button></div>${novenaFeastLine(n,true)}${n.note?`<div class="novena-source-note">${n.note}</div>`:''}<div class="novena-day-meta">Day ${d} of 9${d===scheduled?' · Today':''}</div><h3 class="novena-day-title">${entry[0]}</h3><div class="novena-day-reflection">${entry[1]}</div><div class="novena-nine-days" aria-label="Novena days">${Array.from({length:9},(_,i)=>{const x=i+1;return `<button type="button" class="novena-day-chip ${doneDays.has(x)?'done':''} ${scheduled===x?'scheduled':''} ${d===x?'active':''}" onclick="renderNovenaDay('${slug}',${x},{fromHistory:true})" aria-label="Day ${x}${doneDays.has(x)?', prayed':''}${scheduled===x?', scheduled for today':''}">${x}</button>`}).join('')}</div><div class="novena-prayer-card"><div class="novena-prayer-label">Daily prayer</div><div class="novena-prayer-text">${n.prayer}</div></div><div class="novena-day-actions"><button class="ghost" type="button" ${d<=1?'disabled':''} onclick="renderNovenaDay('${slug}',${d-1},{fromHistory:true})">← Previous</button><button class="primary novena-mark-btn ${doneDays.has(d)?'done':''}" type="button" ${doneDays.has(d)?'disabled':''} onclick="markNovenaDay('${slug}',${d})">${doneDays.has(d)?'✓ Day prayed':`Mark Day ${d} prayed`}</button><button class="ghost" type="button" ${d>=9?'disabled':''} onclick="renderNovenaDay('${slug}',${d+1},{fromHistory:true})">Next →</button></div>${allDone?'<div class="novena-complete-note">Nine days completed ✝</div>':''}<div class="novena-restart-row"><button class="ghost" type="button" onclick="restartNovena('${slug}')">Start again from today</button></div>`;
   setScreen('library',{fromHistory:true,routeKey:`library:novena:${slug}`});
@@ -6959,7 +7015,7 @@ function enableTapEffects(){
 if(!history.state||!history.state.cpcRoute) history.replaceState({cpcScreen:'home',cpcRoute:'home'},'');
 function restoreAppRoute(route){
   if(!route||route==='home'){goHome({fromHistory:true});return;}
-  if(route==='prayer:rosary'){requestPrayerWakeLock();const k=state.setKey||todaySetKey();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=k;setPanelArt('prayerContent',`panel-art rosary-art ${k}-art`);renderPrayer();setScreen('prayer',{fromHistory:true,routeKey:route});return;}
+  if(route==='prayer:rosary'){enterPrayerFocus();const k=state.setKey||todaySetKey();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=k;setPanelArt('prayerContent',`panel-art rosary-art ${k}-art`);renderPrayer();setScreen('prayer',{fromHistory:true,routeKey:route});return;}
   if(route.startsWith('devotion:')){showDevotion(route.slice(9),{fromHistory:true});return;}
   if(route.startsWith('library:mystery:')){const k=route.slice('library:mystery:'.length);showLibrary('mysteries',{fromHistory:true});renderMysteryLibrary(k,{fromHistory:true});return;}
   if(route.startsWith('library:novena:')){const slug=route.slice('library:novena:'.length);showLibrary('novenas',{fromHistory:true});openNovena(slug,null,{fromHistory:true});return;}
@@ -6979,7 +7035,7 @@ updateToday();updateHomeTrackers();
 'use strict';
 
 const CPC = {
-  settings: Object.assign({largeText:false,highContrast:false,reducedMotion:false,haptics:true,keepScreenOn:true}, (()=>{try{return JSON.parse(localStorage.getItem('cpc-settings')||'{}')}catch(_){return {}}})()),
+  settings: Object.assign({largeText:false,highContrast:false,reducedMotion:false,haptics:true,keepScreenOn:true,prayerFocus:true}, (()=>{try{return JSON.parse(localStorage.getItem('cpc-settings')||'{}')}catch(_){return {}}})()),
   installPrompt: null
 };
 window.CPC = CPC;
@@ -7001,7 +7057,19 @@ window.toggleCpcSetting=async(key,val)=>{
       const prayerActive=document.getElementById('prayer')?.classList.contains('active');
       const devotionPrayerActive=document.getElementById('devotions')?.classList.contains('active') &&
         (currentDevotion==='divineMercy'||currentDevotion==='angelus');
-      if(prayerActive||devotionPrayerActive) await requestPrayerWakeLock();
+      const novenaPrayerActive=document.body.classList.contains('cpc-novena-prayer-active');
+      if(prayerActive||devotionPrayerActive||novenaPrayerActive) await requestPrayerWakeLock();
+    }
+  }
+  if(key==='prayerFocus'){
+    if(!CPC.settings.prayerFocus){
+      await exitPrayerFullscreen();
+    }else{
+      const prayerActive=document.getElementById('prayer')?.classList.contains('active');
+      const devotionPrayerActive=document.getElementById('devotions')?.classList.contains('active') &&
+        (currentDevotion==='divineMercy'||currentDevotion==='angelus');
+      const novenaPrayerActive=document.body.classList.contains('cpc-novena-prayer-active');
+      if(prayerActive||devotionPrayerActive||novenaPrayerActive) await requestPrayerFullscreen();
     }
   }
   if(currentDevotion==='settings')renderCpcSettings()
@@ -7115,7 +7183,7 @@ function updateResumeStrip(){
 }
 window.resumePrayer=function(){
  const x=activeSessions()[0];if(!x){startToday();return}
- if(x.kind==='rosary'){const rs=safeJSON('rosaryState',null);if(rs&&cpcPrayerStateIsToday(rs)){Object.assign(state,rs);requestPrayerWakeLock();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=state.setKey;setPanelArt('prayerContent',`panel-art rosary-art ${state.setKey}-art`);renderPrayer();setScreen('prayer',{routeKey:'prayer:rosary'});return}}
+ if(x.kind==='rosary'){const rs=safeJSON('rosaryState',null);if(rs&&cpcPrayerStateIsToday(rs)){Object.assign(state,rs);enterPrayerFocus();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=state.setKey;setPanelArt('prayerContent',`panel-art rosary-art ${state.setKey}-art`);renderPrayer();setScreen('prayer',{routeKey:'prayer:rosary'});return}}
  if(x.kind==='mercy'){const ms=safeJSON('cpc-mercy-state',null);if(ms)Object.assign(mercyState,ms);showDevotion('divineMercy');return}
  if(x.kind==='angelus'){const as=safeJSON('cpc-angelus-state',null);if(as)Object.assign(angelusState,as);showDevotion('angelus');return}
 };
@@ -7213,7 +7281,7 @@ window.renderBibleChapter=function(book){const ch=bibleChapterObj(book,bibleStat
 /* Settings and export/import */
 window.exportPrayerData=function(){const keys=Object.keys(localStorage).filter(k=>k.startsWith('cpc-')||k==='rosaryState'),data={version:1,exportedAt:new Date().toISOString(),localStorage:{}};keys.forEach(k=>data.localStorage[k]=localStorage.getItem(k));const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`catholic-companion-backup-${todayKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
 window.importPrayerData=function(input){const f=input.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d||typeof d!=='object'||!d.localStorage||typeof d.localStorage!=='object')throw new Error('invalid backup');Object.entries(d.localStorage).forEach(([k,v])=>{if((k.startsWith('cpc-')||k==='rosaryState')&&typeof v==='string')localStorage.setItem(k,v)});location.reload()}catch(_){alert('That backup file could not be read.')}};r.readAsText(f)};
-window.renderCpcSettings=function(){const c=document.getElementById('devotionContent');if(!c)return;c.innerHTML=`<div class="settings-list"><label class="settings-row"><span><b>🔎 Larger prayer text</b><small>Increase prayer, Scripture and meditation text.</small></span><input type="checkbox" ${CPC.settings.largeText?'checked':''} onchange="toggleCpcSetting('largeText',this.checked)"></label><label class="settings-row"><span><b>◐ Higher contrast</b><small>Strengthen borders and text contrast.</small></span><input type="checkbox" ${CPC.settings.highContrast?'checked':''} onchange="toggleCpcSetting('highContrast',this.checked)"></label><label class="settings-row"><span><b>〰 Reduced motion</b><small>Minimise animations and smooth scrolling.</small></span><input type="checkbox" ${CPC.settings.reducedMotion?'checked':''} onchange="toggleCpcSetting('reducedMotion',this.checked)"></label><label class="settings-row"><span><b>☀️ Keep screen on</b><small>Prevent the screen from sleeping while you are actively praying, when supported by your browser.</small></span><input type="checkbox" ${CPC.settings.keepScreenOn?'checked':''} onchange="toggleCpcSetting('keepScreenOn',this.checked)"></label><label class="settings-row"><span><b>📳 Gentle haptics</b><small>Light vibration when supported by your phone.</small></span><input type="checkbox" ${CPC.settings.haptics?'checked':''} onchange="toggleCpcSetting('haptics',this.checked)"></label><div class="settings-row"><span><b>📳 Haptic test</b><small id="hapticTestStatus">Use this to check whether your current browser allows vibration.</small></span><button class="ghost" type="button" onclick="testCpcHaptics()">Test</button></div></div><div class="settings-actions"><button class="secondary" onclick="exportPrayerData()">⬇ Export prayer data</button><label class="secondary import-label">⬆ Import prayer data<input type="file" accept="application/json" onchange="importPrayerData(this)"></label></div><div class="share-safety-note"><b>Sharing the app is safe.</b><span>Your prayer progress, bookmarks and preferences stay in this browser and are not stored inside the app file. They are transferred only if you separately export and share a prayer-data backup.</span></div><p class="footer-note">Prayer-data backups include progress, bookmarks and preferences. Downloaded Bible books are not included because they can be downloaded again.</p>`};
+window.renderCpcSettings=function(){const c=document.getElementById('devotionContent');if(!c)return;c.innerHTML=`<div class="settings-list"><label class="settings-row"><span><b>🔎 Larger prayer text</b><small>Increase prayer, Scripture and meditation text.</small></span><input type="checkbox" ${CPC.settings.largeText?'checked':''} onchange="toggleCpcSetting('largeText',this.checked)"></label><label class="settings-row"><span><b>◐ Higher contrast</b><small>Strengthen borders and text contrast.</small></span><input type="checkbox" ${CPC.settings.highContrast?'checked':''} onchange="toggleCpcSetting('highContrast',this.checked)"></label><label class="settings-row"><span><b>〰 Reduced motion</b><small>Minimise animations and smooth scrolling.</small></span><input type="checkbox" ${CPC.settings.reducedMotion?'checked':''} onchange="toggleCpcSetting('reducedMotion',this.checked)"></label><label class="settings-row"><span><b>☀️ Keep screen on</b><small>Prevent the screen from sleeping while you are actively praying, when supported by your browser.</small></span><input type="checkbox" ${CPC.settings.keepScreenOn?'checked':''} onchange="toggleCpcSetting('keepScreenOn',this.checked)"></label><label class="settings-row"><span><b>⛶ Prayer focus</b><small>Enter full screen for the Rosary, Divine Mercy, Angelus and novenas, when supported by your browser.</small></span><input type="checkbox" ${CPC.settings.prayerFocus?'checked':''} onchange="toggleCpcSetting('prayerFocus',this.checked)"></label><label class="settings-row"><span><b>📳 Gentle haptics</b><small>Light vibration when supported by your phone.</small></span><input type="checkbox" ${CPC.settings.haptics?'checked':''} onchange="toggleCpcSetting('haptics',this.checked)"></label><div class="settings-row"><span><b>📳 Haptic test</b><small id="hapticTestStatus">Use this to check whether your current browser allows vibration.</small></span><button class="ghost" type="button" onclick="testCpcHaptics()">Test</button></div></div><div class="settings-actions"><button class="secondary" onclick="exportPrayerData()">⬇ Export prayer data</button><label class="secondary import-label">⬆ Import prayer data<input type="file" accept="application/json" onchange="importPrayerData(this)"></label></div><div class="share-safety-note"><b>🔕 Notification-free prayer</b><span>Phone notifications are controlled by Android or iOS, not by a web app. For completely uninterrupted prayer, turn on Do Not Disturb / Focus on your phone before beginning.</span></div><div class="share-safety-note"><b>Sharing the app is safe.</b><span>Your prayer progress, bookmarks and preferences stay in this browser and are not stored inside the app file. They are transferred only if you separately export and share a prayer-data backup.</span></div><p class="footer-note">Prayer-data backups include progress, bookmarks and preferences. Downloaded Bible books are not included because they can be downloaded again.</p>`};
 
 /* Devotion routing extension + persistent Marian/Divine Mercy state. */
 
@@ -7226,7 +7294,7 @@ window.showDevotion=function(type,{fromHistory=false}={}){
  if(devotionAux){devotionAux.replaceChildren();devotionAux.hidden=true;}
  if(type==='settings'||type==='angelus'||type==='divineMercy'){
    stopSpeech();currentDevotion=type;const art=type==='divineMercy'?'mercy-art':type==='angelus'?'angelus-art':'prayers-art';setPanelArt('devotionPanel',`panel-art ${art}`);setScreen('devotions',{fromHistory,routeKey:`devotion:${type}`});const t=document.getElementById('devotionTitle'),e=document.getElementById('devotionEyebrow');
-   if(type==='settings'){releasePrayerWakeLock();e.textContent='Preferences';t.textContent='App Settings';renderCpcSettings();return}
+   if(type==='settings'){leavePrayerFocus();e.textContent='Preferences';t.textContent='App Settings';renderCpcSettings();return}
    if(type==='divineMercy'){
      e.textContent='Devotion';t.textContent='Chaplet of Divine Mercy';
      const x=safeJSON('cpc-mercy-state',null);
@@ -7238,7 +7306,7 @@ window.showDevotion=function(type,{fromHistory=false}={}){
      }else{
        Object.assign(mercyState,x);
      }
-     requestPrayerWakeLock();renderMercy();return
+     enterPrayerFocus();renderMercy();return
    }
    if(type==='angelus'){
      e.textContent='Marian prayer';t.textContent=currentMarianPrayerName();
@@ -7253,7 +7321,7 @@ window.showDevotion=function(type,{fromHistory=false}={}){
        Object.assign(angelusState,x);
        if(!isCompleteToday('angelus'))localStorage.setItem('cpc-started-angelus',todayKey());
      }
-     requestPrayerWakeLock();updateHomeTrackers();window.renderAngelus();return
+     enterPrayerFocus();updateHomeTrackers();window.renderAngelus();return
    }
  }
  return baseShowDevotion(type,{fromHistory});
