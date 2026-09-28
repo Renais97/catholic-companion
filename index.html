@@ -5771,27 +5771,43 @@ if(window.speechSynthesis){refreshLectorVoice();window.speechSynthesis.addEventL
 function stopSpeech(){speechRun++;if(speechPauseTimer){clearTimeout(speechPauseTimer);speechPauseTimer=null}window.speechSynthesis.cancel()}
 function setPrayerSpeed(v){prayerSpeed=parseFloat(v)||1;localStorage.setItem('cpc-prayer-speed',String(prayerSpeed));stopSpeech();document.querySelectorAll('.voice-speed-select').forEach(x=>x.value=String(prayerSpeed))}
 function voiceSpeedControls(){const icon=prayerSpeed<=1?'🐌':'⚡';const current=(prayerSpeedOptions.find(([v])=>Math.abs(prayerSpeed-v)<.001)||[1,'Gentle'])[1];return `<div class="voice-speed-row cpc-speed-tile"><div class="cpc-speed-display" aria-hidden="true"><span class="cpc-speed-icon">${icon}</span><span class="cpc-speed-text">${current}</span></div><select class="voice-speed-select" aria-label="Prayer voice speed" onchange="setPrayerSpeed(this.value)">${prayerSpeedOptions.map(([v,n])=>`<option value="${v}" ${Math.abs(prayerSpeed-v)<.001?'selected':''}>${n}</option>`).join('')}</select></div>`}
+function prayerSpeechPlainText(text){
+ // Prayer copy is stored as rich HTML for display. Never pass markup such as
+ // <br> to SpeechSynthesisUtterance: some Android voices try to pronounce it
+ // or stumble around the tag boundary. Preserve paragraph breaks as newlines,
+ // then let lectorSegments turn them into natural pauses.
+ const holder=document.createElement('div');
+ holder.innerHTML=String(text||'').replace(/<br\s*\/?\s*>/gi,'\n');
+ return String(holder.textContent||holder.innerText||'')
+   .replace(/\u00a0/g,' ')
+   .replace(/[ \t]+/g,' ')
+   .replace(/ *\n+ */g,'\n')
+   .trim();
+}
 function lectorSegments(text){
- // Keep prayers in longer natural phrases. Some mobile TTS engines clip words
- // when many very short utterances are queued, especially at colons/semicolons.
- const clean=String(text||'').replace(/\s+/g,' ').trim();
+ // Keep prayers in natural phrases while making paragraph breaks explicit.
+ // Shorter chunks are more reliable on mobile TTS, especially for repeated
+ // prayers such as the Hail Mary and Divine Mercy decade responses.
+ const clean=prayerSpeechPlainText(text);
  if(!clean)return [];
- const sentences=clean.match(/[^.!?]+(?:[.!?]+[”’"']?|$)/g)||[clean];
  const out=[];
- let current='';
- const flush=()=>{
-   const t=current.trim();
-   if(t)out.push({text:t,pause:300});
-   current='';
- };
- sentences.forEach(sentence=>{
-   const t=sentence.trim();
-   if(!t)return;
-   // Aim for substantial utterances while staying well below common mobile TTS limits.
-   if(current && (current.length+1+t.length)>280)flush();
-   current+=(current?' ':'')+t;
+ const paragraphs=clean.split(/\n+/).map(x=>x.trim()).filter(Boolean);
+ paragraphs.forEach((paragraph,pIndex)=>{
+   const sentences=paragraph.match(/[^.!?]+(?:[.!?]+[”’"']?|$)/g)||[paragraph];
+   let current='';
+   const flush=(pause=300)=>{
+     const t=current.trim();
+     if(t)out.push({text:t,pause});
+     current='';
+   };
+   sentences.forEach(sentence=>{
+     const t=sentence.trim();
+     if(!t)return;
+     if(current && (current.length+1+t.length)>240)flush(280);
+     current+=(current?' ':'')+t;
+   });
+   flush(pIndex<paragraphs.length-1?460:300);
  });
- flush();
  return out;
 }
 function speakText(text,rate=null,onDone=null){requestPrayerWakeLock();
@@ -5861,10 +5877,45 @@ function autoAdvanceToNext(kind){
 }
 function playCurrentRosary(){if(!autoAdvance.rosary||!autoPlayNext.rosary||!state.setKey)return;const s=state.step;if(s<introSteps.length){const key=introSteps[s];if(key==='hail3')playPrayerAudio(prayers.hailMary,'rosary','rosaryIntroHail');else playPrayerAudio(prayers[key],'rosary','next');return}const dStart=introSteps.length,dEnd=dStart+25;if(s<dEnd){const rel=s-dStart,idx=Math.floor(rel/5),phase=rel%5;if(phase===0){speakMystery(idx,true);return}if(phase===1){playPrayerAudio(prayers.ourFather,'rosary','next');return}if(phase===2){playPrayerAudio(prayers.hailMary,'rosary','rosaryHail');return}if(phase===3){playPrayerAudio(prayers.glory,'rosary','next');return}playPrayerAudio(prayers.fatima,'rosary','next');return}const endIndex=s-dEnd;if(endIndex<endingSteps.length)playPrayerAudio(prayers[endingSteps[endIndex]],'rosary','next')}
 function playCurrentMercy(){if(!autoAdvance.mercy||!autoPlayNext.mercy)return;const s=mercyState.step;if(s<4){playPrayerAudio(divineMercy.opening[s],'mercy','next');return}const rel=s-4;if(rel<10){const phase=rel%2;if(phase===0)playPrayerAudio(divineMercy.large,'mercy','next');else playPrayerAudio(divineMercy.small,'mercy','mercySmall');return}if(rel===10){playPrayerAudio(divineMercy.holyGod,'mercy','mercyHoly');return}if(rel===11)playPrayerAudio(divineMercy.closing,'mercy','next')}
-function autoRosaryIntroHail(){if(!autoAdvance.rosary)return;if(state.hail<3){state.hail++;if(window.cpcPrayerHaptic)window.cpcPrayerHaptic.short();save();updateHomeTrackers();updateRosaryBeadUI();if(state.hail<3){if(autoPlayNext.rosary)setTimeout(()=>playPrayerAudio(prayers.hailMary,'rosary','rosaryIntroHail'),320)}else setTimeout(()=>autoAdvanceToNext('rosary'),500)}}
-function autoRosaryHail(){if(!autoAdvance.rosary)return;if(state.hail<10){state.hail++;if(window.cpcPrayerHaptic)window.cpcPrayerHaptic.short();save();updateHomeTrackers();updateRosaryBeadUI();if(state.hail<10){if(autoPlayNext.rosary)setTimeout(()=>playPrayerAudio(prayers.hailMary,'rosary','rosaryHail'),320)}else setTimeout(()=>autoAdvanceToNext('rosary'),500)}}
-function autoMercySmall(){if(!autoAdvance.mercy)return;if(mercyState.small<10){mercyState.small++;if(window.cpcPrayerHaptic)window.cpcPrayerHaptic.short();updateHomeTrackers();updateMercyBeadUI();if(mercyState.small<10){if(autoPlayNext.mercy)setTimeout(()=>playPrayerAudio(divineMercy.small,'mercy','mercySmall'),320)}else setTimeout(()=>autoAdvanceToNext('mercy'),500)}}
-function autoMercyHoly(){if(!autoAdvance.mercy)return;if(mercyState.holy<3){mercyState.holy++;if(window.cpcPrayerHaptic)window.cpcPrayerHaptic.short();updateHomeTrackers();updateMercyBeadUI();if(mercyState.holy<3){if(autoPlayNext.mercy)setTimeout(()=>playPrayerAudio(divineMercy.holyGod,'mercy','mercyHoly'),320)}else setTimeout(()=>autoAdvanceToNext('mercy'),500)}}
+function autoRosaryIntroHail(){
+ if(!autoAdvance.rosary)return;
+ if(state.hail<3){
+   state.hail++;if(window.cpcPrayerHaptic)window.cpcPrayerHaptic.short();save();updateHomeTrackers();updateRosaryBeadUI();
+   // state.hail is the number of the prayer that is about to be prayed next.
+   // When it becomes 3, the third Hail Mary still needs to be spoken.
+   if(autoPlayNext.rosary)setTimeout(()=>playPrayerAudio(prayers.hailMary,'rosary','rosaryIntroHail'),320);
+   return;
+ }
+ setTimeout(()=>autoAdvanceToNext('rosary'),500);
+}
+function autoRosaryHail(){
+ if(!autoAdvance.rosary)return;
+ if(state.hail<10){
+   state.hail++;if(window.cpcPrayerHaptic)window.cpcPrayerHaptic.short();save();updateHomeTrackers();updateRosaryBeadUI();
+   // Likewise, reaching bead 10 means the tenth Hail Mary is next, not done.
+   if(autoPlayNext.rosary)setTimeout(()=>playPrayerAudio(prayers.hailMary,'rosary','rosaryHail'),320);
+   return;
+ }
+ setTimeout(()=>autoAdvanceToNext('rosary'),500);
+}
+function autoMercySmall(){
+ if(!autoAdvance.mercy)return;
+ if(mercyState.small<10){
+   mercyState.small++;if(window.cpcPrayerHaptic)window.cpcPrayerHaptic.short();updateHomeTrackers();updateMercyBeadUI();
+   if(autoPlayNext.mercy)setTimeout(()=>playPrayerAudio(divineMercy.small,'mercy','mercySmall'),320);
+   return;
+ }
+ setTimeout(()=>autoAdvanceToNext('mercy'),500);
+}
+function autoMercyHoly(){
+ if(!autoAdvance.mercy)return;
+ if(mercyState.holy<3){
+   mercyState.holy++;if(window.cpcPrayerHaptic)window.cpcPrayerHaptic.short();updateHomeTrackers();updateMercyBeadUI();
+   if(autoPlayNext.mercy)setTimeout(()=>playPrayerAudio(divineMercy.holyGod,'mercy','mercyHoly'),320);
+   return;
+ }
+ setTimeout(()=>autoAdvanceToNext('mercy'),500);
+}
 function renderPrayer(){queueMicrotask(ensurePrayerNavigationTip);
  stopSpeech();
  const c=document.getElementById('prayerContent');
