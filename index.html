@@ -1588,6 +1588,44 @@ body.dark .cpc-day-modal-backdrop {
 }
 
 /* ---- cpc-other-prayers-categories ---- */
+/* ---- cpc-daily-prayers-search-v47 ---- */
+#libraryPanel .daily-prayer-search-wrap{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:0 0 16px;
+  padding:9px 12px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--panel);
+}
+#libraryPanel .daily-prayer-search-wrap>span{
+  font-size:1.05rem;
+  line-height:1;
+  color:var(--accent);
+}
+#libraryPanel .daily-prayer-search-wrap input{
+  width:100%;
+  min-width:0;
+  border:0!important;
+  outline:0!important;
+  background:transparent!important;
+  color:var(--text)!important;
+  font:inherit;
+  padding:3px 0!important;
+  box-shadow:none!important;
+}
+#libraryPanel .daily-prayer-search-wrap input::placeholder{color:var(--muted)}
+#libraryPanel .daily-prayer-search-empty{
+  text-align:center;
+  color:var(--muted);
+  font-size:.86rem;
+  padding:2px 0 16px;
+}
+@media(max-width:420px){
+  #libraryPanel .daily-prayer-search-wrap{margin-bottom:12px;padding:8px 10px}
+}
+
 #libraryPanel .other-prayer-groups{
   display:grid;
   gap:24px;
@@ -6349,7 +6387,8 @@ function showLibrary(type,{fromHistory=false}={}){stopSpeech();const libraryPane
       ['🕯️','Act of Faith',`O My God, I believe that You are one God in three Divine Persons - Father, Son and Holy Spirit. I believe all the truths the Catholic Church teaches, because You made them known to me.`],
       ['🌿','Act of Hope',`O My God, I hope in You because You are all-good and can do all things. I hope You will forgive me my sins and help me with Your grace.`],
       ['❤️','Act of Love',`O My God, I love You with my whole heart and soul because You are all-good. I love my neighbor as myself for love of You.`],
-      ['🤲','Prayer to Be Sorry for Sin',`My God, I am sorry for my sins with all my heart. In choosing to do wrong and failing to do good, I have sinned against You. I firmly intend, with Your help, to do penance, to sin no more, and to avoid whatever leads me to sin.`]
+      ['🤲','Prayer to Be Sorry for Sin',`My God, I am sorry for my sins with all my heart. In choosing to do wrong and failing to do good, I have sinned against You. I firmly intend, with Your help, to do penance, to sin no more, and to avoid whatever leads me to sin.`],
+      ['🕯️','Prayer for the Faithful Departed',`Eternal rest grant unto them, O Lord, and let perpetual light shine upon them. May their souls, and the souls of all the faithful departed, through the mercy of God, rest in peace. Amen.`]
     ]},
     {key:'morning-night',label:'Morning & Night',icon:'☀️',items:[
       ['🌅','Morning Prayer',`Come, Holy Spirit, help me to say my prayers well. O Blessed Trinity, I believe in You, I hope in You, I love You, I adore You.<br><br>O My God, I offer You through the Immaculate Heart of Mary, all my thoughts, words, actions and sufferings of this day, to please You, to honor You and to make up for my sins.<br><br>Sweet Mother Mary, keep me in your care. O Virgin Mother Mary, help me to heaven above. Mother of Jesus, keep me always as your loving child.`],
@@ -6387,12 +6426,29 @@ function showLibrary(type,{fromHistory=false}={}){stopSpeech();const libraryPane
       ['🤝','Prayer for My Friends',`Jesus, when I am playing with other boys and girls, help me remember how You played as a Child. Help me make my playmates happy in our games, because You have taught me to love my neighbor as myself. Jesus bless my friends!`]
     ]}
   ];
-  lc.innerHTML=`<div class="other-prayer-groups">${groups.map(g=>`<section class="other-prayer-group other-prayer-${g.key}"><div class="other-prayer-group-head"><span aria-hidden="true">${g.icon}</span><h3>${g.label}</h3></div><div class="other-prayer-group-list">${g.items.map(([i,n,t])=>`<div class="list-item other-prayer-item"><div class="other-prayer-icon" aria-hidden="true">${i}</div><b>${n}</b><div class="other-prayer-text">${t}</div></div>`).join('')}</div></section>`).join('')}</div>`
+  lc.innerHTML=`<div class="daily-prayer-search-wrap"><span aria-hidden="true">⌕</span><input id="dailyPrayerSearchInput" type="search" placeholder="Search prayers…" aria-label="Search daily prayers" autocomplete="off" oninput="filterDailyPrayers(this.value)"></div><div id="dailyPrayerSearchEmpty" class="daily-prayer-search-empty" hidden>No prayers match that search.</div><div class="other-prayer-groups">${groups.map(g=>`<section class="other-prayer-group other-prayer-${g.key}"><div class="other-prayer-group-head"><span aria-hidden="true">${g.icon}</span><h3>${g.label}</h3></div><div class="other-prayer-group-list">${g.items.map(([i,n,t])=>`<div class="list-item other-prayer-item"><div class="other-prayer-icon" aria-hidden="true">${i}</div><b>${n}</b><div class="other-prayer-text">${t}</div></div>`).join('')}</div></section>`).join('')}</div>`
 }
  if(type==='novenas'){renderNovenasLibrary()}
 
  if(type==='mysteries'){const todayMysterySet=todaySetKey();setPanelArt('libraryPanel',`panel-art mysteries-art ${todayMysterySet}-art`);title.textContent='Rosary Mysteries';document.getElementById('libraryTabs').className='';lc.innerHTML=`<p class="muted mystery-overview-intro">Explore the four Rosary mysteries, with the events and stories of each mystery set, their Gospel readings, and meditations.</p><div class="mystery-set-grid">${Object.entries(sets).map(([k,s])=>`<button class="mystery-set-card" data-set="${k}" onclick="renderMysteryLibrary('${k}')"><b>${s.name}</b><span class="muted">${s.days}</span><div class="picker-mystery-inline">${s.items.map(m=>m.title).join(' · ')}</div></button>`).join('')}</div>`}
  setScreen('library',{fromHistory,routeKey:`library:${type}`})}
+function filterDailyPrayers(value){
+ const q=String(value||'').trim().toLowerCase();
+ const groups=document.querySelectorAll('#libraryPanel .other-prayer-group');
+ let any=false;
+ groups.forEach(group=>{
+  let groupHasMatch=false;
+  group.querySelectorAll('.other-prayer-item').forEach(item=>{
+   const hit=!q||String(item.textContent||'').toLowerCase().includes(q);
+   item.hidden=!hit;
+   if(hit){groupHasMatch=true;any=true}
+  });
+  group.hidden=!groupHasMatch;
+ });
+ const empty=document.getElementById('dailyPrayerSearchEmpty');
+ if(empty)empty.hidden=any||!q;
+}
+
 function renderMysteryLibrary(k,{fromHistory=false}={}){setPanelArt('libraryPanel',`panel-art mysteries-art ${k}-art`);const s=sets[k];document.getElementById('libraryTitle').textContent=s.name;document.getElementById('libraryTabs').innerHTML='';document.getElementById('libraryContent').innerHTML=`<p class="muted mystery-library-subtitle">${s.days}</p><div class="list">${s.items.map((m,i)=>`<div class="list-item mystery-detail-item"><b>${i+1}. ${m.title}</b><br><span class="muted">${m.desc}</span><button class="mystery-scripture-link" type="button" onclick='openBibleReference(${JSON.stringify(JSON.stringify(String(m.ref)))})'><span>${m.ref}</span><span aria-hidden="true">→</span></button><div class="reading">${m.reading}</div><div class="section-label">Meditation</div><div class="meditation">${m.meditation}</div></div>`).join('')}</div><div class="mystery-start-zone" role="button" tabindex="0" onclick="startSet('${k}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();startSet('${k}')}"><div><strong>📿 Pray ${s.name.replace('The ','')}</strong><small>Tap this area to begin the Rosary.</small></div></div>`;if(!fromHistory&&history.state?.cpcRoute!==`library:mystery:${k}`)history.pushState({cpcScreen:'library',cpcRoute:`library:mystery:${k}`},'')}
 
 function showDevotion(type,{fromHistory=false}={}){stopSpeech();if(type!=='divineMercy'&&type!=='angelus')releasePrayerWakeLock();currentDevotion=type;const artMap={divineMercy:'mercy-art',angelus:'angelus-art',readings:'readings-art',calendar:'calendar-art',bible:'readings-art'};setPanelArt('devotionPanel',`panel-art ${artMap[type]||'prayers-art'}`);setScreen('devotions',{fromHistory,routeKey:`devotion:${type}`});
