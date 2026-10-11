@@ -5286,6 +5286,36 @@ body.cpc-prayer-screen-active #devotions.active{
   font:12px/1.35 system-ui,sans-serif;
 }
 </style>
+
+<style id="cpc-scriptural-rosary-v54">
+.rosary-mode-intro{margin:4px 0 14px;color:var(--muted);line-height:1.55}
+.rosary-mode-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
+.rosary-mode-card{
+  width:100%;text-align:left;border:1px solid var(--line);border-radius:14px;
+  padding:14px;background:var(--panel);color:var(--ink);box-shadow:var(--shadow);
+}
+.rosary-mode-card strong{display:block;font-size:16px;margin-bottom:4px}
+.rosary-mode-card span{display:block;color:var(--muted);font-size:13px;line-height:1.45}
+.rosary-mode-card .rosary-mode-icon{font-size:24px;margin-bottom:7px}
+.rosary-mode-source{margin-top:13px;padding-top:11px;border-top:1px solid var(--line);font-size:12px;line-height:1.5;color:var(--muted)}
+.rosary-mode-source a{color:inherit;text-underline-offset:2px}
+.scriptural-mystery-intro{
+  margin:12px 0 4px;padding:12px 13px;border:1px solid var(--line);
+  border-radius:12px;background:rgba(255,255,255,.34);line-height:1.5
+}
+[data-theme="dark"] .scriptural-mystery-intro{background:rgba(255,255,255,.04)}
+.scriptural-bead-card{
+  margin:0 0 14px;padding:13px 14px;border:1px solid var(--line);border-radius:13px;
+  background:linear-gradient(180deg,rgba(255,255,255,.52),rgba(255,255,255,.22));
+}
+[data-theme="dark"] .scriptural-bead-card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025))}
+.scriptural-bead-label{font:700 11px/1.2 system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.scriptural-bead-cue{font-size:16px;line-height:1.55}
+.scriptural-bead-ref{margin-top:7px;font:600 12px/1.3 system-ui,sans-serif;color:var(--muted)}
+.scriptural-source-note{margin-top:11px;font-size:12px;line-height:1.45;color:var(--muted)}
+@media(min-width:560px){.rosary-mode-grid{grid-template-columns:1fr 1fr}}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -5437,6 +5467,42 @@ const sets = {
 ]}
 };
 
+
+/* Catholic Companion v54 — Scriptural Rosary
+   The Scripture cues below are original concise paraphrases keyed to the
+   Rosary mystery passages. USCCB Rosary resources guide the structure and
+   mystery references; long copyrighted Scripture text is not reproduced. */
+const scripturalRosaryCues={"joyful":[["Gabriel is sent by God to Nazareth, where Mary is living in quiet faith.","Mary is a virgin betrothed to Joseph, and God enters the ordinary circumstances of her life.","The angel greets Mary as one favored by God and tells her that the Lord is with her.","Mary is troubled by the greeting, yet she remains attentive to what God is asking.","Gabriel tells Mary not to be afraid because she has found favor with God.","Mary learns that she will conceive a son and that his name will be Jesus.","The child promised to Mary will be great and will be called the Son of the Most High.","God promises that the reign of Mary's Son will have no end.","Mary is told that the Holy Spirit will come upon her and God's power will overshadow her.","Mary gives herself freely to God's will: she is the servant of the Lord."],["Mary rises and goes in haste to the hill country to visit Elizabeth.","She enters the house of Zechariah and greets her cousin with loving concern.","At Mary's greeting, the child in Elizabeth's womb leaps for joy.","Elizabeth is filled with the Holy Spirit in Mary's presence.","Elizabeth blesses Mary among women and blesses the fruit of her womb.","Elizabeth recognizes Mary as the mother of her Lord.","Mary is blessed because she believed that God's word to her would be fulfilled.","Mary's soul magnifies the Lord and rejoices in God her Savior.","Mary praises God for lifting up the lowly and remembering his mercy.","Mary remains with Elizabeth, serving her before returning home."],["Joseph travels to Bethlehem with Mary, who is expecting the child promised by God.","While they are in Bethlehem, the time comes for Mary to give birth.","Mary gives birth to her firstborn Son.","She wraps the child Jesus in swaddling clothes with tender care.","Jesus is laid in a manger because there is no room for them in the lodging place.","Nearby shepherds keep watch over their flocks during the night.","An angel announces good news of great joy for all the people.","The angel proclaims that a Savior, Christ the Lord, has been born.","The shepherds go in haste and find Mary, Joseph, and the child lying in the manger.","Mary treasures these events and reflects on them in her heart."],["Mary and Joseph bring Jesus to Jerusalem in obedience to the law of the Lord.","They offer the humble sacrifice prescribed for a family of modest means.","Simeon is a righteous and devout man who waits for the consolation of Israel.","The Holy Spirit rests upon Simeon and guides him into the temple.","Simeon takes the child Jesus into his arms and blesses God.","He recognizes that God's promise has been fulfilled before his eyes.","Simeon proclaims Jesus as a light for revelation to the nations.","He also calls Jesus the glory of God's people Israel.","Simeon foretells that Jesus will be a sign opposed and that Mary's heart will know sorrow.","Anna gives thanks to God and speaks about the child to those awaiting redemption."],["Each year Mary and Joseph go to Jerusalem for the feast of Passover.","When Jesus is twelve years old, he travels with them according to the feast's custom.","After the feast, Jesus remains in Jerusalem without his parents realizing it.","Mary and Joseph search anxiously among relatives and companions.","They return to Jerusalem when they cannot find him.","After three days they find Jesus in the temple.","Jesus sits among the teachers, listening to them and asking questions.","Those who hear Jesus are amazed at his understanding and his answers.","Jesus tells Mary and Joseph that he must be about his Father's affairs.","Jesus returns with them to Nazareth, while Mary keeps these things in her heart."]],"sorrowful":[["Jesus goes to the Mount of Olives, and his disciples follow him into the night.","He tells the disciples to pray so that they may not enter into temptation.","Jesus withdraws a short distance and kneels in prayer before his Father.","He asks that the cup might pass from him if the Father wills it.","Jesus surrenders himself completely: not his will, but the Father's will be done.","An angel strengthens Jesus as he accepts the suffering before him.","In deep anguish Jesus prays even more earnestly.","His agony becomes so intense that his sweat falls like drops of blood.","Jesus finds the disciples overcome by sorrow and sleep.","He calls them to rise and pray as the hour of his Passion arrives."],["Jesus stands before Pilate while accusations are brought against him.","Pilate sees the pressure of the crowd growing around the innocent Jesus.","The crowd asks that Barabbas be released instead of Christ.","Voices demand that Jesus be crucified.","Pilate yields to the crowd and hands Jesus over.","Jesus is scourged before being led away to crucifixion.","The body of Christ bears the wounds inflicted by human cruelty.","Jesus endures the violence without returning hatred for hatred.","The suffering Servant bears what others place upon him.","Christ accepts these wounds within the sacrifice of love he offers for the world."],["The soldiers take Jesus away and gather around him.","They strip him and clothe him in a robe meant to mock his kingship.","They weave a crown of thorns and press it upon his head.","A reed is placed in his hand as a false royal scepter.","The soldiers kneel in mockery and call Jesus king.","They spit upon the One through whom all things were made.","They take the reed and strike the crowned head of Jesus.","Christ remains the true King even while earthly power humiliates him.","The mockery reveals how deeply human sin can wound innocent love.","After ridiculing Jesus, the soldiers lead him away to be crucified."],["Jesus is led away from the place of judgment toward the place of crucifixion.","He goes out bearing the cross upon which he will offer his life.","Simon of Cyrene is compelled to help carry the cross behind Jesus.","A great crowd follows as Jesus continues toward Calvary.","Women mourn and lament as they see his suffering.","Jesus turns to them even in his pain and speaks to their hearts.","The road to the cross becomes the road of complete self-giving.","Christ continues forward, carrying the burden laid upon him.","He accepts the cross out of obedience to the Father and love for humanity.","Jesus reaches the place where he will give his life for the salvation of the world."],["Jesus is crucified between criminals at the place called the Skull.","He prays for those who crucify him, asking the Father to forgive them.","One criminal turns to Jesus in faith and asks to be remembered.","Jesus promises the repentant thief that he will be with him in paradise.","Mary stands near the cross together with the beloved disciple.","Jesus gives Mary and the beloved disciple to one another as mother and son.","Darkness covers the land as the Passion reaches its final hour.","Jesus, knowing that all is now fulfilled, says that he thirsts.","Jesus declares that his saving work is finished.","He entrusts his spirit to the Father and gives his life."]],"glorious":[["At dawn on the first day of the week, the women come to the tomb of Jesus.","They discover that the stone has been rolled away.","Entering the tomb, they do not find the body of the Lord.","Heavenly messengers ask why they seek the living One among the dead.","The women hear the joyful proclamation that Jesus has risen.","They remember the words Jesus had spoken about his Passion and Resurrection.","The women return and announce the news to the apostles.","Peter runs to the tomb and sees the burial cloths.","The risen Jesus appears to his disciples and brings them peace.","The Resurrection opens a new life that death can no longer conquer."],["After his Resurrection, Jesus continues to teach the apostles about the kingdom of God.","He tells them to wait for the promised gift of the Holy Spirit.","Jesus promises that the Spirit will give them power from on high.","He sends the disciples to be his witnesses to the ends of the earth.","As they watch, Jesus is lifted up before them.","A cloud takes him from their sight.","The disciples remain looking toward heaven in wonder.","Heavenly messengers remind them that Jesus will come again.","The apostles return to Jerusalem in obedience to the Lord's command.","They remain together in prayer as they await the promised Spirit."],["The disciples are gathered together when the day of Pentecost arrives.","A sound like a strong rushing wind fills the whole house.","Something like tongues of fire appears and rests upon each of them.","They are all filled with the Holy Spirit.","The Spirit enables them to speak so that people from many nations can understand.","The crowd is amazed to hear God's mighty works proclaimed.","Peter stands up and boldly announces what God has done in Jesus.","He calls his hearers to conversion and baptism.","The promise of the Holy Spirit is offered to all whom the Lord calls.","Those who receive the word become part of the growing community of believers."],["Mary's soul magnifies the Lord, who has looked with favor upon his lowly servant.","Mary proclaims that all generations will call her blessed because God has done great things for her.","She rejoices in the mercy of God that reaches from generation to generation.","Mary praises the Lord who lifts up the lowly and fills the hungry with good things.","Scripture reveals the ark of God's covenant within the heavenly sanctuary.","A great sign appears in heaven: a woman clothed with the sun.","The moon is beneath the woman's feet and a crown of twelve stars is upon her head.","In Christ, death is destined to be swallowed up in victory.","Mary's hope rests entirely in the saving work of her Son.","We contemplate Mary sharing fully in the life and victory promised by Christ."],["A great sign appears in heaven: a woman clothed with the sun.","The moon is beneath her feet, showing that created things are under God's victorious plan.","Upon her head is a crown of twelve stars.","Mary's blessedness always points beyond herself to the greatness of God.","She is the mother of the King whose kingdom will have no end.","At the cross, Jesus gives Mary as mother to the beloved disciple.","Those who belong to Christ are called to share in his royal dignity and service.","The saints reign by serving God in holiness and love.","Mary's crown reflects the victory of grace accomplished by her Son.","We honor Mary as Queen while worshiping Christ alone as Lord and King."]],"luminous":[["Jesus comes from Galilee to the Jordan and presents himself to John for baptism.","John hesitates, knowing that he himself needs what Jesus alone can give.","Jesus asks John to consent so that all righteousness may be fulfilled.","John obeys, and Jesus enters the waters of the Jordan.","After the baptism, Jesus comes up from the water.","The heavens open above him.","The Spirit of God descends upon Jesus like a dove.","The Father's voice identifies Jesus as his beloved Son.","The Father declares that he is well pleased with the Son.","Jesus begins his public mission in the power of the Spirit and in loving obedience to the Father."],["A wedding takes place at Cana in Galilee, and Mary is there.","Jesus and his disciples are also invited to share in the wedding feast.","When the wine runs short, Mary notices the need before others can solve it.","Mary brings the need simply to Jesus: the wedding has no wine.","Jesus' response points toward the hour when his glory will be fully revealed.","Mary tells the servants to do whatever Jesus tells them.","Jesus instructs the servants to fill the stone jars with water.","The servants obey and fill the jars completely.","The water becomes wine, an abundant sign of Christ's transforming grace.","Through this first sign, Jesus reveals his glory and his disciples grow in faith."],["Jesus comes into Galilee proclaiming the good news of God.","He announces that the appointed time is fulfilled.","The kingdom of God has drawn near.","Jesus calls people to repent and believe in the Gospel.","He calls disciples to follow him and share in his mission.","Jesus blesses the poor in spirit and those who hunger for righteousness.","He teaches his followers to love their enemies and pray for those who persecute them.","He calls people to forgive as they themselves hope to be forgiven.","Jesus heals the sick and shows that the kingdom comes with mercy and restoration.","He tells his disciples to seek first God's kingdom and righteousness."],["Jesus takes Peter, James, and John with him up a high mountain.","There, before the disciples, Jesus is transfigured.","His appearance shines with a glory that comes from beyond this world.","Moses and Elijah appear and speak with Jesus.","Peter longs to remain in the wonder of the moment.","A cloud comes over them and they enter into holy awe.","From the cloud the Father's voice again identifies Jesus as his beloved Son.","The disciples receive a clear command from the Father: listen to Jesus.","When the vision passes, they see Jesus alone with them.","They come down the mountain carrying a glimpse of glory into the road toward the cross."],["Jesus gathers with his apostles for the Passover meal before his Passion.","He tells them how deeply he has desired to share this meal with them.","Jesus takes bread into his hands.","He gives thanks to the Father.","He breaks the bread and gives it to his disciples.","Jesus identifies the bread with his body, given for them.","After the meal he takes the cup.","He speaks of the cup as the new covenant in his blood.","Jesus commands his disciples to do this in remembrance of him.","In the Eucharist, Christ gives himself to his Church and prepares his disciples for the sacrifice of the cross."]]};
+const scripturalRosaryPassages={"joyful":["Luke 1:26–38","Luke 1:39–56","Luke 2:1–21","Luke 2:22–38","Luke 2:41–52"],"sorrowful":["Matthew 26:36–46; Luke 22:39–46","Matthew 27:24–26; Mark 15:6–15","Matthew 27:27–31; John 19:1–3","Luke 23:26–32; John 19:17","Luke 23:33–46; John 19:25–30"],"glorious":["Luke 24:1–12; John 20:1–18","Luke 24:44–53; Acts 1:6–11","Acts 2:1–41","Luke 1:46–55; Revelation 11:19–12:1","Revelation 12:1; Psalm 45:10–17"],"luminous":["Matthew 3:13–17","John 2:1–11","Mark 1:14–15; Matthew 5–7","Mark 9:2–8","Luke 22:14–20; 1 Corinthians 11:23–26"]};
+const CPC_USCCB_ROSARY_URL='https://www.usccb.org/how-to-pray-the-rosary';
+const CPC_USCCB_SCRIPTURAL_URL='https://www.usccb.org/prayers/scriptural-rosary-sorrowful-mysteries';
+function isScripturalRosary(){return state&&state.mode==='scriptural'}
+function currentScripturalCue(idx=state.decade,bead=state.hail){
+ const group=scripturalRosaryCues[state.setKey];
+ const list=group&&group[idx];
+ const i=Math.max(0,Math.min(9,(Number(bead)||1)-1));
+ return (list&&list[i])||'';
+}
+function currentScripturalReference(idx=state.decade){
+ const refs=scripturalRosaryPassages[state.setKey];
+ return (refs&&refs[idx])||sets[state.setKey]?.items[idx]?.ref||'';
+}
+function rosaryHailAudioText(){
+ const cue=isScripturalRosary()?currentScripturalCue():'';
+ return cue?`${cue}. ${prayers.hailMary}`:prayers.hailMary;
+}
+function rosaryMysteryAudioText(idx){
+ const m=sets[state.setKey].items[idx];
+ return isScripturalRosary()?`${m.title}. ${m.desc}`:`${m.title}. ${m.meditation}`;
+}
+function updateRosaryModeHeading(){
+ const wrap=document.querySelector('.rosary-screen-heading');
+ if(!wrap)return;
+ const eyebrow=wrap.querySelector('.eyebrow'),title=wrap.querySelector('h2');
+ if(eyebrow)eyebrow.textContent=isScripturalRosary()?'Scripture & Marian Devotion':'Marian Devotion';
+ if(title)title.textContent=isScripturalRosary()?'Scriptural Rosary':'The Rosary';
+}
+
 const promises=[
 'Whoever shall faithfully serve me by the recitation of the Rosary, shall receive powerful graces.',
 'I promise my special protection and the greatest graces to all those who shall recite the Rosary.',
@@ -5496,7 +5562,7 @@ let calDate=new Date();
 let calView=localStorage.getItem('cpc-calendar-view')||'week';
 let currentDevotion=null;
 
-let state={setKey:null,step:0,decade:0,hail:0};
+let state={setKey:null,step:0,decade:0,hail:0,mode:'traditional'};
 const introSteps=['sign','creed','ourFather','hail3','glory'];
 const endingSteps=['hailHolyQueen','memorare','closing','sign'];
 const prayerTitles={sign:'Sign of the Cross',creed:'Apostles’ Creed',ourFather:'Our Father',hail3:'Hail Mary',hailMary:'Hail Mary',glory:'Glory Be',fatima:'Fatima Prayer',hailHolyQueen:'Hail Holy Queen',memorare:'Memorare',closing:'Closing Prayer'};
@@ -5743,10 +5809,19 @@ function liturgicalWeekLabel(date,season=''){
 function heroOrdinalDay(n){const v=n%100;if(v>=11&&v<=13)return n+'th';switch(n%10){case 1:return n+'st';case 2:return n+'nd';case 3:return n+'rd';default:return n+'th';}}
 function heroDateText(d){const months=['January','February','March','April','May','June','July','August','September','October','November','December'];return `${heroOrdinalDay(d.getDate())} ${months[d.getMonth()]} ${d.getFullYear()}`;}
 async function updateToday(){const hero=document.querySelector('#home .hero');if(hero)hero.dataset.mysterySet=todaySetKey();const el=document.getElementById('todayLabel');const d=new Date();if(el)el.innerHTML=`<span class="today-liturgy"><span class="hero-date-main"><span>${heroDateText(d)}</span></span><span class="hero-liturgical-week"><span id="heroLitWeek">Liturgical week</span><span class="hero-lit-dot" id="heroLitDot" aria-hidden="true"></span></span></span>`;setDailyScripture();try{const p=apiDateParts(d),r=await fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok){const cal=await r.json(),lc=liturgicalColour(cal),dot=document.getElementById('heroLitDot'),week=document.getElementById('heroLitWeek');if(dot)dot.style.setProperty('--hero-lit',lc.hex);if(week)week.textContent=liturgicalWeekLabel(d,cal.season||'');}}catch(e){const week=document.getElementById('heroLitWeek');if(week)week.textContent='';}}
-function startToday(){startSet(todaySetKey())}
+function startToday(){showRosaryModePicker(todaySetKey())}
 function showMysteryPicker(){showLibrary('mysteries')}
-function startSet(k){enterPrayerFocus();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=k;state={setKey:k,step:0,decade:0,hail:0};setPanelArt('prayerContent',`panel-art rosary-art ${k}-art`);save();renderPrayer();setScreen('prayer',{routeKey:'prayer:rosary'})}
-function resumePrayer(){enterPrayerFocus();const s=localStorage.getItem('rosaryState');if(s){try{state=JSON.parse(s);if(state.setKey){const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=state.setKey;setPanelArt('prayerContent',`panel-art rosary-art ${state.setKey}-art`);renderPrayer();setScreen('prayer',{routeKey:'prayer:rosary'});return}}catch(e){}}startToday()}
+function showRosaryModePicker(k,{fromHistory=false}={}){
+ const set=sets[k]||sets[todaySetKey()];
+ const key=sets[k]?k:todaySetKey();
+ leavePrayerFocus();stopSpeech();
+ setPanelArt('pickerPanel',`panel-art mysteries-art ${key}-art`);
+ const panel=document.getElementById('pickerPanel');
+ panel.innerHTML=`<div class="eyebrow">Choose how to pray</div><h2>${set.name}</h2><p class="rosary-mode-intro">Choose the familiar Traditional Rosary or pray more slowly with a Scripture cue before each Hail Mary.</p><div class="rosary-mode-grid"><button class="rosary-mode-card" type="button" onclick="startSet('${key}','traditional')"><span class="rosary-mode-icon" aria-hidden="true">📿</span><strong>Traditional Rosary</strong><span>Your current Rosary experience: Gospel reading, meditation, prayers and decade beads.</span></button><button class="rosary-mode-card" type="button" onclick="startSet('${key}','scriptural')"><span class="rosary-mode-icon" aria-hidden="true">📖</span><strong>Scriptural Rosary</strong><span>A short Scripture meditation accompanies each of the ten Hail Marys in every mystery.</span></button></div><div class="rosary-mode-source">Structure and mystery references are guided by <a href="${CPC_USCCB_ROSARY_URL}" target="_blank" rel="noopener noreferrer">USCCB Rosary guidance ↗</a> and its <a href="${CPC_USCCB_SCRIPTURAL_URL}" target="_blank" rel="noopener noreferrer">Scriptural Rosary resource ↗</a>. Scripture cues are concise Catholic Companion paraphrases rather than reproduced USCCB/NABRE text.</div><div class="actions"><button class="ghost" type="button" onclick="showMysteryPicker()">Choose another mystery set</button></div>`;
+ setScreen('picker',{fromHistory,routeKey:`picker:rosary-mode:${key}`});
+}
+function startSet(k,mode='traditional'){enterPrayerFocus();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=k;state={setKey:k,step:0,decade:0,hail:0,mode:mode==='scriptural'?'scriptural':'traditional'};updateRosaryModeHeading();setPanelArt('prayerContent',`panel-art rosary-art ${k}-art`);save();renderPrayer();setScreen('prayer',{routeKey:'prayer:rosary'})}
+function resumePrayer(){enterPrayerFocus();const s=localStorage.getItem('rosaryState');if(s){try{state=JSON.parse(s);state.mode=state.mode==='scriptural'?'scriptural':'traditional';if(state.setKey){const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=state.setKey;updateRosaryModeHeading();setPanelArt('prayerContent',`panel-art rosary-art ${state.setKey}-art`);renderPrayer();setScreen('prayer',{routeKey:'prayer:rosary'});return}}catch(e){}}startToday()}
 function save(){localStorage.setItem('rosaryState',JSON.stringify(state))}
 let prayerSpeed=parseFloat(localStorage.getItem('cpc-prayer-speed')||'1');
 const prayerSpeedOptions=[[0.75,'Slow'],[1,'Gentle'],[1.5,'Fast'],[2,'Faster']];
@@ -5875,7 +5950,7 @@ function autoAdvanceToNext(kind){
  if(kind==='mercy'){mercyNext();if(autoPlayNext.mercy)setTimeout(playCurrentMercy,420);return}
  if(kind==='angelus'){window.angelusNext();if(autoPlayNext.angelus)setTimeout(playCurrentAngelus,420);return}
 }
-function playCurrentRosary(){if(!autoAdvance.rosary||!autoPlayNext.rosary||!state.setKey)return;const s=state.step;if(s<introSteps.length){const key=introSteps[s];if(key==='hail3')playPrayerAudio(prayers.hailMary,'rosary','rosaryIntroHail');else playPrayerAudio(prayers[key],'rosary','next');return}const dStart=introSteps.length,dEnd=dStart+25;if(s<dEnd){const rel=s-dStart,idx=Math.floor(rel/5),phase=rel%5;if(phase===0){speakMystery(idx,true);return}if(phase===1){playPrayerAudio(prayers.ourFather,'rosary','next');return}if(phase===2){playPrayerAudio(prayers.hailMary,'rosary','rosaryHail');return}if(phase===3){playPrayerAudio(prayers.glory,'rosary','next');return}playPrayerAudio(prayers.fatima,'rosary','next');return}const endIndex=s-dEnd;if(endIndex<endingSteps.length)playPrayerAudio(prayers[endingSteps[endIndex]],'rosary','next')}
+function playCurrentRosary(){if(!autoAdvance.rosary||!autoPlayNext.rosary||!state.setKey)return;const s=state.step;if(s<introSteps.length){const key=introSteps[s];if(key==='hail3')playPrayerAudio(prayers.hailMary,'rosary','rosaryIntroHail');else playPrayerAudio(prayers[key],'rosary','next');return}const dStart=introSteps.length,dEnd=dStart+25;if(s<dEnd){const rel=s-dStart,idx=Math.floor(rel/5),phase=rel%5;if(phase===0){speakMystery(idx,true);return}if(phase===1){playPrayerAudio(prayers.ourFather,'rosary','next');return}if(phase===2){playPrayerAudio(rosaryHailAudioText(),'rosary','rosaryHail');return}if(phase===3){playPrayerAudio(prayers.glory,'rosary','next');return}playPrayerAudio(prayers.fatima,'rosary','next');return}const endIndex=s-dEnd;if(endIndex<endingSteps.length)playPrayerAudio(prayers[endingSteps[endIndex]],'rosary','next')}
 function playCurrentMercy(){if(!autoAdvance.mercy||!autoPlayNext.mercy)return;const s=mercyState.step;if(s<4){playPrayerAudio(divineMercy.opening[s],'mercy','next');return}const rel=s-4;if(rel<10){const phase=rel%2;if(phase===0)playPrayerAudio(divineMercy.large,'mercy','next');else playPrayerAudio(divineMercy.small,'mercy','mercySmall');return}if(rel===10){playPrayerAudio(divineMercy.holyGod,'mercy','mercyHoly');return}if(rel===11)playPrayerAudio(divineMercy.closing,'mercy','next')}
 function autoRosaryIntroHail(){
  if(!autoAdvance.rosary)return;
@@ -5893,7 +5968,7 @@ function autoRosaryHail(){
  if(state.hail<10){
    state.hail++;if(window.cpcPrayerHaptic)window.cpcPrayerHaptic.short();save();updateHomeTrackers();updateRosaryBeadUI();
    // Likewise, reaching bead 10 means the tenth Hail Mary is next, not done.
-   if(autoPlayNext.rosary)setTimeout(()=>playPrayerAudio(prayers.hailMary,'rosary','rosaryHail'),320);
+   if(autoPlayNext.rosary)setTimeout(()=>playPrayerAudio(rosaryHailAudioText(),'rosary','rosaryHail'),320);
    return;
  }
  setTimeout(()=>autoAdvanceToNext('rosary'),500);
@@ -5917,13 +5992,13 @@ function autoMercyHoly(){
  setTimeout(()=>autoAdvanceToNext('mercy'),500);
 }
 function renderPrayer(){queueMicrotask(ensurePrayerNavigationTip);
- stopSpeech();
+ stopSpeech();updateRosaryModeHeading();
  const c=document.getElementById('prayerContent');
  if(state.step<introSteps.length){renderIntro(c,introSteps[state.step]);return}
  const dStart=introSteps.length, dEnd=dStart+25;
  if(state.step<dEnd){const rel=state.step-dStart;state.decade=Math.floor(rel/5);const phase=rel%5;renderDecade(c,state.decade,phase);return}
  const endIndex=state.step-dEnd;if(endIndex<endingSteps.length){renderEnding(c,endingSteps[endIndex],endIndex);return}
- markComplete('rosary');c.innerHTML=`<div class="completion-screen-copy"><div class="eyebrow">Rosary complete</div>${completionMoment('Prayer offered with love')}<h2>May the peace of Christ remain with you.</h2><p class="subtitle">May Our Lady keep you close to her Son, and may you return tomorrow with a heart renewed in prayer.</p></div>`;
+ markComplete('rosary');c.innerHTML=`<div class="completion-screen-copy"><div class="eyebrow">${isScripturalRosary()?'Scriptural Rosary':'Rosary'} complete</div>${completionMoment('Prayer offered with love')}<h2>May the peace of Christ remain with you.</h2><p class="subtitle">May Our Lady keep you close to her Son, and may you return tomorrow with a heart renewed in prayer.</p></div>`;
  }
 function next(){
  const dest=state.step+1;
@@ -5951,15 +6026,28 @@ function renderIntro(c,key){
 function tapIntroHail(i){if(i<=state.hail && state.hail<3){state.hail++;save();updateHomeTrackers();renderPrayer()}}
 function renderDecade(c,idx,phase){
  const m=sets[state.setKey].items[idx];
- if(phase===0){c.innerHTML=`<div class="eyebrow">Mystery ${idx+1} of 5 · ${sets[state.setKey].name.replace('The ','')}</div><h2 class="mystery-title">${m.title}</h2><div class="mystery-desc">${m.desc}</div><div class="prayer-mystery-reference" aria-label="Scripture reference: ${m.ref}">${m.ref}</div><div class="section-label">Gospel Reading</div><div class="reading">${m.reading}</div><div class="section-label">Meditation</div><div class="meditation">${m.meditation}</div>${autoAdvanceControls('rosary',`${m.title}. ${m.meditation}`,'Play title & meditation','next')}`;return}
+ if(phase===0){
+   if(isScripturalRosary()){
+     c.innerHTML=`<div class="eyebrow">Mystery ${idx+1} of 5 · Scriptural Rosary</div><h2 class="mystery-title">${m.title}</h2><div class="mystery-desc">${m.desc}</div><div class="prayer-mystery-reference" aria-label="Scripture references: ${currentScripturalReference(idx)}">${currentScripturalReference(idx)}</div><div class="scriptural-mystery-intro"><b>Pray with the Word</b><br>Each Hail Mary in this decade is accompanied by a short Scripture cue drawn from this mystery.</div><div class="scriptural-source-note">USCCB-informed mystery structure; Scripture cues are concise paraphrases.</div>${autoAdvanceControls('rosary',rosaryMysteryAudioText(idx),'Play mystery introduction','next')}`;
+   }else{
+     c.innerHTML=`<div class="eyebrow">Mystery ${idx+1} of 5 · ${sets[state.setKey].name.replace('The ','')}</div><h2 class="mystery-title">${m.title}</h2><div class="mystery-desc">${m.desc}</div><div class="prayer-mystery-reference" aria-label="Scripture reference: ${m.ref}">${m.ref}</div><div class="section-label">Gospel Reading</div><div class="reading">${m.reading}</div><div class="section-label">Meditation</div><div class="meditation">${m.meditation}</div>${autoAdvanceControls('rosary',rosaryMysteryAudioText(idx),'Play title & meditation','next')}`;
+   }
+   return;
+ }
  if(phase===1){c.innerHTML=`<div class="eyebrow">Mystery ${idx+1} · Begin decade</div><h2 class="mystery-title">Our Father</h2><div class="prayer-text">${prayers.ourFather}</div>${autoAdvanceControls('rosary',prayers.ourFather,'Play prayer','next')}`;return}
- if(phase===2){if(state.hail<1){state.hail=1;save();}c.innerHTML=`<div class="eyebrow">Mystery ${idx+1} · Decade</div><h2 class="mystery-title">Hail Mary</h2><div class="prayer-text">${prayers.hailMary}</div><div class="beads mercy-beads">${Array.from({length:10},(_,i)=>`<button class="bead ${i<state.hail?'done':''}" onclick="event.stopPropagation();advanceRosaryBead()">${i<state.hail?'✓':''}</button>`).join('')}</div><div class="status">${state.hail} of 10 Hail Marys</div>${autoAdvanceControls('rosary',prayers.hailMary,'Play prayer','rosaryHail')}${state.hail===10?``:''}`;return}
+ if(phase===2){
+   if(state.hail<1){state.hail=1;save();}
+   const cue=isScripturalRosary()?currentScripturalCue(idx,state.hail):'';
+   const cueCard=cue?`<div class="scriptural-bead-card"><div class="scriptural-bead-label">Scripture cue · Bead ${state.hail} of 10</div><div class="scriptural-bead-cue">${esc(cue)}</div><div class="scriptural-bead-ref">${currentScripturalReference(idx)}</div></div>`:'';
+   c.innerHTML=`<div class="eyebrow">Mystery ${idx+1} · ${isScripturalRosary()?'Scriptural decade':'Decade'}</div>${cueCard}<h2 class="mystery-title">Hail Mary</h2><div class="prayer-text">${prayers.hailMary}</div><div class="beads mercy-beads">${Array.from({length:10},(_,i)=>`<button class="bead ${i<state.hail?'done':''}" onclick="event.stopPropagation();advanceRosaryBead()">${i<state.hail?'✓':''}</button>`).join('')}</div><div class="status">${state.hail} of 10 Hail Marys</div>${autoAdvanceControls('rosary',rosaryHailAudioText(),isScripturalRosary()?'Play Scripture cue & prayer':'Play prayer','rosaryHail')}${state.hail===10?``:''}`;
+   return;
+ }
  if(phase===3){c.innerHTML=`<div class="eyebrow">Mystery ${idx+1}</div><h2 class="mystery-title">Glory Be</h2><div class="prayer-text">${prayers.glory}</div>${autoAdvanceControls('rosary',prayers.glory,'Play prayer','next')}`;return}
  c.innerHTML=`<div class="eyebrow">Mystery ${idx+1}</div><h2 class="mystery-title">Fatima Prayer</h2><div class="prayer-text">${prayers.fatima}</div>${autoAdvanceControls('rosary',prayers.fatima,'Play prayer','next')}`;
 }
 function tapHail(i){if(i<=state.hail && state.hail<10){state.hail++;save();updateHomeTrackers();renderPrayer()}}
 function renderEnding(c,key,index){c.innerHTML=`<div class="eyebrow">Closing prayers</div><h2 class="mystery-title">${prayerTitles[key]}</h2><div class="prayer-text">${prayers[key]}</div>${autoAdvanceControls('rosary',prayers[key],'Play prayer','next')}`}
-function speakMystery(idx,allowAuto=false){const m=sets[state.setKey].items[idx];if(allowAuto)playPrayerAudio(`${m.title}. ${m.meditation}`,'rosary','next');else speakText(`${m.title}. ${m.meditation}`)}
+function speakMystery(idx,allowAuto=false){const text=rosaryMysteryAudioText(idx);if(allowAuto)playPrayerAudio(text,'rosary','next');else speakText(text)}
 
 
 /* ---- Catholic Companion v35: Novenas ---- */
@@ -6504,7 +6592,7 @@ function filterDailyPrayers(value){
  if(empty)empty.hidden=any||!q;
 }
 
-function renderMysteryLibrary(k,{fromHistory=false}={}){setPanelArt('libraryPanel',`panel-art mysteries-art ${k}-art`);const s=sets[k];document.getElementById('libraryTitle').textContent=s.name;document.getElementById('libraryTabs').innerHTML='';document.getElementById('libraryContent').innerHTML=`<p class="muted mystery-library-subtitle">${s.days}</p><div class="list">${s.items.map((m,i)=>`<div class="list-item mystery-detail-item"><b>${i+1}. ${m.title}</b><br><span class="muted">${m.desc}</span><button class="mystery-scripture-link" type="button" onclick='openBibleReference(${JSON.stringify(JSON.stringify(String(m.ref)))})'><span>${m.ref}</span><span aria-hidden="true">→</span></button><div class="reading">${m.reading}</div><div class="section-label">Meditation</div><div class="meditation">${m.meditation}</div></div>`).join('')}</div><div class="mystery-start-zone" role="button" tabindex="0" onclick="startSet('${k}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();startSet('${k}')}"><div><strong>📿 Pray ${s.name.replace('The ','')}</strong><small>Tap this area to begin the Rosary.</small></div></div>`;if(!fromHistory&&history.state?.cpcRoute!==`library:mystery:${k}`)history.pushState({cpcScreen:'library',cpcRoute:`library:mystery:${k}`},'')}
+function renderMysteryLibrary(k,{fromHistory=false}={}){setPanelArt('libraryPanel',`panel-art mysteries-art ${k}-art`);const s=sets[k];document.getElementById('libraryTitle').textContent=s.name;document.getElementById('libraryTabs').innerHTML='';document.getElementById('libraryContent').innerHTML=`<p class="muted mystery-library-subtitle">${s.days}</p><div class="list">${s.items.map((m,i)=>`<div class="list-item mystery-detail-item"><b>${i+1}. ${m.title}</b><br><span class="muted">${m.desc}</span><button class="mystery-scripture-link" type="button" onclick='openBibleReference(${JSON.stringify(JSON.stringify(String(m.ref)))})'><span>${m.ref}</span><span aria-hidden="true">→</span></button><div class="reading">${m.reading}</div><div class="section-label">Meditation</div><div class="meditation">${m.meditation}</div></div>`).join('')}</div><div class="mystery-start-zone" role="button" tabindex="0" onclick="showRosaryModePicker('${k}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showRosaryModePicker('${k}')}"><div><strong>📿 Pray ${s.name.replace('The ','')}</strong><small>Choose Traditional or Scriptural Rosary.</small></div></div>`;if(!fromHistory&&history.state?.cpcRoute!==`library:mystery:${k}`)history.pushState({cpcScreen:'library',cpcRoute:`library:mystery:${k}`},'')}
 
 function showDevotion(type,{fromHistory=false}={}){stopSpeech();if(type!=='divineMercy'&&type!=='angelus')releasePrayerWakeLock();currentDevotion=type;const artMap={divineMercy:'mercy-art',angelus:'angelus-art',readings:'readings-art',calendar:'calendar-art',bible:'readings-art'};setPanelArt('devotionPanel',`panel-art ${artMap[type]||'prayers-art'}`);setScreen('devotions',{fromHistory,routeKey:`devotion:${type}`});
  const t=document.getElementById('devotionTitle'), e=document.getElementById('devotionEyebrow');
@@ -6688,6 +6776,12 @@ function updateRosaryBeadUI(){
  beads.forEach((b,i)=>{const done=i<state.hail;b.classList.toggle('done',done);b.textContent=done?'✓':''});
  const count=beads.length;
  const counter=panel.querySelector('.status'); if(counter)counter.textContent=count===3?`${state.hail} of 3`:`${state.hail} of 10 Hail Marys`;
+ if(isScripturalRosary()&&rosaryBeadScreen()==='decade'){
+   const cue=panel.querySelector('.scriptural-bead-cue');
+   const label=panel.querySelector('.scriptural-bead-label');
+   if(cue)cue.textContent=currentScripturalCue();
+   if(label)label.textContent=`Scripture cue · Bead ${state.hail} of 10`;
+ }
 }
 function advanceRosaryBead(){
  const mode=rosaryBeadScreen(); if(!mode)return false;
@@ -7126,7 +7220,8 @@ function enableTapEffects(){
 if(!history.state||!history.state.cpcRoute) history.replaceState({cpcScreen:'home',cpcRoute:'home'},'');
 function restoreAppRoute(route){
   if(!route||route==='home'){goHome({fromHistory:true});return;}
-  if(route==='prayer:rosary'){enterPrayerFocus();const k=state.setKey||todaySetKey();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=k;setPanelArt('prayerContent',`panel-art rosary-art ${k}-art`);renderPrayer();setScreen('prayer',{fromHistory:true,routeKey:route});return;}
+  if(route==='prayer:rosary'){enterPrayerFocus();state.mode=state.mode==='scriptural'?'scriptural':'traditional';const k=state.setKey||todaySetKey();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=k;updateRosaryModeHeading();setPanelArt('prayerContent',`panel-art rosary-art ${k}-art`);renderPrayer();setScreen('prayer',{fromHistory:true,routeKey:route});return;}
+  if(route.startsWith('picker:rosary-mode:')){showRosaryModePicker(route.slice('picker:rosary-mode:'.length),{fromHistory:true});return;}
   if(route.startsWith('devotion:')){showDevotion(route.slice(9),{fromHistory:true});return;}
   if(route.startsWith('library:mystery:')){const k=route.slice('library:mystery:'.length);showLibrary('mysteries',{fromHistory:true});renderMysteryLibrary(k,{fromHistory:true});return;}
   if(route.startsWith('library:novena:')){const slug=route.slice('library:novena:'.length);showLibrary('novenas',{fromHistory:true});openNovena(slug,null,{fromHistory:true});return;}
@@ -7282,7 +7377,7 @@ function mercyStepName(ms){const s=ms?.step||0;if(s<4)return mercyOpeningTitles[
 function angelusStepName(as){const steps=activeMarianSteps();return steps[Math.min(as?.step||0,steps.length-1)]?.title||currentMarianPrayerName()}
 function activeSessions(){
  const rs=safeJSON('rosaryState',null),ms=safeJSON('cpc-mercy-state',null),as=safeJSON('cpc-angelus-state',null),list=[];
- if(rs?.setKey&&cpcPrayerStateIsToday(rs)&&!isCompleteToday('rosary'))list.push({kind:'rosary',at:rs.updatedAt||0,label:`Rosary · ${rosaryStepName(rs)}`});
+ if(rs?.setKey&&cpcPrayerStateIsToday(rs)&&!isCompleteToday('rosary'))list.push({kind:'rosary',at:rs.updatedAt||0,label:`${rs.mode==='scriptural'?'Scriptural Rosary':'Rosary'} · ${rosaryStepName(rs)}`});
  if(ms&&cpcPrayerStateIsToday(ms)&&ms.step>0&&!isCompleteToday('mercy'))list.push({kind:'mercy',at:ms.updatedAt||0,label:`Divine Mercy · ${mercyStepName(ms)}`});
  if(as&&cpcPrayerStateIsToday(as)&&as.step>0&&!isCompleteToday('angelus'))list.push({kind:'angelus',at:as.updatedAt||0,label:`${currentMarianPrayerName()} · ${angelusStepName(as)}`});
  return list.sort((a,b)=>b.at-a.at);
@@ -7318,7 +7413,12 @@ let prayerSettingsDrawerOpen=false;
 window.syncPrayerSettingsDrawer=function(el){prayerSettingsDrawerOpen=!!el.open};
 window.autoAdvanceControls=function(kind,text='',label='Play prayer',action='next'){
  const on=!!autoAdvance[kind],play=!!autoPlayNext[kind];
- const playback=text?`<div class="prayer-settings-playback"><div class="audio-row compact-audio-row"><button class="secondary" onclick='playPrayerAudio(${JSON.stringify(text)},${JSON.stringify(kind)},${JSON.stringify(action)})'><span class="audio-icon">▶</span><span class="audio-label">Play</span></button><button class="ghost" onclick="toggleSpeech()"><span class="audio-icon">⏯</span><span class="audio-label">Pause</span></button><button class="ghost" onclick="stopSpeech()"><span class="audio-icon">■</span><span class="audio-label">Stop</span></button></div></div>`:'';
+ const dynamicScripturalHail=kind==='rosary'&&action==='rosaryHail'&&state?.mode==='scriptural';
+ const encodedText=encodeURIComponent(String(text||'')).replace(/'/g,'%27');
+ const playCall=dynamicScripturalHail
+   ?`playPrayerAudio(rosaryHailAudioText(),'rosary','rosaryHail')`
+   :`playPrayerAudio(decodeURIComponent('${encodedText}'),'${kind}','${action}')`;
+ const playback=text?`<div class="prayer-settings-playback"><div class="audio-row compact-audio-row"><button class="secondary" onclick="${playCall}"><span class="audio-icon">▶</span><span class="audio-label">Play</span></button><button class="ghost" onclick="toggleSpeech()"><span class="audio-icon">⏯</span><span class="audio-label">Pause</span></button><button class="ghost" onclick="stopSpeech()"><span class="audio-icon">■</span><span class="audio-label">Stop</span></button></div></div>`:'';
  return `<details class="prayer-settings-drawer" data-no-prayer-tap="1" ${prayerSettingsDrawerOpen?'open':''} ontoggle="syncPrayerSettingsDrawer(this)"><summary onclick="event.stopPropagation()">⚙️ Settings</summary><div class="prayer-settings-content" onclick="event.stopPropagation()">${playback}<div class="prayer-bottom-settings"><label class="prayer-setting ${on?'is-on':''}"><span class="setting-icon">⏭️</span><span class="setting-label">Auto-advance</span><span class="setting-state">${on?'On':'Off'}</span><input type="checkbox" ${on?'checked':''} onchange="toggleAutoAdvance('${kind}',this.checked)"></label><label class="prayer-setting ${play?'is-on':''} ${on?'':'is-disabled'}"><span class="setting-icon">▶️</span><span class="setting-label">Auto-play</span><span class="setting-state">${play?'On':'Off'}</span><input type="checkbox" ${play?'checked':''} ${on?'':'disabled'} onchange="toggleAutoPlay('${kind}',this.checked)"></label><label class="prayer-setting speed-setting compact-speed-setting"><span class="speed-rate-icon">${cpcSpeedIconForRate(prayerSpeed)}</span><span class="setting-label speed-title">Speed</span><span class="setting-state speed-visible">${cpcSpeedLabel(prayerSpeed)}</span><select class="prayer-speed-compact" aria-label="Prayer speed" onchange="cpcSetPrayerSpeedFromSelect(this)">${prayerSpeedOptions.map(([v,n])=>`<option value="${v}" ${Math.abs(prayerSpeed-v)<.001?'selected':''}>${n}</option>`).join('')}</select></label></div></div></details>`;
 };
 /* Authoritative Angelus renderer and prayer extensions. */
