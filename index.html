@@ -550,11 +550,11 @@ button::after,.primary::after,.secondary::after,.ghost::after,.card::after,.tab:
 /* Catholic Bible */
 .bible-toolbar{display:grid;grid-template-columns:1fr 120px;gap:10px;margin:16px 0 12px}
 .bible-toolbar select,.bible-toolbar button{width:100%}
-.bible-book-guide-card{margin:0 0 14px;padding:12px 13px;border:1px solid var(--line);border-radius:14px;background:var(--soft)}
-.bible-book-guide-head{display:flex;align-items:center;justify-content:space-between;gap:8px 12px;flex-wrap:wrap;margin-bottom:7px}
+.bible-book-guide-card{display:block;margin:0 0 14px;padding:12px 13px;border:1px solid var(--line);border-radius:14px;background:var(--soft);color:inherit;text-decoration:none;cursor:pointer;transition:border-color .16s ease,transform .16s ease,background .16s ease}
+.bible-book-guide-card:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));transform:translateY(-1px)}
+.bible-book-guide-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.bible-book-guide-head{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;margin-bottom:7px}
 .bible-book-division{font:800 11px/1.25 system-ui,-apple-system,sans-serif;letter-spacing:.055em;text-transform:uppercase;color:var(--accent)}
-.bible-book-guide-source{font:700 12px/1.3 system-ui,-apple-system,sans-serif;color:var(--accent);text-decoration:none}
-.bible-book-guide-source:hover,.bible-book-guide-source:focus-visible{text-decoration:underline;text-underline-offset:2px;outline:none}
 .bible-book-guide-card p{margin:0;color:var(--ink);font:14px/1.5 system-ui,-apple-system,sans-serif}
 .bible-offline-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:10px 0 18px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--soft)}
 .bible-offline-status{font-size:13px;color:var(--muted)}
@@ -6656,7 +6656,7 @@ async function fetchBibleBook(slug){const urls=[`${biblePrimaryBase}${slug}.json
 async function loadBibleBook(slug,{onlineFallback=true}={}){let data=await bibleDbGet(slug);if(validBibleBook(data))return {data,offline:true};if(!onlineFallback)throw new Error('not-downloaded');data=await fetchBibleBook(slug);await bibleDbPut(slug,data);return {data,offline:false}}
 function bibleChapterObj(book,n){const chapters=book?.chapters||[];return chapters.find(x=>Number(x.chapter)===Number(n))||chapters[Math.max(0,Number(n)-1)]||null}
 function bibleBookOptions(){return `<optgroup label="Old Testament">${bibleBooks.filter(x=>x[2]==='OT').map(x=>`<option value="${x[0]}" ${x[0]===bibleState.slug?'selected':''}>${x[1]}</option>`).join('')}</optgroup><optgroup label="New Testament">${bibleBooks.filter(x=>x[2]==='NT').map(x=>`<option value="${x[0]}" ${x[0]===bibleState.slug?'selected':''}>${x[1]}</option>`).join('')}</optgroup>`}
-function bibleBookGuideHtml(slug){const info=bibleBookGuides[slug],book=bibleBooks.find(x=>x[0]===slug);if(!info||!book)return '';const testament=book[2]==='OT'?'Old Testament':'New Testament',url=`https://bible.usccb.org/bible/${info.usccbSlug}/0`;return `<div class="bible-book-guide-card"><div class="bible-book-guide-head"><span class="bible-book-division">${esc(testament)} · ${esc(info.division)}</span><a class="bible-book-guide-source" href="${url}" target="_blank" rel="noopener noreferrer">USCCB introduction ↗</a></div><p>${esc(info.description)}</p></div>`}
+function bibleBookGuideHtml(slug){const info=bibleBookGuides[slug],book=bibleBooks.find(x=>x[0]===slug);if(!info||!book)return '';const testament=book[2]==='OT'?'Old Testament':'New Testament',url=`https://bible.usccb.org/bible/${info.usccbSlug}/0`;return `<a class="bible-book-guide-card" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="Open ${esc(book[1])} on the USCCB Bible website"><div class="bible-book-guide-head"><span class="bible-book-division">${esc(testament)} · ${esc(info.division)}</span></div><p>${esc(info.description)}</p></a>`}
 function updateBibleBookGuide(){const el=document.getElementById('bibleBookGuide');if(el)el.innerHTML=bibleBookGuideHtml(bibleState.slug)}
 async function retryBibleBook(){const r=document.getElementById('bibleReader');if(r)r.innerHTML='<div class="notice">Loading…</div>';try{const {data}=await loadBibleBook(bibleState.slug);renderBibleBook(data)}catch(e){if(r)r.innerHTML=`<div class="notice">Still unable to load this book. Check your connection, or reopen a book that was previously saved offline.</div><div class="actions"><button class="primary" onclick="retryBibleBook()">Try again</button></div>`}}
 function renderBibleBook(book){
