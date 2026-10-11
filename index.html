@@ -5321,6 +5321,22 @@ body.cpc-prayer-screen-active #devotions.active{
 @media(min-width:560px){.rosary-mode-grid{grid-template-columns:1fr 1fr}}
 </style>
 
+
+<style id="cpc-home-rosary-mystery-label-v56">
+/* v56 — show today's Rosary mystery set directly on the Home hero. */
+#home .hero .hero-mystery-today{
+  margin:-1px 0 8px;
+  text-align:center;
+  color:var(--m-accent,#7a503d);
+  font:700 13px/1.25 system-ui,sans-serif;
+  letter-spacing:.025em;
+}
+[data-theme="dark"] #home .hero .hero-mystery-today{color:var(--m-accent,#b9ddff)}
+@media(max-width:540px){
+  #home .hero .hero-mystery-today{margin-bottom:7px;font-size:12.5px}
+}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -5337,6 +5353,7 @@ body.cpc-prayer-screen-active #devotions.active{
     <div class="eyebrow hero-date-link" id="todayLabel" role="button" tabindex="0" aria-label="Open Liturgical Calendar" onclick="showDevotion('calendar')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showDevotion('calendar')}">Today</div>
       <div class="hero">
       <div class="hero-title-stack"><span class="hero-title-icon" aria-hidden="true"><span class="devotion-glyph">📿</span></span><h1>Pray the Rosary</h1></div>
+      <div class="hero-mystery-today" id="todayMysterySet" aria-live="polite">Today · Rosary Mysteries</div>
       <p class="daily-quote" id="dailyScripture">“Remain in me, as I remain in you.”<cite>John 15:4</cite></p>
       <div class="actions">
         <button class="primary today-rosary-btn" onclick="startToday()">Pray today's Rosary</button>
@@ -5813,7 +5830,7 @@ function liturgicalWeekLabel(date,season=''){
 
 function heroOrdinalDay(n){const v=n%100;if(v>=11&&v<=13)return n+'th';switch(n%10){case 1:return n+'st';case 2:return n+'nd';case 3:return n+'rd';default:return n+'th';}}
 function heroDateText(d){const months=['January','February','March','April','May','June','July','August','September','October','November','December'];return `${heroOrdinalDay(d.getDate())} ${months[d.getMonth()]} ${d.getFullYear()}`;}
-async function updateToday(){const hero=document.querySelector('#home .hero');if(hero)hero.dataset.mysterySet=todaySetKey();const el=document.getElementById('todayLabel');const d=new Date();if(el)el.innerHTML=`<span class="today-liturgy"><span class="hero-date-main"><span>${heroDateText(d)}</span></span><span class="hero-liturgical-week"><span id="heroLitWeek">Liturgical week</span><span class="hero-lit-dot" id="heroLitDot" aria-hidden="true"></span></span></span>`;setDailyScripture();try{const p=apiDateParts(d),r=await fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok){const cal=await r.json(),lc=liturgicalColour(cal),dot=document.getElementById('heroLitDot'),week=document.getElementById('heroLitWeek');if(dot)dot.style.setProperty('--hero-lit',lc.hex);if(week)week.textContent=liturgicalWeekLabel(d,cal.season||'');}}catch(e){const week=document.getElementById('heroLitWeek');if(week)week.textContent='';}}
+async function updateToday(){const hero=document.querySelector('#home .hero'),mysteryKey=todaySetKey();if(hero)hero.dataset.mysterySet=mysteryKey;const mysteryLabel=document.getElementById('todayMysterySet');if(mysteryLabel)mysteryLabel.textContent=`Today · ${(sets[mysteryKey]?.name||'Rosary Mysteries').replace(/^The\s+/,'')}`;const el=document.getElementById('todayLabel');const d=new Date();if(el)el.innerHTML=`<span class="today-liturgy"><span class="hero-date-main"><span>${heroDateText(d)}</span></span><span class="hero-liturgical-week"><span id="heroLitWeek">Liturgical week</span><span class="hero-lit-dot" id="heroLitDot" aria-hidden="true"></span></span></span>`;setDailyScripture();try{const p=apiDateParts(d),r=await fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok){const cal=await r.json(),lc=liturgicalColour(cal),dot=document.getElementById('heroLitDot'),week=document.getElementById('heroLitWeek');if(dot)dot.style.setProperty('--hero-lit',lc.hex);if(week)week.textContent=liturgicalWeekLabel(d,cal.season||'');}}catch(e){const week=document.getElementById('heroLitWeek');if(week)week.textContent='';}}
 function startToday(){showRosaryModePicker(todaySetKey())}
 function showMysteryPicker(){showLibrary('mysteries')}
 function showRosaryModePicker(k,{fromHistory=false}={}){
