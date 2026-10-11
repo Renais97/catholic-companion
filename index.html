@@ -5287,18 +5287,23 @@ body.cpc-prayer-screen-active #devotions.active{
 }
 </style>
 
-<style id="cpc-scriptural-rosary-v54">
-.rosary-mode-intro{margin:4px 0 14px;color:var(--muted);line-height:1.55}
-.rosary-mode-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
-.rosary-mode-card{
-  width:100%;text-align:left;border:1px solid var(--line);border-radius:14px;
-  padding:14px;background:var(--panel);color:var(--ink);box-shadow:var(--shadow);
+<style id="cpc-scriptural-rosary-v55">
+.rosary-mode-grid{
+  display:grid;grid-template-columns:1fr;gap:14px;width:100%;max-width:620px;margin:4px auto 0;
 }
-.rosary-mode-card strong{display:block;font-size:16px;margin-bottom:4px}
-.rosary-mode-card span{display:block;color:var(--muted);font-size:13px;line-height:1.45}
-.rosary-mode-card .rosary-mode-icon{font-size:24px;margin-bottom:7px}
-.rosary-mode-source{margin-top:13px;padding-top:11px;border-top:1px solid var(--line);font-size:12px;line-height:1.5;color:var(--muted)}
-.rosary-mode-source a{color:inherit;text-underline-offset:2px}
+.rosary-mode-card{
+  width:100%;min-height:142px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;border:1px solid var(--line);border-radius:18px;padding:18px 20px;
+  background:var(--panel);color:var(--ink);box-shadow:var(--shadow);
+}
+.rosary-mode-card:active{transform:scale(.985)}
+.rosary-mode-card strong{display:block;font-size:18px;line-height:1.25;margin:7px 0 5px}
+.rosary-mode-card .rosary-mode-description{display:block;max-width:420px;color:var(--muted);font-size:13px;line-height:1.5}
+.rosary-mode-card .rosary-mode-icon{display:block;font-size:34px;line-height:1;margin:0}
+@media(max-width:360px){
+  .rosary-mode-card{min-height:132px;padding:15px 14px}
+  .rosary-mode-card strong{font-size:17px}
+}
 .scriptural-mystery-intro{
   margin:12px 0 4px;padding:12px 13px;border:1px solid var(--line);
   border-radius:12px;background:rgba(255,255,255,.34);line-height:1.5
@@ -5817,7 +5822,7 @@ function showRosaryModePicker(k,{fromHistory=false}={}){
  leavePrayerFocus();stopSpeech();
  setPanelArt('pickerPanel',`panel-art mysteries-art ${key}-art`);
  const panel=document.getElementById('pickerPanel');
- panel.innerHTML=`<div class="eyebrow">Choose how to pray</div><h2>${set.name}</h2><p class="rosary-mode-intro">Choose the familiar Traditional Rosary or pray more slowly with a Scripture cue before each Hail Mary.</p><div class="rosary-mode-grid"><button class="rosary-mode-card" type="button" onclick="startSet('${key}','traditional')"><span class="rosary-mode-icon" aria-hidden="true">📿</span><strong>Traditional Rosary</strong><span>Your current Rosary experience: Gospel reading, meditation, prayers and decade beads.</span></button><button class="rosary-mode-card" type="button" onclick="startSet('${key}','scriptural')"><span class="rosary-mode-icon" aria-hidden="true">📖</span><strong>Scriptural Rosary</strong><span>A short Scripture meditation accompanies each of the ten Hail Marys in every mystery.</span></button></div><div class="rosary-mode-source">Structure and mystery references are guided by <a href="${CPC_USCCB_ROSARY_URL}" target="_blank" rel="noopener noreferrer">USCCB Rosary guidance ↗</a> and its <a href="${CPC_USCCB_SCRIPTURAL_URL}" target="_blank" rel="noopener noreferrer">Scriptural Rosary resource ↗</a>. Scripture cues are concise Catholic Companion paraphrases rather than reproduced USCCB/NABRE text.</div><div class="actions"><button class="ghost" type="button" onclick="showMysteryPicker()">Choose another mystery set</button></div>`;
+ panel.innerHTML=`<div class="rosary-mode-grid"><button class="rosary-mode-card" type="button" onclick="startSet('${key}','traditional')" aria-label="Pray the Traditional Rosary"><span class="rosary-mode-icon" aria-hidden="true">📿</span><strong>Traditional Rosary</strong><span class="rosary-mode-description">Pray in the familiar format with a meditation for each mystery.</span></button><button class="rosary-mode-card" type="button" onclick="startSet('${key}','scriptural')" aria-label="Pray the Scriptural Rosary"><span class="rosary-mode-icon" aria-hidden="true">📖</span><strong>Scriptural Rosary</strong><span class="rosary-mode-description">Reflect on a short Scripture cue before each Hail Mary.</span></button></div>`;
  setScreen('picker',{fromHistory,routeKey:`picker:rosary-mode:${key}`});
 }
 function startSet(k,mode='traditional'){enterPrayerFocus();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=k;state={setKey:k,step:0,decade:0,hail:0,mode:mode==='scriptural'?'scriptural':'traditional'};updateRosaryModeHeading();setPanelArt('prayerContent',`panel-art rosary-art ${k}-art`);save();renderPrayer();setScreen('prayer',{routeKey:'prayer:rosary'})}
