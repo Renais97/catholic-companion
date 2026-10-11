@@ -550,12 +550,12 @@ button::after,.primary::after,.secondary::after,.ghost::after,.card::after,.tab:
 /* Catholic Bible */
 .bible-toolbar{display:grid;grid-template-columns:1fr 120px;gap:10px;margin:16px 0 12px}
 .bible-toolbar select,.bible-toolbar button{width:100%}
-.bible-book-guide-card{display:block;margin:0 0 14px;padding:12px 13px;border:1px solid var(--line);border-radius:14px;background:var(--soft);color:inherit;text-decoration:none;cursor:pointer;transition:border-color .16s ease,transform .16s ease,background .16s ease}
+.bible-book-guide-card{display:block;margin:0 0 14px;padding:12px 13px;border:1px solid var(--line);border-radius:14px;background:var(--soft);color:inherit;text-decoration:none;text-align:center;cursor:pointer;transition:border-color .16s ease,transform .16s ease,background .16s ease}
 .bible-book-guide-card:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));transform:translateY(-1px)}
 .bible-book-guide-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .bible-book-guide-head{display:flex;align-items:center;justify-content:center;gap:8px 12px;flex-wrap:wrap;margin-bottom:7px;text-align:center}
-.bible-book-division{font:800 11px/1.25 system-ui,-apple-system,sans-serif;letter-spacing:.055em;text-transform:uppercase;color:var(--accent)}
-.bible-book-guide-card p{margin:0;color:var(--ink);font:14px/1.5 system-ui,-apple-system,sans-serif}
+.bible-book-division{display:block;width:100%;font:800 11px/1.25 system-ui,-apple-system,sans-serif;letter-spacing:.055em;text-transform:uppercase;text-align:center;color:var(--accent)}
+.bible-book-guide-card p{margin:0;text-align:center;color:var(--ink);font:14px/1.5 system-ui,-apple-system,sans-serif}
 .bible-offline-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:10px 0 18px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--soft)}
 .bible-offline-status{font-size:13px;color:var(--muted)}
 .bible-chapter-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 0 8px}
