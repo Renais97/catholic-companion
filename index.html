@@ -5343,6 +5343,44 @@ body.cpc-prayer-screen-active #devotions.active{
 }
 </style>
 
+<style id="cpc-spouse-weekly-v65">
+/* Weekly spouse prayer schedule — complements, rather than replaces, existing prayers. */
+#libraryPanel .cpc-spouse-portal{
+ display:flex;align-items:center;gap:13px;width:100%;margin:0 0 16px;padding:16px;
+ border:1px solid var(--line);border-radius:18px;text-align:left;
+ background:linear-gradient(115deg,rgba(202,161,120,.16),rgba(255,255,255,.05));
+ color:var(--ink);cursor:pointer;box-shadow:0 4px 14px rgba(80,47,32,.06);
+}
+#libraryPanel .cpc-spouse-portal-icon{font-size:1.8rem;line-height:1}
+#libraryPanel .cpc-spouse-portal-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:4px}
+#libraryPanel .cpc-spouse-portal-title{font-weight:750;color:var(--accent);font-size:1rem}
+#libraryPanel .cpc-spouse-portal-sub{font:400 .83rem/1.4 system-ui,sans-serif;color:var(--muted)}
+#libraryPanel .cpc-spouse-portal-arrow{color:var(--accent);font-size:1.4rem}
+#libraryPanel .cpc-spouse-intro{line-height:1.6;color:var(--muted);font-size:.94rem;text-align:center;margin:4px auto 20px;max-width:600px}
+#libraryPanel .cpc-spouse-back{display:inline-flex;align-items:center;gap:7px;margin:0 0 16px;padding:9px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--accent);font-weight:650}
+#libraryPanel .cpc-spouse-grid{display:grid;gap:12px}
+#libraryPanel .cpc-spouse-day{display:grid;grid-template-columns:42px minmax(0,1fr);gap:12px;padding:16px 14px;
+ border-radius:18px;border:1px solid var(--line);background:var(--panel);}
+#libraryPanel .cpc-spouse-day.is-today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+#libraryPanel .cpc-spouse-icon{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:13px;background:rgba(148,105,75,.1);font-size:1.45rem}
+#libraryPanel .cpc-spouse-day-body{min-width:0}
+#libraryPanel .cpc-spouse-day-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+#libraryPanel .cpc-spouse-weekday{color:var(--accent);font:750 .85rem/1.2 system-ui,sans-serif}
+#libraryPanel .cpc-spouse-today{font:700 .7rem system-ui,sans-serif;letter-spacing:.035em;color:var(--accent)}
+#libraryPanel .cpc-spouse-name{font-size:1.02rem;line-height:1.38;margin:7px 0 5px;color:var(--ink)}
+#libraryPanel .cpc-spouse-focus{margin:0 0 5px;color:var(--accent);font-weight:650;font-size:.89rem}
+#libraryPanel .cpc-spouse-description{margin:0 0 10px;color:var(--muted);line-height:1.53;font-size:.87rem}
+#libraryPanel .cpc-spouse-read{padding:9px 13px;border-radius:11px;background:transparent;border:1px solid var(--line);color:var(--accent);font-weight:700;font-size:.85rem}
+#libraryPanel .cpc-spouse-read:hover,#libraryPanel .cpc-spouse-portal:hover{border-color:var(--accent)}
+#libraryPanel .cpc-spouse-conclusion{margin:22px 0 16px;padding:20px 18px;border:1px solid var(--line);border-radius:18px;background:rgba(182,131,89,.085);text-align:center}
+#libraryPanel .cpc-spouse-conclusion h3{margin:2px 0 12px;color:var(--accent);font-size:1.14rem}
+#libraryPanel .cpc-spouse-conclusion p{font-size:1rem;line-height:1.75;margin:0}
+#libraryPanel .cpc-spouse-final{margin-top:12px;text-align:center;color:var(--muted);font-size:.86rem;line-height:1.5}
+#libraryPanel .cpc-spouse-target{outline:2px solid var(--accent)!important;outline-offset:3px;scroll-margin-top:95px}
+#libraryPanel .cpc-spouse-target-action{margin:18px 0 4px;text-align:center}
+@media(min-width:640px){#libraryPanel .cpc-spouse-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:400px){#libraryPanel .cpc-spouse-day{grid-template-columns:34px minmax(0,1fr);gap:10px;padding:13px 10px}#libraryPanel .cpc-spouse-icon{width:34px;height:34px;font-size:1.15rem}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -5496,7 +5534,7 @@ const sets = {
 };
 
 
-/* Catholic Companion v62 — Daily Prayer
+/* Catholic Companion v65 — Weekly prayer schedule
    The Scripture cues below are original concise paraphrases keyed to the
    Rosary mystery passages. USCCB Rosary resources guide the structure and
    mystery references; long copyrighted Scripture text is not reproduced. */
@@ -6380,7 +6418,64 @@ function renderNovenaDay(slug,day=null,{fromHistory=false}={}){
 
 
 
+// Weekly spouse prayer schedule. Names intentionally match the existing Daily Prayers collection.
+const spouseWeeklyPrayerPlan = [{"day":"Monday","icon":"💍","prayer":"Prayer for a Good Husband or Wife","focus":"Discernment of a future spouse","description":"Ask Jesus for wisdom in finding a faithful companion with whom you can build a holy marriage."},{"day":"Tuesday","icon":"🪢","prayer":"Prayer to Mary the “Knots-looser”","focus":"Entrusting obstacles to Our Lady","description":"Bring Mary your uncertainties, fears, and any knots that may hinder a loving relationship."},{"day":"Wednesday","icon":"🪚","prayer":"Prayer to Saint Joseph","focus":"Preparing to become a good spouse","description":"Seek the virtues of fidelity, responsibility, patience, purity of heart, and selfless love."},{"day":"Thursday","icon":"💒","prayer":"Prayer to Saint Raphael for a Holy Spouse","focus":"Guidance towards the right person","description":"Ask St Raphael to guide your discernment and lead you towards a relationship rooted in God’s will."},{"day":"Friday","icon":"❤️","prayer":"Prayer to the Sacred Heart of Jesus","focus":"Growing in sincere and sacrificial love","description":"Invite Jesus to make your heart more humble, compassionate, patient, and open to His will."},{"day":"Saturday","icon":"💐","prayer":"Prayer to Saints Louis and Zélie Martin","focus":"The example of a holy marriage","description":"Seek their intercession for faithfulness, shared holiness, and a future family centred on Christ."},{"day":"Sunday","icon":"🏠","prayer":"Prayer to the Holy Family","focus":"Entrusting your future home to God","description":"Ask Jesus, Mary, and Joseph to bless your future marriage and family with peace, unity, and love."}];
+function renderSpouseWeeklyPrayerSchedule(){
+  const content=document.getElementById('libraryContent');
+  const jsMondayFirstDay=(new Date().getDay()+6)%7;
+  const cards=spouseWeeklyPrayerPlan.map((item,i)=>`
+    <article class="cpc-spouse-day ${i===jsMondayFirstDay?'is-today':''}" role="listitem" ${i===jsMondayFirstDay?'aria-current="date"':''}>
+      <span class="cpc-spouse-icon" aria-hidden="true">${item.icon}</span>
+      <div class="cpc-spouse-day-body">
+        <div class="cpc-spouse-day-top"><span class="cpc-spouse-weekday">${item.day}</span>${i===jsMondayFirstDay?'<span class="cpc-spouse-today">TODAY</span>':''}</div>
+        <h3 class="cpc-spouse-name">${item.prayer}</h3>
+        <p class="cpc-spouse-focus">${item.focus}</p>
+        <p class="cpc-spouse-description">${item.description}</p>
+        <button class="cpc-spouse-read" type="button" onclick="openSpouseWeeklyPrayer(${i})" aria-label="Read ${item.prayer}">Read prayer →</button>
+      </div>
+    </article>`).join('');
+  content.innerHTML=`
+    <button type="button" class="cpc-spouse-back" onclick="showLibrary('prayers')">← Daily Prayers</button>
+    <p class="cpc-spouse-intro">Seven different prayers for seven days of the week — to discern, prepare for, and entrust a future marriage to God. Pray the day's existing prayer, then finish with the concluding prayer below.</p>
+    <div class="cpc-spouse-grid" role="list" aria-label="Weekly prayer schedule">${cards}</div>
+    <section class="cpc-spouse-conclusion" aria-labelledby="cpc-spouse-conclusion-title">
+      <div class="eyebrow">After each day's prayer</div>
+      <h3 id="cpc-spouse-conclusion-title">Concluding Prayer</h3>
+      <p>Lord, if marriage is Your will for me, prepare my heart and the heart of my future spouse. Guide us towards one another in Your time, and help us always place You at the centre of our love. Amen.</p>
+    </section>
+    <p class="cpc-spouse-final">One prayer each day. Repeat the schedule weekly, trusting God's timing.</p>
+    <div style="text-align:center;margin-top:18px"><button type="button" class="cpc-spouse-back" onclick="showLibrary('prayers')">← Return to Daily Prayers</button></div>`;
+}
+function showSpouseWeeklyConcludingPrayer(){
+  showLibrary('spouse-schedule');
+  setTimeout(()=>{
+    const card=document.querySelector('#libraryContent .cpc-spouse-conclusion');
+    if(!card)return;
+    card.setAttribute('tabindex','-1');
+    card.scrollIntoView({behavior:'auto',block:'center'});
+    try{card.focus({preventScroll:true})}catch(_){card.focus()}
+  },170);
+}
+function openSpouseWeeklyPrayer(dayIndex){
+  const item=spouseWeeklyPrayerPlan[dayIndex];
+  if(!item)return;
+  showLibrary('prayers');
+  // Navigate to the original prayer text instead of creating a duplicate copy.
+  const entries=[...document.querySelectorAll('#libraryContent .other-prayer-item')];
+  const target=entries.find(el=>el.querySelector('b')?.textContent?.trim()===item.prayer);
+  if(!target)return;
+  target.insertAdjacentHTML('beforeend', '<div class="cpc-spouse-target-action"><button type="button" class="cpc-spouse-read" onclick="showSpouseWeeklyConcludingPrayer()">Continue to concluding prayer →</button></div>');
+  target.classList.add('cpc-spouse-target');
+  target.setAttribute('tabindex','-1');
+  setTimeout(()=>{
+    if(!target.isConnected)return;
+    target.scrollIntoView({behavior:'auto',block:'start'});
+    try{target.focus({preventScroll:true})}catch(_){target.focus()}
+  },170);
+}
+
 function showLibrary(type,{fromHistory=false}={}){stopSpeech();const libraryPanel=document.getElementById('libraryPanel');libraryPanel.classList.remove('bp-unboxed','parables-unboxed','novena-detail');if(type==='promises')libraryPanel.classList.add('bp-unboxed');if(type==='parables')libraryPanel.classList.add('parables-unboxed');const artMap={mysteries:'mysteries-art',prayers:'prayers-art',promises:'promises-art',blessings:'blessings-art',parables:'prayers-art',novenas:'novenas-art'};setPanelArt('libraryPanel',`panel-art ${artMap[type]||'prayers-art'}`);document.getElementById('libraryTabs').innerHTML='';const lc=document.getElementById('libraryContent');const title=document.getElementById('libraryTitle');
+ if(type==='spouse-schedule'){title.textContent='Weekly Prayer for a Future Spouse';renderSpouseWeeklyPrayerSchedule();}
  if(type==='promises'){title.textContent='';lc.innerHTML=`<div class="bp-page-header"><h2>Rosary Promises &amp; Blessings</h2></div><div class="cpc-bp-panels"><section class="cpc-bp-panel"><div class="cpc-bp-head"><div class="cpc-bp-title-row"><h3 class="cpc-bp-title">Promises of the Rosary</h3></div><p class="cpc-bp-subtext">The Fifteen Promises are traditionally associated with devotion to the Holy Rosary and express the spiritual graces and help entrusted to those who pray it faithfully.</p></div><div class="cpc-bp-list"><div class="cpc-bp-item"><b>1.</b> Whoever shall faithfully serve me by the recitation of the Rosary, shall receive powerful graces.</div><div class="cpc-bp-item"><b>2.</b> I promise my special protection and the greatest graces to all those who shall recite the Rosary.</div><div class="cpc-bp-item"><b>3.</b> The Rosary shall be a powerful armor against hell, it will destroy vice, decrease sin, and defeat heresies.</div><div class="cpc-bp-item"><b>4.</b> It will cause virtue and good works to flourish; it will obtain for souls the abundant mercy of God; it will withdraw the hearts of people from the love of the world and its vanities, and will lift them to the desire of eternal things. Oh, that souls would sanctify themselves by this means.</div><div class="cpc-bp-item"><b>5.</b> The soul which recommends itself to me by the recitation of the Rosary, shall not perish.</div><div class="cpc-bp-item"><b>6.</b> Whoever shall recite the Rosary devoutly, applying himself to the consideration of its Sacred Mysteries shall never be conquered by misfortune. God will not chastise him in His justice, he shall not perish by an unprovided death; if he be just, he shall remain in the grace of God, and become worthy of eternal life.</div><div class="cpc-bp-item"><b>7.</b> Whoever shall have a true devotion for the Rosary shall not die without the Sacraments of the Church.</div><div class="cpc-bp-item"><b>8.</b> Those who are faithful to recite the Rosary shall have during their life and at their death the light of God and the plentitude of His graces; at the moment of death they shall participate in the merits of the Saints in Paradise.</div><div class="cpc-bp-item"><b>9.</b> I shall deliver from purgatory those who have been devoted to the Rosary.</div><div class="cpc-bp-item"><b>10.</b> The faithful children of the Rosary shall merit a high degree of glory in Heaven.</div><div class="cpc-bp-item"><b>11.</b> You shall obtain all you ask of me by the recitation of the Rosary.</div><div class="cpc-bp-item"><b>12.</b> All those who propagate the Holy Rosary shall be aided by me in their necessities.</div><div class="cpc-bp-item"><b>13.</b> I have obtained from my Divine Son that all the advocates of the Rosary shall have for intercessors the entire celestial court during their life and at the hour of death.</div><div class="cpc-bp-item"><b>14.</b> All who recite the Rosary are my children, and brothers and sisters of my only Son, Jesus Christ.</div><div class="cpc-bp-item"><b>15.</b> Devotion of my Rosary is a great sign of predestination.</div></div></section><section class="cpc-bp-panel"><div class="cpc-bp-head"><div class="cpc-bp-title-row"><h3 class="cpc-bp-title">Blessings of the Rosary</h3></div><p class="cpc-bp-subtext">These blessings describe the spiritual fruits traditionally associated with praying the Rosary, including conversion, consolation, peace, growth in faith, and help for the faithful departed.</p></div><div class="cpc-bp-list"><div class="cpc-bp-item"><b>1.</b> Sinners are forgiven.</div><div class="cpc-bp-item"><b>2.</b> Souls that thirst are refreshed.</div><div class="cpc-bp-item"><b>3.</b> Those who are fettered have their bonds broken.</div><div class="cpc-bp-item"><b>4.</b> Those who weep find happiness.</div><div class="cpc-bp-item"><b>5.</b> Those who are tempted find peace.</div><div class="cpc-bp-item"><b>6.</b> The poor find help.</div><div class="cpc-bp-item"><b>7.</b> Religions are reformed.</div><div class="cpc-bp-item"><b>8.</b> Those who are ignorant are instructed.</div><div class="cpc-bp-item"><b>9.</b> The living learn to overcome pride.</div><div class="cpc-bp-item"><b>10.</b> The Holy Souls in Purgatory have their pains eased by suffrages.</div></div></section></div>`}
 
  if(type==='parables'){title.textContent='';lc.innerHTML=`<div class="cpc-parables-head"><h2>Parables of Jesus</h2><div class="cpc-parables-overview">Jesus used parables - simple stories with deeper meaning - to teach us about God, His Kingdom, and how we are called to live.</div></div><div class="cpc-parables-grid"><section class="cpc-parable-panel">
@@ -6614,7 +6709,7 @@ function showLibrary(type,{fromHistory=false}={}){stopSpeech();const libraryPane
       ['🤝','Prayer for My Friends',`Jesus, when I am playing with other boys and girls, help me remember how You played as a Child. Help me make my playmates happy in our games, because You have taught me to love my neighbor as myself. Jesus bless my friends!`]
     ]}
   ];
-  lc.innerHTML=`<div class="daily-prayer-search-wrap"><span aria-hidden="true">⌕</span><input id="dailyPrayerSearchInput" type="search" placeholder="Search prayers…" aria-label="Search daily prayers" autocomplete="off" oninput="filterDailyPrayers(this.value)"></div><div id="dailyPrayerSearchEmpty" class="daily-prayer-search-empty" hidden>No prayers match that search.</div><div class="other-prayer-groups">${groups.map(g=>`<section class="other-prayer-group other-prayer-${g.key}"><div class="other-prayer-group-head"><span aria-hidden="true">${g.icon}</span><h3>${g.label}</h3></div><div class="other-prayer-group-list">${g.items.map(([i,n,t])=>`<div class="list-item other-prayer-item"><div class="other-prayer-icon" aria-hidden="true">${i}</div><b>${n}</b><div class="other-prayer-text">${t}</div></div>`).join('')}</div></section>`).join('')}</div>`
+  lc.innerHTML=`<button type="button" class="cpc-spouse-portal" onclick="showLibrary('spouse-schedule')" aria-label="Open Weekly Prayer for a Future Spouse"><span class="cpc-spouse-portal-icon" aria-hidden="true">💍</span><span class="cpc-spouse-portal-copy"><span class="cpc-spouse-portal-title">Weekly Prayer for a Future Spouse</span><span class="cpc-spouse-portal-sub">Monday–Sunday · Seven existing prayers · A concluding prayer</span></span><span class="cpc-spouse-portal-arrow" aria-hidden="true">›</span></button><div class="daily-prayer-search-wrap"><span aria-hidden="true">⌕</span><input id="dailyPrayerSearchInput" type="search" placeholder="Search prayers…" aria-label="Search daily prayers" autocomplete="off" oninput="filterDailyPrayers(this.value)"></div><div id="dailyPrayerSearchEmpty" class="daily-prayer-search-empty" hidden>No prayers match that search.</div><div class="other-prayer-groups">${groups.map(g=>`<section class="other-prayer-group other-prayer-${g.key}"><div class="other-prayer-group-head"><span aria-hidden="true">${g.icon}</span><h3>${g.label}</h3></div><div class="other-prayer-group-list">${g.items.map(([i,n,t])=>`<div class="list-item other-prayer-item"><div class="other-prayer-icon" aria-hidden="true">${i}</div><b>${n}</b><div class="other-prayer-text">${t}</div></div>`).join('')}</div></section>`).join('')}</div>`
 }
  if(type==='novenas'){renderNovenasLibrary()}
 
