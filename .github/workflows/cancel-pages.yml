@@ -1,0 +1,20 @@
+
+name: Clear Stuck Pages Deployment
+
+on:
+  workflow_dispatch:
+
+permissions:
+  pages: write
+
+jobs:
+  cancel-stuck-deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel blocked Pages deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --method POST \
+            repos/Renais97/catholic-companion/pages/deployments/9612388318842b888248f478b9a3c37d021e5cc6/cancel
+            
