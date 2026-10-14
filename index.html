@@ -5343,7 +5343,7 @@ body.cpc-prayer-screen-active #devotions.active{
 }
 </style>
 
-<style id="cpc-spouse-weekly-v65">
+<style id="cpc-spouse-weekly-v66">
 /* Weekly spouse prayer schedule — complements, rather than replaces, existing prayers. */
 #libraryPanel .cpc-spouse-portal{
  display:flex;align-items:center;gap:13px;width:100%;margin:0 0 16px;padding:16px;
@@ -5357,7 +5357,45 @@ body.cpc-prayer-screen-active #devotions.active{
 #libraryPanel .cpc-spouse-portal-sub{font:400 .83rem/1.4 system-ui,sans-serif;color:var(--muted)}
 #libraryPanel .cpc-spouse-portal-arrow{color:var(--accent);font-size:1.4rem}
 #libraryPanel .cpc-spouse-intro{line-height:1.6;color:var(--muted);font-size:.94rem;text-align:center;margin:4px auto 20px;max-width:600px}
-#libraryPanel .cpc-spouse-back{display:inline-flex;align-items:center;gap:7px;margin:0 0 16px;padding:9px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--accent);font-weight:650}
+#libraryPanel .cpc-spouse-back{display:flex;align-items:center;justify-content:center;width:max-content;max-width:100%;gap:7px;margin:0 auto 16px;padding:9px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--accent);font-weight:650}
+
+/* v66: seven calm, distinct day palettes (light / dark), scoped to the weekly spouse schedule. */
+#libraryPanel .cpc-spouse-day[data-spouse-day="monday"]{--spouse-rgb:179,93,118;--spouse-ink:#91415c}
+#libraryPanel .cpc-spouse-day[data-spouse-day="tuesday"]{--spouse-rgb:73,127,183;--spouse-ink:#386a9a}
+#libraryPanel .cpc-spouse-day[data-spouse-day="wednesday"]{--spouse-rgb:89,142,104;--spouse-ink:#416e4d}
+#libraryPanel .cpc-spouse-day[data-spouse-day="thursday"]{--spouse-rgb:67,144,147;--spouse-ink:#296e75}
+#libraryPanel .cpc-spouse-day[data-spouse-day="friday"]{--spouse-rgb:156,75,86;--spouse-ink:#913d51}
+#libraryPanel .cpc-spouse-day[data-spouse-day="saturday"]{--spouse-rgb:136,103,172;--spouse-ink:#71519a}
+#libraryPanel .cpc-spouse-day[data-spouse-day="sunday"]{--spouse-rgb:178,133,65;--spouse-ink:#8b6128}
+#libraryPanel .cpc-spouse-day[data-spouse-day]{
+  border-color:rgba(var(--spouse-rgb),.38);
+  border-left:4px solid rgb(var(--spouse-rgb));
+  background:linear-gradient(125deg,rgba(var(--spouse-rgb),.14) 0%,rgba(var(--spouse-rgb),.055) 65%,transparent 100%),var(--panel);
+}
+#libraryPanel .cpc-spouse-day[data-spouse-day].is-today{
+  border-color:rgb(var(--spouse-rgb));
+  box-shadow:0 0 0 1px rgba(var(--spouse-rgb),.65) inset;
+}
+#libraryPanel .cpc-spouse-day[data-spouse-day] .cpc-spouse-icon{background:rgba(var(--spouse-rgb),.18)}
+#libraryPanel .cpc-spouse-day[data-spouse-day] .cpc-spouse-weekday,
+#libraryPanel .cpc-spouse-day[data-spouse-day] .cpc-spouse-focus,
+#libraryPanel .cpc-spouse-day[data-spouse-day] .cpc-spouse-today{color:var(--spouse-ink)}
+#libraryPanel .cpc-spouse-day[data-spouse-day] .cpc-spouse-read{
+  color:var(--spouse-ink);border-color:rgba(var(--spouse-rgb),.45);
+  background:rgba(var(--spouse-rgb),.08);
+}
+#libraryPanel .cpc-spouse-day[data-spouse-day] .cpc-spouse-read:hover,
+#libraryPanel .cpc-spouse-day[data-spouse-day] .cpc-spouse-read:focus-visible{
+  background:rgba(var(--spouse-rgb),.17);border-color:rgb(var(--spouse-rgb));
+}
+[data-theme="dark"] #libraryPanel .cpc-spouse-day[data-spouse-day="monday"]{--spouse-ink:#f2b0be}
+[data-theme="dark"] #libraryPanel .cpc-spouse-day[data-spouse-day="tuesday"]{--spouse-ink:#acccf4}
+[data-theme="dark"] #libraryPanel .cpc-spouse-day[data-spouse-day="wednesday"]{--spouse-ink:#b3dbb9}
+[data-theme="dark"] #libraryPanel .cpc-spouse-day[data-spouse-day="thursday"]{--spouse-ink:#9fdbdd}
+[data-theme="dark"] #libraryPanel .cpc-spouse-day[data-spouse-day="friday"]{--spouse-ink:#efacb4}
+[data-theme="dark"] #libraryPanel .cpc-spouse-day[data-spouse-day="saturday"]{--spouse-ink:#d6bceb}
+[data-theme="dark"] #libraryPanel .cpc-spouse-day[data-spouse-day="sunday"]{--spouse-ink:#e9cb96}
+
 #libraryPanel .cpc-spouse-grid{display:grid;gap:12px}
 #libraryPanel .cpc-spouse-day{display:grid;grid-template-columns:42px minmax(0,1fr);gap:12px;padding:16px 14px;
  border-radius:18px;border:1px solid var(--line);background:var(--panel);}
@@ -6424,7 +6462,7 @@ function renderSpouseWeeklyPrayerSchedule(){
   const content=document.getElementById('libraryContent');
   const jsMondayFirstDay=(new Date().getDay()+6)%7;
   const cards=spouseWeeklyPrayerPlan.map((item,i)=>`
-    <article class="cpc-spouse-day ${i===jsMondayFirstDay?'is-today':''}" role="listitem" ${i===jsMondayFirstDay?'aria-current="date"':''}>
+    <article class="cpc-spouse-day ${i===jsMondayFirstDay?'is-today':''}" data-spouse-day="${item.day.toLowerCase()}" role="listitem" ${i===jsMondayFirstDay?'aria-current="date"':''}>
       <span class="cpc-spouse-icon" aria-hidden="true">${item.icon}</span>
       <div class="cpc-spouse-day-body">
         <div class="cpc-spouse-day-top"><span class="cpc-spouse-weekday">${item.day}</span>${i===jsMondayFirstDay?'<span class="cpc-spouse-today">TODAY</span>':''}</div>
