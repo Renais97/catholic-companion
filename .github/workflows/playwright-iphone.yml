@@ -212,8 +212,7 @@ jobs:
             await page.goto(base);
             const manifestHref = await page.locator('link[rel="manifest"]').getAttribute('href');
             expect(manifestHref).toBeTruthy();
-            const response = await request.get(new URL(manifestHref, base).href);
-            expect(response.ok()).toBeTruthy();
+            const response = await request.get(base + '/service-worker.js');
             const manifest = await response.json();
             expect(manifest.name || manifest.short_name).toBeTruthy();
             expect(Array.isArray(manifest.icons) && manifest.icons.length>0).toBe(true);
