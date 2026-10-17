@@ -142,12 +142,12 @@ jobs:
             expect(output.done).toBe(true);
             expect(output.text).toMatch(/Prayer offered with love|Rosary complete/i);
           });
-          test('Rosary completed tracker appears at home', async ({page}) => {
+          test('Rosary completion badge appears at home', async ({page}) => {
             await page.goto(base);
             await page.getByRole('button', {name: /Pray today's Rosary/i}).click();
             await page.getByRole('button', {name: /Pray the Traditional Rosary/i}).click();
             await page.evaluate(() => {markComplete('rosary');goHome()});
-            await expect(page.locator('#rosaryTracker')).toHaveClass(/complete/);
+            await expect(page.locator('#home .hero .hero-title-icon .devotion-glyph .completion-badge')).toBeVisible();
           });
           test('All five Divine Mercy decades show correct large and small bead prayers', async ({page}) => {
             await page.goto(base);
