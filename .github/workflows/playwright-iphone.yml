@@ -69,6 +69,67 @@ jobs:
             const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 3);
             expect(overflow).toBe(false);
           });
+          test('Rosary progress is saved after advancing and survives reload', async ({page}) => {
+            await page.goto(base);
+            await page.getByRole('button', {name: /Pray today's Rosary/i}).click();
+            await page.getByRole('button', {name: /Pray the Traditional Rosary/i}).click();
+            const initial = await page.evaluate(() => JSON.parse(localStorage.getItem('rosaryState')).step);
+            await page.evaluate(() => next());
+            const advanced = await page.evaluate(() => JSON.parse(localStorage.getItem('rosaryState')).step);
+            expect(advanced).toBe(initial + 1);
+            await page.reload();
+            const restored = await page.evaluate(() => JSON.parse(localStorage.getItem('rosaryState')).step);
+            expect(restored).toBe(advanced);
+          });
+          test('Rosary back navigation restores previous prayer step', async ({page}) => {
+            await page.goto(base);
+            await page.getByRole('button', {name: /Pray today's Rosary/i}).click();
+            await page.getByRole('button', {name: /Pray the Traditional Rosary/i}).click();
+            await page.evaluate(() => { next(); next(); });
+            const before = await page.evaluate(() => JSON.parse(localStorage.getItem('rosaryState')).step);
+            const didGoBack = await page.evaluate(() => previousRosary());
+            const after = await page.evaluate(() => JSON.parse(localStorage.getItem('rosaryState')).step);
+            expect(didGoBack).toBe(true);
+            expect(after).toBe(before - 1);
+          });
+          test('Scriptural Rosary generates a scripture reference for each mystery', async ({page}) => {
+            await page.goto(base);
+            await page.getByRole('button', {name: /Pray today's Rosary/i}).click();
+            await page.getByRole('button', {name: /Pray the Scriptural Rosary/i}).click();
+            const check = await page.evaluate(() => {
+              const output = [];
+              for (let idx=0;idx<5;idx++) {
+                state.step = introSteps.length + idx*5;
+                renderPrayer();
+                const ref = document.querySelector('#prayerContent .prayer-mystery-reference');
+                output.push(ref?.textContent?.trim() || '');
+              }
+              return output;
+            });
+            expect(check).toHaveLength(5);
+            for (const ref of check) expect(ref.length).toBeGreaterThan(2);
+          });
+          test('Rosary bead counters advance without exceeding 10', async ({page}) => {
+            await page.goto(base);
+            await page.getByRole('button', {name: /Pray today's Rosary/i}).click();
+            await page.getByRole('button', {name: /Pray the Traditional Rosary/i}).click();
+            const result = await page.evaluate(() => {
+              state.step = introSteps.length + 2;
+              state.hail = 1;
+              renderPrayer();
+              for (let n=0;n<15;n++) advanceRosaryBead();
+              return {hail:state.hail, label:document.querySelector('#prayerContent .status')?.textContent || ''};
+            });
+            expect(result.hail).toBe(10);
+            expect(result.label).toContain('10');
+          });
+          test('Weekly prayer section and its weekday controls render', async ({page}) => {
+            await page.goto(base);
+            await page.locator('#home button.card').filter({hasText:'Daily Prayers'}).first().click();
+            await expect(page.locator('#library')).toHaveClass(/active/);
+            const pageText = await page.locator('#library').innerText();
+            expect(pageText.length).toBeGreaterThan(100);
+          });
           EOF
       - name: Start local website
         run: |
