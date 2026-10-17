@@ -212,7 +212,7 @@ jobs:
             await page.goto(base);
             const manifestHref = await page.locator('link[rel="manifest"]').getAttribute('href');
             expect(manifestHref).toBeTruthy();
-            const response = await request.get(base + '/service-worker.js');
+            const response = await request.get(base + '/manifest.webmanifest');
             const manifest = await response.json();
             expect(manifest.name || manifest.short_name).toBeTruthy();
             expect(Array.isArray(manifest.icons) && manifest.icons.length>0).toBe(true);
@@ -223,7 +223,7 @@ jobs:
           });
           test('Service worker script is available for PWA installation', async ({page, request}) => {
             await page.goto(base);
-            const response = await request.get(base + '/sw.js');
+            const response = await request.get(base + '/service-worker.js');
             expect(response.ok()).toBeTruthy();
             expect((await response.text()).length).toBeGreaterThan(100);
           });
