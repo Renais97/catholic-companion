@@ -5419,6 +5419,16 @@ body.cpc-prayer-screen-active #devotions.active{
 @media(min-width:640px){#libraryPanel .cpc-spouse-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:400px){#libraryPanel .cpc-spouse-day{grid-template-columns:34px minmax(0,1fr);gap:10px;padding:13px 10px}#libraryPanel .cpc-spouse-icon{width:34px;height:34px;font-size:1.15rem}}
 </style>
+<style>
+/* Mystery navigation fix: visible, easily tappable advance control. */
+#prayer .cpc-mystery-continue {
+  display:block;width:min(100%,440px);margin:12px auto 16px;
+  min-height:52px;padding:13px 20px;border:0;border-radius:14px;
+  color:#fff;background:var(--accent,#805657);font:700 15px/1.35 system-ui,sans-serif;
+  text-align:center;cursor:pointer;touch-action:manipulation;
+}
+#prayer .cpc-mystery-continue:focus-visible {outline:3px solid var(--accent2,#c79b89);outline-offset:3px;}
+</style>
 </head>
 <body>
 <div class="app">
@@ -7059,7 +7069,7 @@ function enableTapAnywhereProgress(){
       if(tapControlExcluded(e.target))return;
       const goBack=e.clientY < window.innerHeight/2;
       if(goBack){previousRosary();return;}
-      if(!prayerScrolledToBottom())return;
+      // The lower-half tap advances without relying on the entire page scroll position.
       next();return;
     }
     if(tapAnywhereExcluded(e.target))return;
@@ -7131,7 +7141,7 @@ function ensurePrayerNavigationTip(){
    root=document.getElementById('prayerContent');
    aux=document.getElementById('rosaryPrayerAux');
    if(rosaryMysteryReadingScreen()){
-     text='Tap the top half anytime to go back · scroll to the bottom, then tap the bottom half to continue.';
+     text='Tap the top half to go back · tap the lower half or use Continue to advance.';
    }
  }else if(devotionActive&&(currentDevotion==='divineMercy'||currentDevotion==='angelus')){
    root=document.getElementById('devotionContent');
@@ -7151,6 +7161,18 @@ function ensurePrayerNavigationTip(){
  tip.className='tap-anywhere-hint';
  tip.textContent=text;
  aux.appendChild(tip);
+
+ // Explicit touch target on mystery reading screens: avoids scroll-height
+ // assumptions and gives mobile users an unmistakable way forward.
+ if(prayerActive&&rosaryMysteryReadingScreen()){
+   const continueButton=document.createElement('button');
+   continueButton.type='button';
+   continueButton.className='cpc-mystery-continue';
+   continueButton.textContent='Continue to Our Father →';
+   continueButton.setAttribute('aria-label','Continue to Our Father');
+   continueButton.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();next();});
+   aux.appendChild(continueButton);
+ }
 
  if(settings)aux.appendChild(settings);
 
