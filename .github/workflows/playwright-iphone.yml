@@ -8,7 +8,7 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -208,6 +208,67 @@ jobs:
             await page.evaluate(()=>showLibrary('spouse-schedule'));
             expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+3)).toBe(false);
           });
+          test('Manifest and icon files are accessible', async ({page, request}) => {
+            await page.goto(base);
+            const manifestHref = await page.locator('link[rel="manifest"]').getAttribute('href');
+            expect(manifestHref).toBeTruthy();
+            const response = await request.get(new URL(manifestHref, base).href);
+            expect(response.ok()).toBeTruthy();
+            const manifest = await response.json();
+            expect(manifest.name || manifest.short_name).toBeTruthy();
+            expect(Array.isArray(manifest.icons) && manifest.icons.length>0).toBe(true);
+            for (const icon of manifest.icons) {
+              const r = await request.get(new URL(icon.src, new URL(manifestHref, base)).href);
+              expect(r.ok(), `Missing icon: ${icon.src}`).toBe(true);
+            }
+          });
+          test('Service worker script is available for PWA installation', async ({page, request}) => {
+            await page.goto(base);
+            const response = await request.get(base + '/sw.js');
+            expect(response.ok()).toBeTruthy();
+            expect((await response.text()).length).toBeGreaterThan(100);
+          });
+          test('Accessibility settings persist after reload', async ({page}) => {
+            await page.goto(base);
+            await page.evaluate(async () => {
+              await window.toggleCpcSetting('largeText', true);
+              await window.toggleCpcSetting('highContrast', true);
+              await window.toggleCpcSetting('reducedMotion', true);
+            });
+            await page.reload();
+            const flags = await page.evaluate(() => ({
+              large: document.body.classList.contains('cpc-large-text'),
+              contrast: document.body.classList.contains('cpc-high-contrast'),
+              motion: document.body.classList.contains('cpc-reduced-motion')
+            }));
+            expect(flags).toEqual({large:true, contrast:true, motion:true});
+          });
+          test('Major home controls have accessible names', async ({page}) => {
+            await page.goto(base);
+            const unnamed = await page.locator('#home button').evaluateAll(btns => btns.filter(b =>
+              !(b.getAttribute('aria-label') || b.innerText || b.getAttribute('title') || '').trim()
+            ).map(b => b.outerHTML.slice(0,140)));
+            expect(unnamed).toEqual([]);
+          });
+          test('Mobile text settings do not create horizontal overflow', async ({page}) => {
+            await page.goto(base);
+            await page.evaluate(async () => {
+              await window.toggleCpcSetting('largeText', true);
+              await window.toggleCpcSetting('highContrast', true);
+            });
+            for (const mode of ['home','devotion']) {
+              if (mode==='devotion') await page.evaluate(()=>showDevotion('divineMercy'));
+              const measure = await page.evaluate(() => ({scroll:document.documentElement.scrollWidth, viewport:innerWidth}));
+              expect(measure.scroll, `Overflow in ${mode}`).toBeLessThanOrEqual(measure.viewport+3);
+            }
+          });
+          test('All visible navigation buttons remain clickable after reload', async ({page}) => {
+            await page.goto(base);
+            await page.reload();
+            await page.locator('#settingsTopBtn').click();
+            await expect(page.locator('#devotions')).toHaveClass(/active/);
+            await expect(page.locator('#devotionContent')).not.toBeEmpty();
+          });
           EOF
       - name: Start local website
         run: |
@@ -215,16 +276,16 @@ jobs:
           python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/catholic-companion-server.log 2>&1 &
           sleep 2
       - name: Run browser tests
-        run: npx playwright test tests/catholic-companion.spec.cjs --reporter=html,line --workers=1
+        run: npx playwright test tests/catholic-companion.spec.cjs --reporter=html,line --workers=1 --screenshot=only-on-failure --trace=retain-on-failure
         env:
           PLAYWRIGHT_HTML_OPEN: never
       - name: Upload report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: catholic-companion-playwright-phase3-report
+          name: catholic-companion-playwright-phase4-report
           path: |
             playwright-report/
             test-results/
           if-no-files-found: ignore
-          retention-days: 14
+          retention-days: 21
