@@ -8,7 +8,7 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -130,6 +130,84 @@ jobs:
             const pageText = await page.locator('#library').innerText();
             expect(pageText.length).toBeGreaterThan(100);
           });
+          test('Rosary completes all five decades', async ({page}) => {
+            await page.goto(base);
+            await page.getByRole('button', {name: /Pray today's Rosary/i}).click();
+            await page.getByRole('button', {name: /Pray the Traditional Rosary/i}).click();
+            const output = await page.evaluate(() => {
+              const n=introSteps.length+25+endingSteps.length;
+              for(let i=0;i<n;i++) next();
+              return {done:localStorage.getItem('cpc-complete-rosary')===todayKey(), text:document.querySelector('#prayerContent').textContent};
+            });
+            expect(output.done).toBe(true);
+            expect(output.text).toMatch(/Prayer offered with love|Rosary complete/i);
+          });
+          test('Rosary completed tracker appears at home', async ({page}) => {
+            await page.goto(base);
+            await page.getByRole('button', {name: /Pray today's Rosary/i}).click();
+            await page.getByRole('button', {name: /Pray the Traditional Rosary/i}).click();
+            await page.evaluate(() => {markComplete('rosary');goHome()});
+            await expect(page.locator('#rosaryTracker')).toHaveClass(/complete/);
+          });
+          test('All five Divine Mercy decades show correct large and small bead prayers', async ({page}) => {
+            await page.goto(base);
+            await page.locator('#home button.card').filter({hasText:'Divine Mercy'}).first().click();
+            const results=await page.evaluate(() => Array.from({length:5},(_,d)=>{
+              mercyState.step=4+2*d;renderMercy();
+              const large=document.querySelector('#devotionContent').textContent.includes('Eternal Father');
+              mercyState.step=5+2*d;mercyState.small=1;renderMercy();
+              const small=document.querySelector('#devotionContent').textContent.includes('For the Sake of His Sorrowful Passion');
+              return {large,small};
+            }));
+            results.forEach(x=>{expect(x.large).toBe(true);expect(x.small).toBe(true)});
+          });
+          test('Divine Mercy ten-bead counter has an upper limit', async ({page}) => {
+            await page.goto(base);
+            await page.locator('#home button.card').filter({hasText:'Divine Mercy'}).first().click();
+            const count=await page.evaluate(()=>{
+              mercyState.step=5;mercyState.small=1;renderMercy();
+              for(let i=0;i<15;i++)advanceMercyBead();
+              return mercyState.small;
+            });
+            expect(count).toBe(10);
+          });
+          test('Marian devotion opens with visible prayer content', async ({page}) => {
+            await page.goto(base);
+            await page.locator('#home button.card').filter({hasText:/Angelus|Regina Caeli/i}).first().click();
+            await expect(page.locator('#devotions')).toHaveClass(/active/);
+            expect((await page.locator('#devotionContent').innerText()).length).toBeGreaterThan(80);
+          });
+          test('Weekly spouse schedule lists all seven weekdays', async ({page}) => {
+            await page.goto(base);
+            const days=await page.evaluate(()=>{
+              showLibrary('spouse-schedule');
+              return Array.from(document.querySelectorAll('#libraryContent [data-spouse-day]')).map(x=>x.dataset.spouseDay).sort();
+            });
+            expect(days).toEqual(['friday','monday','saturday','sunday','thursday','tuesday','wednesday']);
+          });
+          test('Browser back navigates from Divine Mercy to home', async ({page}) => {
+            await page.goto(base);
+            await page.locator('#home button.card').filter({hasText:'Divine Mercy'}).first().click();
+            await page.goBack();
+            await expect(page.locator('#home')).toHaveClass(/active/);
+          });
+          test('Rosary progress persists after leaving and refreshing', async ({page}) => {
+            await page.goto(base);
+            await page.getByRole('button', {name: /Pray today's Rosary/i}).click();
+            await page.getByRole('button', {name: /Pray the Traditional Rosary/i}).click();
+            await page.evaluate(()=>{next();next();goHome()});
+            await page.reload();
+            expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('rosaryState')||'{}').step)).toBeGreaterThanOrEqual(2);
+          });
+          test('Prayer and weekly pages fit iPhone viewport', async ({page}) => {
+            await page.goto(base);
+            for(const x of ['divineMercy','angelus']) {
+              await page.evaluate(type=>showDevotion(type),x);
+              expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+3)).toBe(false);
+            }
+            await page.evaluate(()=>showLibrary('spouse-schedule'));
+            expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+3)).toBe(false);
+          });
           EOF
       - name: Start local website
         run: |
@@ -144,7 +222,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: catholic-companion-playwright-report
+          name: catholic-companion-playwright-phase3-report
           path: |
             playwright-report/
             test-results/
