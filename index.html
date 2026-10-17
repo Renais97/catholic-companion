@@ -5343,7 +5343,7 @@ body.cpc-prayer-screen-active #devotions.active{
 }
 </style>
 
-<style id="cpc-spouse-weekly-v66">
+<style id="cpc-spouse-weekly-v68">
 /* Weekly spouse prayer schedule — complements, rather than replaces, existing prayers. */
 #libraryPanel .cpc-spouse-portal{
  display:flex;align-items:center;gap:13px;width:100%;margin:0 0 16px;padding:16px;
@@ -5419,9 +5419,43 @@ body.cpc-prayer-screen-active #devotions.active{
 @media(min-width:640px){#libraryPanel .cpc-spouse-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:400px){#libraryPanel .cpc-spouse-day{grid-template-columns:34px minmax(0,1fr);gap:10px;padding:13px 10px}#libraryPanel .cpc-spouse-icon{width:34px;height:34px;font-size:1.15rem}}
 </style>
-
+<style id="cpc-v68-improvements">
+/* Native expandable prayer cards; keep all earlier colour palettes. */
+#libraryPanel .other-prayer-item[hidden],#libraryPanel .other-prayer-group[hidden]{display:none!important}
+#libraryPanel.prayers-art #libraryContent details.other-prayer-item[hidden],#libraryPanel.prayers-art #libraryContent section.other-prayer-group[hidden]{display:none!important}
+#libraryPanel.prayers-art #libraryContent details.other-prayer-item{display:block!important;overflow:hidden}
+#libraryPanel.prayers-art #libraryContent details.other-prayer-item:not([open]){padding-bottom:12px!important}
+#libraryPanel.prayers-art #libraryContent .cpc-prayer-summary{display:block;cursor:pointer;list-style:none;text-align:center;outline-offset:3px;min-height:52px}
+#libraryPanel.prayers-art #libraryContent .cpc-prayer-summary::-webkit-details-marker{display:none}
+#libraryPanel.prayers-art #libraryContent .cpc-prayer-summary::marker{content:""}
+#libraryPanel.prayers-art #libraryContent .cpc-prayer-summary > b{display:block!important;color:var(--prayer-cat)!important;font-size:17px!important;line-height:1.35!important;font-weight:800!important;margin:3px 0 5px!important}
+[data-theme="dark"] #libraryPanel.prayers-art #libraryContent .cpc-prayer-summary > b{color:var(--prayer-cat-dark)!important}
+#libraryPanel.prayers-art #libraryContent .cpc-prayer-toggle-hint{display:block;font-size:.78rem;line-height:1.45;color:var(--muted)}
+#libraryPanel.prayers-art #libraryContent details.other-prayer-item[open] .cpc-prayer-toggle-hint{margin-bottom:13px}
+#libraryPanel.prayers-art #libraryContent details.other-prayer-item[open] .cpc-prayer-toggle-hint span{display:inline-block;transform:rotate(180deg)}
+#libraryPanel.prayers-art #libraryContent details.other-prayer-item[open] .other-prayer-text{border-top:1px solid rgba(var(--prayer-cat-rgb),.20);padding-top:14px!important}
+#libraryPanel.prayers-art #libraryContent details.other-prayer-item .other-prayer-icon{margin-bottom:6px!important}
+#libraryPanel.prayers-art #libraryContent .cpc-prayer-summary:focus-visible,.cpc-scriptural-full summary:focus-visible{outline:2px solid var(--accent);border-radius:9px}
+@media(max-width:540px){#libraryPanel.prayers-art #libraryContent .cpc-prayer-summary > b{font-size:16px!important}}
+/* Read the public-domain Douay–Rheims text inline, without navigating away from the Rosary. */
+.cpc-scriptural-full{margin-top:12px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(127,103,79,.045)}
+.cpc-scriptural-full summary{cursor:pointer;color:var(--accent);font-size:.88rem;font-weight:700;min-height:25px}
+.cpc-scriptural-full-body{margin-top:10px;font-size:.94rem;line-height:1.65;text-align:left}
+.cpc-scriptural-full-body p{margin:0 0 10px}
+.cpc-scriptural-full-body small{display:block;color:var(--muted);font-size:.75rem;line-height:1.5}
+.cpc-scriptural-verse{display:inline}
+.cpc-scriptural-verse sup{font-weight:750;margin-right:2px}
+/* Minimum 44px touch targets on Rosary/Divine Mercy prayer beads. */
+#prayer .beads .bead,#devotionPanel .beads .bead{min-width:44px;min-height:44px;touch-action:manipulation}
+/* A manual update notice never reloads in the middle of prayer. */
+.cpc-update-banner{position:fixed;z-index:99999;left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:12px 14px;background:var(--panel,#fff);color:var(--ink,#201714);border:1px solid var(--accent,#b17a4b);border-radius:15px;box-shadow:0 9px 25px rgba(0,0,0,.22);font:600 .85rem/1.45 system-ui,sans-serif}
+.cpc-update-banner[hidden]{display:none!important}
+.cpc-update-banner button{border:1px solid var(--accent);border-radius:9px;padding:8px 12px;background:var(--accent);color:#fff;font-weight:750;cursor:pointer}
+.cpc-update-banner .cpc-update-later{background:transparent;color:var(--ink,#201714)}
+@media(prefers-reduced-motion:reduce){.cpc-update-banner *{transition:none!important}}
+</style>
 </head>
-<body>
+<body data-cpc-version="68">
 <div class="app">
   <div class="topbar">
     <div class="brand"><span>Catholic Companion</span></div>
@@ -5602,6 +5636,48 @@ function currentScripturalCueLabel(idx=state.decade,bead=state.hail){
 function currentScripturalMysterySource(){
  const names={joyful:'Joyful',luminous:'Luminous',sorrowful:'Sorrowful',glorious:'Glorious'};
  return names[state.setKey]||'';
+}
+function cpcScripturalIsBibleReference(ref){return /\b\d+\s*:\s*\d+/.test(ref||'')}
+function cpcScripturalTextControl(ref){
+ return cpcScripturalIsBibleReference(ref)?`<details class="cpc-scriptural-full" ontoggle="if(this.open)cpcLoadScripturalFullText(this)"><summary>Read full verse · Douay–Rheims</summary><div class="cpc-scriptural-full-body" role="status" aria-live="polite">Loading the complete Scripture text…</div></details>`:'';
+}
+function cpcScripturalReferenceParts(ref){
+ return String(ref||'').split(';').map(part=>{
+  // Parentheses give alternate Psalm numbering; prefer the Douay–Rheims number.
+  const ps=part.match(/^\s*Psalm\s+\d+:\d+\s*\((\d+):(\d+)\)/i);
+  if(ps)part=`Psalm ${ps[1]}:${ps[2]}`;
+  const parsed=parseBibleReference(part);
+  if(!parsed)return null;
+  const list=part.replace(/^.*?\d+\s*:\s*/, '').replace(/\([^)]*\)/g,'').split(/\s*,\s*/);
+  const nums=[];
+  for(const str of list){
+   const m=str.match(/^(\d+)(?:\s*[-–]\s*(\d+))?/);if(!m)continue;
+   const from=Number(m[1]),to=Number(m[2]||m[1]);
+   for(let v=from;v<=Math.min(to,from+19);v++)if(!nums.includes(v))nums.push(v);
+  }
+  return {slug:parsed.slug,chapter:parsed.chapter,numbers:nums,ref:part.trim()};
+ }).filter(Boolean);
+}
+async function cpcLoadScripturalFullText(details){
+ const body=details.querySelector('.cpc-scriptural-full-body');if(!body)return;
+ const ref=currentScripturalReference(),key=`${state.setKey}:${state.decade}:${state.hail}:${ref}`;
+ details.dataset.refKey=key;
+ body.textContent='Loading the complete Scripture text…';
+ const parts=cpcScripturalReferenceParts(ref);
+ if(!parts.length){body.textContent='This cue is a liturgical prayer rather than a Bible verse.';return}
+ try{
+  const blocks=[];
+  for(const part of parts){
+   const {data}=await loadBibleBook(part.slug);
+   const chapter=bibleChapterObj(data,part.chapter);
+   const verses=(chapter?.verses||[]).filter(v=>part.numbers.includes(parseInt(v.verse,10)));
+   if(verses.length)blocks.push(`<p><b>${esc(part.ref)}</b> ${verses.map(v=>`<span class="cpc-scriptural-verse"><sup>${esc(v.verse)}</sup> ${esc(cleanBibleText(v.text))}</span>`).join(' ')}</p>`);
+  }
+  if(!details.isConnected||!details.open||details.dataset.refKey!==key)return;
+  body.innerHTML=blocks.length?blocks.join('')+'<small>Public-domain Douay–Rheims translation; wording may differ from other translations.</small>':'Text for this reference is not available in the saved Bible. The short cue above remains available.';
+ }catch(e){
+  if(details.isConnected&&details.open&&details.dataset.refKey===key)body.textContent='Unable to load this verse. Connect to the internet or download this Bible book for offline reading.';
+ }
 }
 function currentScripturalMysteryReference(idx=state.decade){
  const refs=scripturalRosaryPassages[state.setKey];
@@ -6139,7 +6215,7 @@ function renderIntro(c,key){
  const title=prayerTitles[key]||'';
  if(key==='hail3'){
   if(state.hail<1){state.hail=1;save();}
-  c.innerHTML=`<div class="eyebrow">Opening prayers</div><h2 class="mystery-title">${title}</h2><div class="prayer-text">${prayers.hailMary}</div><div class="beads beads-three">${[0,1,2].map(i=>`<button class="bead ${i<state.hail?'done':''}" onclick="event.stopPropagation();advanceRosaryBead()">${i<state.hail?'✓':''}</button>`).join('')}</div><div class="status">${state.hail} of 3</div>${autoAdvanceControls('rosary',prayers.hailMary,'Play prayer','rosaryIntroHail')}`;return;
+  c.innerHTML=`<div class="eyebrow">Opening prayers</div><h2 class="mystery-title">${title}</h2><div class="prayer-text">${prayers.hailMary}</div><div class="beads beads-three">${cpcRenderBeads(3,state.hail,'Hail Mary','advanceRosaryBead')}</div><div class="status" role="status" aria-live="polite">${state.hail} of 3</div>${autoAdvanceControls('rosary',prayers.hailMary,'Play prayer','rosaryIntroHail')}`;return;
  }
  c.innerHTML=`<div class="eyebrow">Opening prayers</div><h2 class="mystery-title">${title}</h2><div class="prayer-text">${prayers[key]}</div>${autoAdvanceControls('rosary',prayers[key],'Play prayer','next')}`;
 }
@@ -6158,8 +6234,8 @@ function renderDecade(c,idx,phase){
  if(phase===2){
    if(state.hail<1){state.hail=1;save();}
    const cue=isScripturalRosary()?currentScripturalCue(idx,state.hail):'';
-   const cueCard=cue?`<div class="scriptural-bead-card"><div class="scriptural-bead-label">${currentScripturalCueLabel(idx,state.hail)} · Bead ${state.hail} of 10</div><div class="scriptural-bead-cue">${esc(cue)}</div><div class="scriptural-bead-ref">${currentScripturalReference(idx)}</div></div>`:'';
-   c.innerHTML=`<div class="eyebrow">Mystery ${idx+1} · ${isScripturalRosary()?'Scriptural decade':'Decade'}</div>${cueCard}<h2 class="mystery-title">Hail Mary</h2><div class="prayer-text">${prayers.hailMary}</div><div class="beads mercy-beads">${Array.from({length:10},(_,i)=>`<button class="bead ${i<state.hail?'done':''}" onclick="event.stopPropagation();advanceRosaryBead()">${i<state.hail?'✓':''}</button>`).join('')}</div><div class="status">${state.hail} of 10 Hail Marys</div>${autoAdvanceControls('rosary',rosaryHailAudioText(),isScripturalRosary()?'Play Scripture cue & prayer':'Play prayer','rosaryHail')}${state.hail===10?``:''}`;
+   const cueCard=cue?`<div class="scriptural-bead-card"><div class="scriptural-bead-label">${currentScripturalCueLabel(idx,state.hail)} · Bead ${state.hail} of 10</div><div class="scriptural-bead-cue">${esc(cue)}</div><div class="scriptural-bead-ref">${currentScripturalReference(idx)}</div>${cpcScripturalTextControl(currentScripturalReference(idx))}</div>`:'';
+   c.innerHTML=`<div class="eyebrow">Mystery ${idx+1} · ${isScripturalRosary()?'Scriptural decade':'Decade'}</div>${cueCard}<h2 class="mystery-title">Hail Mary</h2><div class="prayer-text">${prayers.hailMary}</div><div class="beads mercy-beads">${cpcRenderBeads(10,state.hail,'Hail Mary','advanceRosaryBead')}</div><div class="status" role="status" aria-live="polite">${state.hail} of 10 Hail Marys</div>${autoAdvanceControls('rosary',rosaryHailAudioText(),isScripturalRosary()?'Play Scripture cue & prayer':'Play prayer','rosaryHail')}${state.hail===10?``:''}`;
    return;
  }
  if(phase===3){c.innerHTML=`<div class="eyebrow">Mystery ${idx+1}</div><h2 class="mystery-title">Glory Be</h2><div class="prayer-text">${prayers.glory}</div>${autoAdvanceControls('rosary',prayers.glory,'Play prayer','next')}`;return}
@@ -6503,6 +6579,7 @@ function openSpouseWeeklyPrayer(dayIndex){
   const entries=[...document.querySelectorAll('#libraryContent .other-prayer-item')];
   const target=entries.find(el=>el.querySelector('b')?.textContent?.trim()===item.prayer);
   if(!target)return;
+  target.open=true;
   target.insertAdjacentHTML('beforeend', '<div class="cpc-spouse-target-action"><button type="button" class="cpc-spouse-read" onclick="showSpouseWeeklyConcludingPrayer()">Continue to concluding prayer →</button></div>');
   target.classList.add('cpc-spouse-target');
   target.setAttribute('tabindex','-1');
@@ -6748,7 +6825,7 @@ function showLibrary(type,{fromHistory=false}={}){stopSpeech();const libraryPane
       ['🤝','Prayer for My Friends',`Jesus, when I am playing with other boys and girls, help me remember how You played as a Child. Help me make my playmates happy in our games, because You have taught me to love my neighbor as myself. Jesus bless my friends!`]
     ]}
   ];
-  lc.innerHTML=`<button type="button" class="cpc-spouse-portal" onclick="showLibrary('spouse-schedule')" aria-label="Open Weekly Prayer for a Future Spouse"><span class="cpc-spouse-portal-icon" aria-hidden="true">💍</span><span class="cpc-spouse-portal-copy"><span class="cpc-spouse-portal-title">Weekly Prayer for a Future Spouse</span><span class="cpc-spouse-portal-sub">Monday–Sunday · Seven existing prayers · A concluding prayer</span></span><span class="cpc-spouse-portal-arrow" aria-hidden="true">›</span></button><div class="daily-prayer-search-wrap"><span aria-hidden="true">⌕</span><input id="dailyPrayerSearchInput" type="search" placeholder="Search prayers…" aria-label="Search daily prayers" autocomplete="off" oninput="filterDailyPrayers(this.value)"></div><div id="dailyPrayerSearchEmpty" class="daily-prayer-search-empty" hidden>No prayers match that search.</div><div class="other-prayer-groups">${groups.map(g=>`<section class="other-prayer-group other-prayer-${g.key}"><div class="other-prayer-group-head"><span aria-hidden="true">${g.icon}</span><h3>${g.label}</h3></div><div class="other-prayer-group-list">${g.items.map(([i,n,t])=>`<div class="list-item other-prayer-item"><div class="other-prayer-icon" aria-hidden="true">${i}</div><b>${n}</b><div class="other-prayer-text">${t}</div></div>`).join('')}</div></section>`).join('')}</div>`
+  lc.innerHTML=`<button type="button" class="cpc-spouse-portal" onclick="showLibrary('spouse-schedule')" aria-label="Open Weekly Prayer for a Future Spouse"><span class="cpc-spouse-portal-icon" aria-hidden="true">💍</span><span class="cpc-spouse-portal-copy"><span class="cpc-spouse-portal-title">Weekly Prayer for a Future Spouse</span><span class="cpc-spouse-portal-sub">Monday–Sunday · Seven existing prayers · A concluding prayer</span></span><span class="cpc-spouse-portal-arrow" aria-hidden="true">›</span></button><div class="daily-prayer-search-wrap"><span aria-hidden="true">⌕</span><input id="dailyPrayerSearchInput" type="search" placeholder="Search prayers…" aria-label="Search daily prayers" autocomplete="off" oninput="filterDailyPrayers(this.value)"></div><div id="dailyPrayerSearchEmpty" class="daily-prayer-search-empty" hidden>No prayers match that search.</div><div class="other-prayer-groups">${groups.map(g=>`<section class="other-prayer-group other-prayer-${g.key}"><div class="other-prayer-group-head"><span aria-hidden="true">${g.icon}</span><h3>${g.label}</h3></div><div class="other-prayer-group-list">${g.items.map(([i,n,t])=>`<details class="list-item other-prayer-item"><summary class="cpc-prayer-summary"><span class="other-prayer-icon" aria-hidden="true">${i}</span><b>${n}</b><span class="cpc-prayer-toggle-hint">Tap to read prayer <span aria-hidden="true">⌄</span></span></summary><div class="other-prayer-text">${t}</div></details>`).join('')}</div></section>`).join('')}</div>`
 }
  if(type==='novenas'){renderNovenasLibrary()}
 
@@ -6921,9 +6998,9 @@ function renderMercy(){queueMicrotask(ensurePrayerNavigationTip);
  if(rel<10){const dec=Math.floor(rel/2), phase=rel%2; mercyState.decade=dec;
   if(phase===0){
    c.innerHTML=`<div class="eyebrow">Decade ${dec+1} of 5 · Large bead</div><h2 class="mystery-title">Eternal Father</h2><div class="prayer-text">${divineMercy.large}</div>${autoAdvanceControls('mercy',divineMercy.large,'Play prayer','next')}`;return}
-  if(mercyState.small<1)mercyState.small=1;c.innerHTML=`<div class="eyebrow">Decade ${dec+1} of 5 · Ten small beads</div><h2 class="mystery-title">For the Sake of His Sorrowful Passion</h2><div class="prayer-text">${divineMercy.small}</div><div class="beads mercy-beads">${Array.from({length:10},(_,i)=>`<button class="bead ${i<mercyState.small?'done':''}" onclick="event.stopPropagation();advanceMercyBead()">${i<mercyState.small?'✓':''}</button>`).join('')}</div><div class="counter">${mercyState.small} of 10</div>${autoAdvanceControls('mercy',divineMercy.small,'Play prayer','mercySmall')}`;return
+  if(mercyState.small<1)mercyState.small=1;c.innerHTML=`<div class="eyebrow">Decade ${dec+1} of 5 · Ten small beads</div><h2 class="mystery-title">For the Sake of His Sorrowful Passion</h2><div class="prayer-text">${divineMercy.small}</div><div class="beads mercy-beads">${cpcRenderBeads(10,mercyState.small,'Divine Mercy','advanceMercyBead')}</div><div class="counter" role="status" aria-live="polite">${mercyState.small} of 10</div>${autoAdvanceControls('mercy',divineMercy.small,'Play prayer','mercySmall')}`;return
  }
- if(rel===10){if(mercyState.holy<1)mercyState.holy=1;c.innerHTML=`<div class="eyebrow">Closing · Pray three times</div><h2 class="mystery-title">Holy God</h2><div class="prayer-text">${divineMercy.holyGod}</div><div class="beads mercy-beads beads-three">${[0,1,2].map(i=>`<button class="bead ${i<mercyState.holy?'done':''}" onclick="event.stopPropagation();advanceMercyBead()">${i<mercyState.holy?'✓':''}</button>`).join('')}</div><div class="counter">${mercyState.holy} of 3</div>${autoAdvanceControls('mercy',divineMercy.holyGod,'Play prayer','mercyHoly')}${mercyState.holy===3?``:''}`;return}
+ if(rel===10){if(mercyState.holy<1)mercyState.holy=1;c.innerHTML=`<div class="eyebrow">Closing · Pray three times</div><h2 class="mystery-title">Holy God</h2><div class="prayer-text">${divineMercy.holyGod}</div><div class="beads mercy-beads beads-three">${cpcRenderBeads(3,mercyState.holy,'Holy God','advanceMercyBead')}</div><div class="counter" role="status" aria-live="polite">${mercyState.holy} of 3</div>${autoAdvanceControls('mercy',divineMercy.holyGod,'Play prayer','mercyHoly')}${mercyState.holy===3?``:''}`;return}
  if(rel===11){c.innerHTML=`<div class="eyebrow">Closing prayer</div><h2 class="mystery-title">Closing Prayer</h2><div class="prayer-text">${divineMercy.closing}</div>${autoAdvanceControls('mercy',divineMercy.closing,'Play prayer','next')}`;return}
  markComplete('mercy');c.innerHTML=`<div class="completion-screen-copy"><div class="eyebrow">Chaplet complete</div>${completionMoment('Prayer offered with love')}<h2>Praise be to the Father of mercies.</h2><p class="subtitle">May His mercy remain with you today, and may your heart be drawn back to prayer tomorrow.</p></div>`;
 }
@@ -6952,11 +7029,27 @@ function rosaryBeadScreen(){
  if(s>=dStart&&s<dEnd&&((s-dStart)%5)===2)return 'decade';
  return null;
 }
+function cpcBeadLabel(index,count,active,kind){
+ const status=index+1<active?'completed':index+1===active?'current':'upcoming';
+ return `${kind} bead ${index+1} of ${count}, ${status}. Tap to advance one bead`;
+}
+function cpcRenderBeads(count,active,kind,onclick){
+ return Array.from({length:count},(_,i)=>`<button type="button" class="bead ${i<active?'done':''}" aria-label="${cpcBeadLabel(i,count,active,kind)}" ${i+1===active?'aria-current="step"':''} onclick="event.stopPropagation();${onclick}()">${i<active?'✓':''}</button>`).join('');
+}
+function cpcSyncBeadLabels(beads,count,active,kind){
+ beads.forEach((b,i)=>{
+  const done=i<active;
+  b.classList.toggle('done',done);
+  b.textContent=done?'✓':'';
+  b.setAttribute('aria-label',cpcBeadLabel(i,count,active,kind));
+  if(i+1===active)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');
+ });
+}
 function updateRosaryBeadUI(){
  const panel=document.getElementById('prayerContent'); if(!panel)return;
  const beads=panel.querySelectorAll('.beads .bead');
- beads.forEach((b,i)=>{const done=i<state.hail;b.classList.toggle('done',done);b.textContent=done?'✓':''});
  const count=beads.length;
+ cpcSyncBeadLabels(beads,count,state.hail,'Hail Mary');
  const counter=panel.querySelector('.status'); if(counter)counter.textContent=count===3?`${state.hail} of 3`:`${state.hail} of 10 Hail Marys`;
  if(isScripturalRosary()&&rosaryBeadScreen()==='decade'){
    const cue=panel.querySelector('.scriptural-bead-cue');
@@ -6965,6 +7058,8 @@ function updateRosaryBeadUI(){
    if(cue)cue.textContent=currentScripturalCue();
    if(ref)ref.textContent=currentScripturalReference();
    if(label)label.textContent=`${currentScripturalCueLabel()} · Bead ${state.hail} of 10`;
+   const verses=panel.querySelector('.cpc-scriptural-full');
+   if(verses)verses.open=false;
  }
 }
 function advanceRosaryBead(){
@@ -7002,7 +7097,7 @@ function updateMercyBeadUI(){
  const panel=document.getElementById('devotionPanel'); if(!panel)return;
  const beads=panel.querySelectorAll('.beads .bead');
  const rel=mercyState.step-4, isHoly=rel===10, current=isHoly?mercyState.holy:mercyState.small, max=isHoly?3:10;
- beads.forEach((b,i)=>{const done=i<current;b.classList.toggle('done',done);b.textContent=done?'✓':''});
+ cpcSyncBeadLabels(beads,max,current,isHoly?'Holy God':'Divine Mercy');
  const counter=panel.querySelector('.counter');if(counter)counter.textContent=`${current} of ${max}`;
 }
 function advanceMercyBead(){
@@ -7060,7 +7155,7 @@ function enableTapAnywhereProgress(){
       if(tapControlExcluded(e.target))return;
       const goBack=e.clientY < window.innerHeight/2;
       if(goBack){previousRosary();return;}
-      // The lower-half tap advances without relying on the entire page scroll position.
+      if(!prayerScrolledToBottom())return;
       next();return;
     }
     if(tapAnywhereExcluded(e.target))return;
@@ -7132,7 +7227,7 @@ function ensurePrayerNavigationTip(){
    root=document.getElementById('prayerContent');
    aux=document.getElementById('rosaryPrayerAux');
    if(rosaryMysteryReadingScreen()){
-     text='Tap the top half to go back · tap the lower half or use Continue to advance.';
+     text='Tap the top half anytime to go back · scroll to the bottom, then tap the bottom half to continue.';
    }
  }else if(devotionActive&&(currentDevotion==='divineMercy'||currentDevotion==='angelus')){
    root=document.getElementById('devotionContent');
@@ -7152,7 +7247,6 @@ function ensurePrayerNavigationTip(){
  tip.className='tap-anywhere-hint';
  tip.textContent=text;
  aux.appendChild(tip);
-
 
  if(settings)aux.appendChild(settings);
 
@@ -7671,7 +7765,7 @@ window.searchOfflineBible=async function(){
  out.innerHTML=`<div class="bible-search-summary">${hits.length}${hits.length>=80?'+' : ''} result${hits.length===1?'':'s'} across ${count} available book${count===1?'':'s'}</div>`+hits.map(h=>{const n=bibleBooks.find(x=>x[0]===h.slug)?.[1]||h.slug;return `<button class="bible-search-hit" type="button" onclick="openBibleSearchHit('${h.slug}',${h.ch},${h.v})"><b>${esc(n)} ${h.ch}:${h.v}</b><span>${esc(h.text)}</span></button>`}).join('');
 };
 window.openBibleSearchHit=function(slug,ch,v){bibleReferenceTarget={slug,chapter:Number(ch),verseStart:Number(v),verseEnd:Number(v),raw:`${bibleBooks.find(x=>x[0]===slug)?.[1]||slug} ${ch}:${v}`};bibleState.slug=slug;bibleState.chapter=Number(ch);localStorage.setItem('cpc-bible-book',slug);localStorage.setItem('cpc-bible-chapter',String(ch));window.renderBible()};
-window.renderBible=function(){const c=document.getElementById('devotionContent'),displayName=bibleBooks.find(x=>x[0]===bibleState.slug)?.[1]||'Bible';c.innerHTML=`<div class="bible-status-line"><span id="networkBibleStatus">${navigator.onLine?'● Online':'● Offline'}</span><span>Douay–Rheims · 73-book Catholic canon</span></div><div class="bible-search-row"><input id="bibleSearchInput" type="search" placeholder="Search saved Bible text" onkeydown="if(event.key==='Enter')searchOfflineBible()"><button class="secondary" id="bibleSearchBtn" type="button" onclick="searchOfflineBible()">Search</button><button class="ghost" onclick="renderBibleBookmarks()">★ Bookmarks</button></div><div id="bibleSearchResults"></div><div class="bible-toolbar"><select id="bibleBookSelect" aria-label="Bible book" onchange="changeBibleBook(this.value)">${bibleBookOptions()}</select><select id="bibleChapterSelect" aria-label="Bible chapter" disabled><option>Chapter</option></select></div><div id="bibleBookGuide">${bibleBookGuideHtml(bibleState.slug)}</div><div id="bibleReader"><div class="notice">Loading ${esc(displayName)}…</div></div><p class="footer-note">Public-domain Douay–Rheims text. Books you open are saved locally when your browser supports persistent storage.</p><div class="bible-offline-row bible-offline-bottom"><div><b>Catholic Bible</b><div id="bibleOfflineStatus" class="bible-offline-status">Checking saved books…</div><div class="bible-download-progress" id="bibleDownloadProgress"><span></span></div></div><button class="secondary" id="bibleDownloadBtn" onclick="downloadCompleteBible()">Download all</button></div>`;cpcWireLiveBibleSearch();loadBibleBook(bibleState.slug).then(({data})=>renderBibleBook(data)).catch(()=>{const r=document.getElementById('bibleReader');if(r)r.innerHTML=`<div class="notice">This book is not available offline yet and could not be downloaded.</div><div class="actions"><button class="primary" onclick="retryBibleBook()">Try again</button></div>`});updateBibleOfflineStatus()};
+window.renderBible=function(){const c=document.getElementById('devotionContent'),displayName=bibleBooks.find(x=>x[0]===bibleState.slug)?.[1]||'Bible';c.innerHTML=`<div class="bible-status-line"><span id="networkBibleStatus">${navigator.onLine?'● Online':'● Offline'}</span><span>Offline reader: Douay–Rheims · 73-book canon</span></div><div class="bible-search-row"><input id="bibleSearchInput" type="search" placeholder="Search saved Bible text" onkeydown="if(event.key==='Enter')searchOfflineBible()"><button class="secondary" id="bibleSearchBtn" type="button" onclick="searchOfflineBible()">Search</button><button class="ghost" onclick="renderBibleBookmarks()">★ Bookmarks</button></div><div id="bibleSearchResults"></div><div class="bible-toolbar"><select id="bibleBookSelect" aria-label="Bible book" onchange="changeBibleBook(this.value)">${bibleBookOptions()}</select><select id="bibleChapterSelect" aria-label="Bible chapter" disabled><option>Chapter</option></select></div><div id="bibleBookGuide">${bibleBookGuideHtml(bibleState.slug)}</div><div id="bibleReader"><div class="notice">Loading ${esc(displayName)}…</div></div><p class="footer-note">This offline Bible uses the public-domain Douay–Rheims translation, not USCCB/NABRE text. Book guide cards open the corresponding USCCB pages separately. Books you open are saved locally when supported.</p><div class="bible-offline-row bible-offline-bottom"><div><b>Catholic Bible</b><div id="bibleOfflineStatus" class="bible-offline-status">Checking saved books…</div><div class="bible-download-progress" id="bibleDownloadProgress"><span></span></div></div><button class="secondary" id="bibleDownloadBtn" onclick="downloadCompleteBible()">Download all</button></div>`;cpcWireLiveBibleSearch();loadBibleBook(bibleState.slug).then(({data})=>renderBibleBook(data)).catch(()=>{const r=document.getElementById('bibleReader');if(r)r.innerHTML=`<div class="notice">This book is not available offline yet and could not be downloaded.</div><div class="actions"><button class="primary" onclick="retryBibleBook()">Try again</button></div>`});updateBibleOfflineStatus()};
 window.renderBibleChapter=function(book){const ch=bibleChapterObj(book,bibleState.chapter),reader=document.getElementById('bibleReader');if(!ch||!reader)return;const name=book.short_title||book.book_title||bibleBooks.find(x=>x[0]===bibleState.slug)?.[1]||'Bible',verses=Array.isArray(ch.verses)?ch.verses:[],chapters=book.chapters||[],idx=chapters.findIndex(x=>Number(x.chapter)===Number(bibleState.chapter)),prev=idx>0?Number(chapters[idx-1].chapter)||idx:null,next=idx>=0&&idx<chapters.length-1?(Number(chapters[idx+1].chapter)||idx+2):null,target=(bibleReferenceTarget&&bibleReferenceTarget.slug===bibleState.slug&&Number(bibleReferenceTarget.chapter)===Number(bibleState.chapter))?bibleReferenceTarget:null,marks=new Set(getBibleBookmarks().map(b=>b.key)),refNotice=target?`<div class="notice bible-reference-notice">Reading: <b>${esc(target.raw)}</b></div>`:'';reader.innerHTML=`<div class="bible-chapter-head"><button class="ghost" onclick="bibleGoChapter(${prev??'null'})" ${prev==null?'disabled':''}>‹</button><h3>${esc(name)} ${esc(bibleState.chapter)}</h3><button class="ghost" onclick="bibleGoChapter(${next??'null'})" ${next==null?'disabled':''}>›</button></div>${refNotice}${cleanBibleText(ch.introduction)?`<p class="muted bible-intro">${esc(cleanBibleText(ch.introduction))}</p>`:''}<div class="bible-verses">${verses.length?verses.map(v=>{const vn=parseInt(String(v.verse),10),hit=target&&target.verseStart!=null&&vn>=target.verseStart&&vn<=target.verseEnd,key=verseKey(bibleState.slug,bibleState.chapter,vn),saved=marks.has(key);return `<div class="bible-verse${hit?' bible-verse-target':''}"${hit?' id="bibleTargetVerse"':''}><button class="verse-bookmark" aria-label="${saved?'Remove':'Add'} bookmark" onclick='event.stopPropagation();toggleBibleBookmark(${JSON.stringify(bibleState.slug)},${Number(bibleState.chapter)},${vn},${JSON.stringify(cleanBibleText(v.text))})'>${saved?'★':'☆'}</button><sup>${esc(v.verse)}</sup>${esc(cleanBibleText(v.text))}</div>`}).join(''):'<div class="notice">No verse text was found for this chapter.</div>'}</div>`;if(target)setTimeout(()=>document.getElementById('bibleTargetVerse')?.scrollIntoView({behavior:CPC.settings.reducedMotion?'auto':'smooth',block:'center'}),80)};
 
 /* Settings and export/import */
@@ -8056,13 +8150,32 @@ function cpcSetPrayerSpeedFromSelect(sel){
 </script>
 
 
-<script>
+<script id="cpc-v68-update-notice">
 (function(){
-  if(!('serviceWorker' in navigator))return;
-  if(location.protocol!=='https:' && location.hostname!=='localhost')return;
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./service-worker.js',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});
-  });
+ if(!('serviceWorker' in navigator))return;
+ if(location.protocol!=='https:'&&location.hostname!=='localhost')return;
+ let hadController=!!navigator.serviceWorker.controller;
+ let dismissed=false;
+ function showUpdateNotice(){
+  if(!hadController||dismissed||document.getElementById('cpc-update-banner'))return;
+  const banner=document.createElement('div');
+  banner.id='cpc-update-banner';banner.className='cpc-update-banner';
+  banner.setAttribute('role','status');
+  const message=document.createElement('span');message.textContent='A new Catholic Companion version is ready.';
+  const reload=document.createElement('button');reload.type='button';reload.textContent='Refresh app';
+  reload.addEventListener('click',()=>location.reload());
+  const later=document.createElement('button');later.type='button';later.className='cpc-update-later';later.textContent='Later';
+  later.addEventListener('click',()=>{dismissed=true;banner.remove()});
+  banner.append(message,reload,later);document.body.appendChild(banner);
+ }
+ navigator.serviceWorker.addEventListener('controllerchange',()=>{if(hadController)showUpdateNotice();hadController=true});
+ window.addEventListener('load',()=>{
+  navigator.serviceWorker.register('./service-worker.js',{updateViaCache:'none'}).then(reg=>{
+   const check=()=>reg.update().catch(()=>{});
+   check();
+   document.addEventListener('visibilitychange',()=>{if(!document.hidden)check()});
+  }).catch(()=>{});
+ });
 })();
 </script>
 
