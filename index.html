@@ -3669,6 +3669,13 @@ body .app .topbar::before{
   color:var(--reading-lit-dark,var(--accent))!important;
 }
 
+
+.cpc-mystery-continue{display:flex;justify-content:center;margin:20px auto 10px;padding:0 12px}.cpc-mystery-continue button{min-height:48px;max-width:100%;padding:12px 20px;touch-action:manipulation;cursor:pointer}
+
+/* v73: tappable meditation, iOS-friendly */
+#prayer .cpc-meditation-advance {cursor:pointer; touch-action:pan-y; -webkit-tap-highlight-color:rgba(160,130,82,.18); position:relative}
+#prayer .cpc-meditation-advance:focus-visible {outline:3px solid var(--accent,#a58557);outline-offset:3px}
+#prayer .cpc-meditation-tap-hint {display:block;margin-top:12px;font-size:.82em;opacity:.8;text-align:center;pointer-events:none}
 </style>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -6224,9 +6231,9 @@ function renderDecade(c,idx,phase){
  const m=sets[state.setKey].items[idx];
  if(phase===0){
    if(isScripturalRosary()){
-     c.innerHTML=`<div class="eyebrow">Mystery ${idx+1} of 5 · Scriptural Rosary</div><h2 class="mystery-title">${m.title}</h2><div class="mystery-desc">${m.desc}</div><div class="prayer-mystery-reference" aria-label="Scripture references: ${currentScripturalMysteryReference(idx)}">${currentScripturalMysteryReference(idx)}</div><div class="scriptural-mystery-intro"><b>Pray with the Word</b><br>Before each of the ten Hail Marys, read a different Scripture cue following the selected passages in sequence.</div><div class="scriptural-source-note">Sequence adapted from Our Catholic Prayers — ${currentScripturalMysterySource()} Mysteries. Cues are paraphrased, with an individual reference for every bead.</div>${autoAdvanceControls('rosary',rosaryMysteryAudioText(idx),'Play mystery introduction','next')}`;
+     c.innerHTML=`<div class="eyebrow">Mystery ${idx+1} of 5 · Scriptural Rosary</div><h2 class="mystery-title">${m.title}</h2><div class="mystery-desc">${m.desc}</div><div class="prayer-mystery-reference" aria-label="Scripture references: ${currentScripturalMysteryReference(idx)}">${currentScripturalMysteryReference(idx)}</div><div class="scriptural-mystery-intro cpc-meditation-advance" onclick="event.stopPropagation();if(rosaryMysteryReadingScreen())next()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();if(rosaryMysteryReadingScreen())next()}" role="button" tabindex="0" aria-label="Continue to Our Father"><b>Pray with the Word</b><br>Before each of the ten Hail Marys, read a different Scripture cue following the selected passages in sequence.<span class="cpc-meditation-tap-hint" aria-hidden="true">Tap anywhere in this box to continue →</span></div><div class="scriptural-source-note">Sequence adapted from Our Catholic Prayers — ${currentScripturalMysterySource()} Mysteries. Cues are paraphrased, with an individual reference for every bead.</div>${autoAdvanceControls('rosary',rosaryMysteryAudioText(idx),'Play mystery introduction','next')}<div class="cpc-mystery-continue"><button type="button" class="primary" onclick="event.stopPropagation();next()" aria-label="Continue to Our Father">Continue to Our Father →</button></div>`;
    }else{
-     c.innerHTML=`<div class="eyebrow">Mystery ${idx+1} of 5 · ${sets[state.setKey].name.replace('The ','')}</div><h2 class="mystery-title">${m.title}</h2><div class="mystery-desc">${m.desc}</div><div class="prayer-mystery-reference" aria-label="Scripture reference: ${m.ref}">${m.ref}</div><div class="section-label">Gospel Reading</div><div class="reading">${m.reading}</div><div class="section-label">Meditation</div><div class="meditation">${m.meditation}</div>${autoAdvanceControls('rosary',rosaryMysteryAudioText(idx),'Play title & meditation','next')}`;
+     c.innerHTML=`<div class="eyebrow">Mystery ${idx+1} of 5 · ${sets[state.setKey].name.replace('The ','')}</div><h2 class="mystery-title">${m.title}</h2><div class="mystery-desc">${m.desc}</div><div class="prayer-mystery-reference" aria-label="Scripture reference: ${m.ref}">${m.ref}</div><div class="section-label">Gospel Reading</div><div class="reading">${m.reading}</div><div class="section-label">Meditation</div><div class="meditation cpc-meditation-advance" onclick="event.stopPropagation();if(rosaryMysteryReadingScreen())next()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();if(rosaryMysteryReadingScreen())next()}" role="button" tabindex="0" aria-label="Continue to Our Father">${m.meditation}<span class="cpc-meditation-tap-hint" aria-hidden="true">Tap anywhere in the meditation to continue →</span></div>${autoAdvanceControls('rosary',rosaryMysteryAudioText(idx),'Play title & meditation','next')}<div class="cpc-mystery-continue"><button type="button" class="primary" onclick="event.stopPropagation();next()" aria-label="Continue to Our Father">Continue to Our Father →</button></div>`;
    }
    return;
  }
@@ -6534,7 +6541,7 @@ function renderNovenaDay(slug,day=null,{fromHistory=false}={}){
 
 
 // Weekly spouse prayer schedule. Names intentionally match the existing Daily Prayers collection.
-const spouseWeeklyPrayerPlan = [{"day":"Monday","icon":"💍","prayer":"Prayer for a Good Husband or Wife","focus":"Discernment of a future spouse","description":"Ask Jesus for wisdom in finding a faithful companion with whom you can build a holy marriage."},{"day":"Tuesday","icon":"🪢","prayer":"Prayer to Mary the “Knots-looser”","focus":"Entrusting obstacles to Our Lady","description":"Bring Mary your uncertainties, fears, and any knots that may hinder a loving relationship."},{"day":"Wednesday","icon":"🪚","prayer":"Prayer to Saint Joseph","focus":"Preparing to become a good spouse","description":"Seek the virtues of fidelity, responsibility, patience, purity of heart, and selfless love."},{"day":"Thursday","icon":"💒","prayer":"Prayer to Saint Raphael for a Holy Spouse","focus":"Guidance towards the right person","description":"Ask St Raphael to guide your discernment and lead you towards a relationship rooted in God’s will."},{"day":"Friday","icon":"❤️","prayer":"Prayer to the Sacred Heart of Jesus","focus":"Growing in sincere and sacrificial love","description":"Invite Jesus to make your heart more humble, compassionate, patient, and open to His will."},{"day":"Saturday","icon":"💐","prayer":"Prayer to Saints Louis and Zélie Martin","focus":"The example of a holy marriage","description":"Seek their intercession for faithfulness, shared holiness, and a future family centred on Christ."},{"day":"Sunday","icon":"💞","prayer":"Prayer to St. Anthony for a Holy Spouse","focus":"Finding genuine and lasting love","description":"Seek St Anthony’s intercession for a sincere, faithful relationship rooted in God’s love."}];
+const spouseWeeklyPrayerPlan = [{"day":"Monday","icon":"💍","prayer":"Prayer for a Good Husband or Wife","focus":"Discernment of a future spouse","description":"Ask Jesus for wisdom in finding a faithful companion with whom you can build a holy marriage."},{"day":"Tuesday","icon":"🪢","prayer":"Prayer to Mary the “Knots-looser”","focus":"Entrusting obstacles to Our Lady","description":"Bring Mary your uncertainties, fears, and any knots that may hinder a loving relationship."},{"day":"Wednesday","icon":"🪚","prayer":"Prayer to Saint Joseph","focus":"Preparing to become a good spouse","description":"Seek the virtues of fidelity, responsibility, patience, purity of heart, and selfless love."},{"day":"Thursday","icon":"💒","prayer":"Prayer to Saint Raphael for a Holy Spouse","focus":"Guidance towards the right person","description":"Ask St Raphael to guide your discernment and lead you towards a relationship rooted in God’s will."},{"day":"Friday","icon":"❤️","prayer":"Prayer to the Sacred Heart of Jesus","focus":"Growing in sincere and sacrificial love","description":"Invite Jesus to make your heart more humble, compassionate, patient, and open to His will."},{"day":"Saturday","icon":"💐","prayer":"Prayer to Saints Louis and Zélie Martin","focus":"The example of a holy marriage","description":"Seek their intercession for faithfulness, shared holiness, and a future family centred on Christ."},{"day":"Sunday","icon":"💞","prayer":"Prayer to St. Anthony for a Holy Spouse","focus":"Seeking a holy and faithful spouse","description":"Ask St. Anthony to intercede as you seek sincere, lasting love and prepare your heart for marriage."}];
 function renderSpouseWeeklyPrayerSchedule(){
   const content=document.getElementById('libraryContent');
   const jsMondayFirstDay=(new Date().getDay()+6)%7;
@@ -7155,7 +7162,8 @@ function enableTapAnywhereProgress(){
       if(tapControlExcluded(e.target))return;
       const goBack=e.clientY < window.innerHeight/2;
       if(goBack){previousRosary();return;}
-      if(!prayerScrolledToBottom())return;
+      // iOS Safari's visual viewport and document scroll metrics may disagree.
+      // A deliberate tap in the lower half advances without relying on scroll position.
       next();return;
     }
     if(tapAnywhereExcluded(e.target))return;
@@ -7227,7 +7235,7 @@ function ensurePrayerNavigationTip(){
    root=document.getElementById('prayerContent');
    aux=document.getElementById('rosaryPrayerAux');
    if(rosaryMysteryReadingScreen()){
-     text='Tap the top half anytime to go back · scroll to the bottom, then tap the bottom half to continue.';
+     text='Tap the top half to go back · tap the bottom half to continue, or use Continue.';
    }
  }else if(devotionActive&&(currentDevotion==='divineMercy'||currentDevotion==='angelus')){
    root=document.getElementById('devotionContent');
