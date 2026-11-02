@@ -5461,8 +5461,75 @@ body.cpc-prayer-screen-active #devotions.active{
 .cpc-update-banner .cpc-update-later{background:transparent;color:var(--ink,#201714)}
 @media(prefers-reduced-motion:reduce){.cpc-update-banner *{transition:none!important}}
 </style>
+<style id="cpc-v78-order-of-mass">
+
+/* v78: Rosary chooser now includes all four sets and their usual weekdays. */
+#home .grid > .promises-home-card .home-title-text{font-size:clamp(10px,2.9vw,12px)!important;letter-spacing:-.06em!important;white-space:nowrap!important}
+#pickerPanel .cpc-rosary-chooser-head{text-align:center;margin:1px auto 16px;max-width:590px}
+#pickerPanel .cpc-rosary-chooser-head h2{font-size:clamp(23px,5vw,31px);color:var(--accent);margin:7px auto}
+#pickerPanel .cpc-rosary-chooser-head p{font-size:.9rem;line-height:1.5;margin:7px auto}
+#pickerPanel .cpc-rosary-mysteries-on-picker{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+#pickerPanel .cpc-rosary-sets-head{text-align:center;max-width:600px;margin:auto}
+#pickerPanel .cpc-rosary-sets-head h3{color:var(--accent);font-size:1.45rem;margin:5px 0 8px}
+#pickerPanel .cpc-rosary-sets-head p{font-size:.9rem;line-height:1.55;margin:0}
+#pickerPanel .cpc-chooser-mystery-grid{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:18px;gap:12px}
+#pickerPanel .cpc-chooser-set-card{padding:15px 11px;text-align:center;display:flex;flex-direction:column;align-items:center;min-width:0;position:relative;transition:border-color .15s ease,transform .15s ease}
+#pickerPanel .cpc-chooser-set-card b{font-size:1.04rem;line-height:1.35;margin:2px 0 7px}
+#pickerPanel .cpc-chooser-set-card .cpc-mystery-days{font:600 .77rem/1.35 system-ui,sans-serif;display:block}
+#pickerPanel .cpc-chooser-set-card .picker-mystery-inline{font-size:.76rem;line-height:1.5;margin:11px 0;overflow-wrap:anywhere}
+#pickerPanel .cpc-chooser-set-card.is-today{border:2px solid var(--accent);padding:14px 10px}
+#pickerPanel .cpc-today-mystery-tag{color:var(--accent);font:700 .67rem/1.25 system-ui,sans-serif;margin-top:9px;letter-spacing:.03em}
+#pickerPanel .cpc-explore-label{margin-top:auto;color:var(--accent);font:700 .75rem system-ui,sans-serif}
+#pickerPanel .cpc-season-note{font:.76rem/1.5 system-ui,sans-serif;color:var(--muted);text-align:center;margin:16px 0 0}
+#pickerPanel .cpc-chooser-set-card:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+[data-theme='dark'] #pickerPanel .cpc-chooser-set-card{background:rgba(40,38,37,.9)}
+@media(max-width:370px){#pickerPanel .cpc-chooser-mystery-grid{grid-template-columns:1fr}}
+/* v78: compact and accessible Order of Mass booklet */
+#libraryPanel.mass-art::before{background-position:right top;opacity:.07}
+#libraryPanel.mass-art #libraryTitle{text-align:center}
+#libraryPanel.mass-art #libraryContent{width:100%}
+#libraryPanel .cpc-mass-page{font-family:Georgia,'Times New Roman',serif}
+#libraryPanel .cpc-mass-intro{text-align:center;margin:3px auto 18px;max-width:600px}
+#libraryPanel .cpc-mass-hero-icon{display:block;font-size:2.3rem;margin:6px auto}
+#libraryPanel .cpc-mass-lead{font-size:1.08rem;line-height:1.5;margin:8px auto}
+#libraryPanel .cpc-mass-explain{font:.86rem/1.55 system-ui,sans-serif;color:var(--muted);margin:10px auto}
+#libraryPanel .cpc-mass-quick-nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:19px 0 13px}
+#libraryPanel .cpc-mass-quick-nav button{border:1px solid var(--line);background:var(--panel);border-radius:99px;color:var(--accent);font:700 .76rem/1.25 system-ui,sans-serif;padding:10px 12px;min-height:41px}
+#libraryPanel .cpc-mass-expand-tools{display:flex;align-items:center;justify-content:center;gap:10px;margin:14px auto 16px}
+#libraryPanel .cpc-mass-expand-tools button{font:700 .77rem system-ui,sans-serif;padding:9px 14px;min-height:40px}
+#libraryPanel .cpc-mass-parts{display:grid;gap:12px}
+#libraryPanel .cpc-mass-part{border:1px solid var(--line);border-radius:17px;background:var(--panel);overflow:hidden;scroll-margin-top:98px}
+#libraryPanel .cpc-mass-part summary{list-style:none;display:flex;align-items:center;gap:12px;padding:17px 15px;cursor:pointer;min-height:80px}
+#libraryPanel .cpc-mass-part summary::-webkit-details-marker{display:none}
+#libraryPanel .cpc-mass-part-num{flex:0 0 auto;display:grid;place-items:center;width:39px;height:39px;border-radius:12px;background:rgba(152,97,69,.12);color:var(--accent);font:750 .82rem system-ui,sans-serif}
+#libraryPanel .cpc-mass-part-title{flex:1;min-width:0}
+#libraryPanel .cpc-mass-part-title strong{display:block;font-size:1.02rem;line-height:1.3;color:var(--ink)}
+#libraryPanel .cpc-mass-part-title small{display:block;margin-top:4px;color:var(--muted);font:.76rem/1.4 system-ui,sans-serif}
+#libraryPanel .cpc-mass-chevron{flex:0 0 auto;color:var(--muted);font-size:1.6rem;transition:transform .15s ease}
+#libraryPanel .cpc-mass-part[open] .cpc-mass-chevron{transform:rotate(180deg)}
+#libraryPanel .cpc-mass-part-body{padding:0 13px 14px}
+#libraryPanel .cpc-mass-section-posture{margin:0 0 12px;text-align:center;color:var(--muted);font:italic .8rem/1.4 system-ui,sans-serif}
+#libraryPanel .cpc-mass-step{padding:15px 12px;margin:10px 0;border:1px solid var(--line);border-radius:14px;background:rgba(230,215,198,.11)}
+#libraryPanel .cpc-mass-step-heading{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:11px}
+#libraryPanel .cpc-mass-step-heading h4{font-size:.97rem;line-height:1.3;margin:0;color:var(--ink)}
+#libraryPanel .cpc-mass-posture{font:600 .64rem/1.3 system-ui,sans-serif;white-space:normal;color:var(--muted);text-align:right;max-width:42%}
+#libraryPanel .cpc-mass-speech{margin-bottom:9px;text-align:left;padding:2px 3px}
+#libraryPanel .cpc-mass-speaker{display:block;color:var(--muted);font:800 .65rem/1.25 system-ui,sans-serif;letter-spacing:.09em;margin-bottom:5px}
+#libraryPanel .cpc-mass-speech p{font-size:.99rem;line-height:1.55;margin:0}
+#libraryPanel .cpc-mass-response{background:rgba(125,79,80,.08);border-left:3px solid var(--accent);border-radius:8px;padding:12px;margin:10px 0}
+#libraryPanel .cpc-mass-response .cpc-mass-speaker{color:var(--accent)}
+#libraryPanel .cpc-mass-response p{font-weight:700}
+#libraryPanel .cpc-mass-step-note{font:.77rem/1.55 system-ui,sans-serif;color:var(--muted);margin:7px 1px 0}
+#libraryPanel .cpc-mass-bottom-note{font:.76rem/1.65 system-ui,sans-serif;color:var(--muted);margin:18px 2px 4px;text-align:center}
+#libraryPanel .cpc-mass-bottom-note a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+[data-theme='dark'] #libraryPanel .cpc-mass-part{background:rgba(45,39,35,.94)}
+[data-theme='dark'] #libraryPanel .cpc-mass-step{background:rgba(255,255,255,.035)}
+[data-theme='dark'] #libraryPanel .cpc-mass-response{background:rgba(178,205,230,.09)}
+@media(max-width:480px){#libraryPanel .cpc-mass-quick-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}#libraryPanel .cpc-mass-quick-nav button{padding:10px 5px;font-size:.72rem}#libraryPanel .cpc-mass-part summary{padding:15px 11px}#libraryPanel .cpc-mass-part-body{padding:0 8px 9px}#libraryPanel .cpc-mass-step{padding:13px 10px}#libraryPanel .cpc-mass-speech p{font-size:.96rem}}
+
+</style>
 </head>
-<body data-cpc-version="68">
+<body data-cpc-version="78">
 <div class="app">
   <div class="topbar">
     <div class="brand"><span>Catholic Companion</span></div>
@@ -5494,10 +5561,10 @@ body.cpc-prayer-screen-active #devotions.active{
       <button class="card" onclick="showLibrary('prayers')"><strong><span class="home-title-text">Daily Prayers</span><span class="home-icon" aria-hidden="true">🙏</span></strong></button>
       <button class="card novenas-home-card" onclick="showLibrary('novenas')"><strong><span class="home-title-text">Novenas</span><span class="home-icon" aria-hidden="true">🕯️</span></strong></button>
       <button class="card" onclick="showDevotion('readings')"><strong><span class="home-title-text">Daily Mass Readings</span><span class="home-icon" aria-hidden="true">📖</span></strong></button>
+      <button class="card" onclick="showLibrary('mass')"><strong><span class="home-title-text">Order of Mass</span><span class="home-icon" aria-hidden="true">⛪</span></strong></button>
       <button class="card" onclick="showDevotion('bible')"><strong><span class="home-title-text">Catholic Bible</span><span class="home-icon" aria-hidden="true">✝️</span></strong></button>
       <button class="card" onclick="showDevotion('calendar')"><strong><span class="home-title-text">Liturgical Calendar</span><span class="home-icon" aria-hidden="true">🗓️</span></strong></button>
       <button class="card" onclick="showLibrary('parables')"><strong><span class="home-title-text">Parables of Jesus</span><span class="home-icon" aria-hidden="true">🌾</span></strong></button>
-      <button class="card" onclick="showLibrary('mysteries')"><strong><span class="home-title-text">Rosary Mysteries</span><span class="home-icon" aria-hidden="true">🌹</span></strong></button>
       <button class="card promises-home-card" onclick="showLibrary('promises')">
   <strong>
     <span class="home-title-text">Rosary Promises &amp; Blessings</span>
@@ -6014,13 +6081,16 @@ function heroDateText(d){const months=['January','February','March','April','May
 async function updateToday(){const hero=document.querySelector('#home .hero'),mysteryKey=todaySetKey();if(hero)hero.dataset.mysterySet=mysteryKey;const mysteryLabel=document.getElementById('todayMysterySet');if(mysteryLabel)mysteryLabel.textContent=`${(sets[mysteryKey]?.name||'Rosary Mysteries').replace(/^The\s+/,'')}`;const el=document.getElementById('todayLabel');const d=new Date();if(el)el.innerHTML=`<span class="today-liturgy"><span class="hero-date-main"><span>${heroDateText(d)}</span></span><span class="hero-liturgical-week"><span id="heroLitWeek">Liturgical week</span><span class="hero-lit-dot" id="heroLitDot" aria-hidden="true"></span></span></span>`;setDailyScripture();try{const p=apiDateParts(d),r=await fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok){const cal=await r.json(),lc=liturgicalColour(cal,d),dot=document.getElementById('heroLitDot'),week=document.getElementById('heroLitWeek');if(dot)dot.style.setProperty('--hero-lit',lc.hex);if(week)week.textContent=liturgicalWeekLabel(d,cal.season||'');}}catch(e){const week=document.getElementById('heroLitWeek');if(week)week.textContent='';}}
 function startToday(){showRosaryModePicker(todaySetKey())}
 function showMysteryPicker(){showLibrary('mysteries')}
+function cpcOpenMysteryFromRosary(k){showLibrary('mysteries',{fromHistory:true});renderMysteryLibrary(k)}
 function showRosaryModePicker(k,{fromHistory=false}={}){
  const set=sets[k]||sets[todaySetKey()];
  const key=sets[k]?k:todaySetKey();
  leavePrayerFocus();stopSpeech();
  setPanelArt('pickerPanel',`panel-art mysteries-art ${key}-art`);
  const panel=document.getElementById('pickerPanel');
- panel.innerHTML=`<div class="rosary-mode-grid"><button class="rosary-mode-card" type="button" onclick="startSet('${key}','traditional')" aria-label="Pray the Traditional Rosary"><span class="rosary-mode-icon" aria-hidden="true">📿</span><strong>Traditional Rosary</strong><span class="rosary-mode-description">Pray in the familiar format with a meditation for each mystery.</span></button><button class="rosary-mode-card" type="button" onclick="startSet('${key}','scriptural')" aria-label="Pray the Scriptural Rosary"><span class="rosary-mode-icon" aria-hidden="true">📖</span><strong>Scriptural Rosary</strong><span class="rosary-mode-description">Reflect on a short Scripture cue before each Hail Mary.</span></button></div>`;
+ panel.innerHTML=`<div class="cpc-rosary-chooser-head"><div class="eyebrow">Pray the Rosary</div><h2>${set.name.replace(/^The\s+/,'')}</h2><p class="muted">${set.days} · Choose how to pray this set.</p></div>
+ <div class="rosary-mode-grid"><button class="rosary-mode-card" type="button" onclick="startSet('${key}','traditional')" aria-label="Pray the Traditional Rosary"><span class="rosary-mode-icon" aria-hidden="true">📿</span><strong>Traditional Rosary</strong><span class="rosary-mode-description">Pray in the familiar format with a meditation for each mystery.</span></button><button class="rosary-mode-card" type="button" onclick="startSet('${key}','scriptural')" aria-label="Pray the Scriptural Rosary"><span class="rosary-mode-icon" aria-hidden="true">📖</span><strong>Scriptural Rosary</strong><span class="rosary-mode-description">Reflect on a short Scripture cue before each Hail Mary.</span></button></div>
+ <section class="cpc-rosary-mysteries-on-picker" aria-labelledby="cpc-rosary-sets-title"><div class="cpc-rosary-sets-head"><span class="eyebrow">Explore &amp; meditate</span><h3 id="cpc-rosary-sets-title">Rosary Mysteries</h3><p class="muted">Tap any set to read its five mysteries, Scripture passages and meditations. You can pray any set on any day.</p></div><div class="mystery-set-grid cpc-chooser-mystery-grid">${Object.entries(sets).map(([mk,m])=>`<button class="mystery-set-card cpc-chooser-set-card ${mk===key?'is-today':''}" type="button" onclick="cpcOpenMysteryFromRosary('${mk}')" aria-label="Explore ${m.name}: ${m.days}"><b>${m.name.replace(/^The\s+/,'')}</b><span class="muted cpc-mystery-days">${m.days}</span>${mk===key?'<span class="cpc-today-mystery-tag">Today’s mystery</span>':''}<div class="picker-mystery-inline">${m.items.map(x=>x.title).join(' · ')}</div><span class="cpc-explore-label">Explore mysteries ›</span></button>`).join('')}</div><p class="cpc-season-note">Traditional Sunday customs sometimes use the Joyful Mysteries during Advent or the Sorrowful Mysteries during Lent.</p></section>`;
  setScreen('picker',{fromHistory,routeKey:`picker:rosary-mode:${key}`});
 }
 function startSet(k,mode='traditional'){enterPrayerFocus();const prayerScreen=document.getElementById('prayer');if(prayerScreen)prayerScreen.dataset.mysterySet=k;state={setKey:k,step:0,decade:0,hail:0,mode:mode==='scriptural'?'scriptural':'traditional'};updateRosaryModeHeading();setPanelArt('prayerContent',`panel-art rosary-art ${k}-art`);save();renderPrayer();setScreen('prayer',{routeKey:'prayer:rosary'})}
@@ -6597,7 +6667,64 @@ function openSpouseWeeklyPrayer(dayIndex){
   },170);
 }
 
-function showLibrary(type,{fromHistory=false}={}){stopSpeech();const libraryPanel=document.getElementById('libraryPanel');libraryPanel.classList.remove('bp-unboxed','parables-unboxed','novena-detail');if(type==='promises')libraryPanel.classList.add('bp-unboxed');if(type==='parables')libraryPanel.classList.add('parables-unboxed');const artMap={mysteries:'mysteries-art',prayers:'prayers-art',promises:'promises-art',blessings:'blessings-art',parables:'prayers-art',novenas:'novenas-art'};setPanelArt('libraryPanel',`panel-art ${artMap[type]||'prayers-art'}`);document.getElementById('libraryTabs').innerHTML='';const lc=document.getElementById('libraryContent');const title=document.getElementById('libraryTitle');
+
+/* v78: Order of Mass preview, a response-first booklet view with the priest's parts in sequence. */
+const cpcMassGuide=[
+ {id:'introductory',number:'01',title:'Introductory Rites',summary:'Gathering, greeting, penitence and opening prayer',posture:'Usually standing',items:[
+  ['Entrance and Sign of the Cross','Stand','PRIEST','In the name of the Father, and of the Son, and of the Holy Spirit.','PEOPLE','Amen.','The opening chant or hymn accompanies the procession.'],
+  ['Greeting','Stand','PRIEST','The Lord be with you.','PEOPLE','And with your spirit.','One of several approved greetings may be used.'],
+  ['Penitential Act','Stand','PRIEST','The priest invites everyone to acknowledge their sins.','PEOPLE','The assembly joins in the chosen form of the Penitential Act.','The Confiteor, other approved invocations or sprinkling with blessed water may be used.'],
+  ['Kyrie','Stand','PRIEST / CANTOR','Lord, have mercy.','PEOPLE','Lord, have mercy.','The Kyrie may already be included in the Penitential Act.'],
+  ['Gloria','Stand','PRIEST / CANTOR','The Gloria is intoned or begun.','PEOPLE','Everyone joins in the Gloria.','Usually sung or said on Sundays outside Advent and Lent, and on solemnities and feasts.'],
+  ['Collect','Stand','PRIEST','Let us pray.','PEOPLE','Amen.','After silent prayer, the priest says the Collect (the opening prayer), which changes with the day.']
+ ]},
+ {id:'word',number:'02',title:'Liturgy of the Word',summary:'Scripture, Gospel, homily and prayers of the faithful',posture:'Sit for readings · stand for Gospel',items:[
+  ['First Reading','Sit','READER','The word of the Lord.','PEOPLE','Thanks be to God.','The reading changes according to the liturgical day.'],
+  ['Responsorial Psalm','Sit','PSALMIST','The psalmist sings or recites a verse.','PEOPLE','Repeat the response for the day.','Find the text of today’s psalm in Daily Mass Readings.'],
+  ['Second Reading','Sit','READER','The word of the Lord.','PEOPLE','Thanks be to God.','Usually included on Sundays and solemnities.'],
+  ['Gospel Acclamation','Stand','CANTOR / ALL','The Gospel acclamation begins.','PEOPLE','Alleluia (except during Lent).','The verse and the Lenten acclamation vary with the day.'],
+  ['Gospel Greeting','Stand','DEACON / PRIEST','The Lord be with you.','PEOPLE','And with your spirit.','The Gospel is proclaimed by the deacon or, if there is none, the priest.'],
+  ['Gospel Announcement','Stand','DEACON / PRIEST','A reading from the holy Gospel according to …','PEOPLE','Glory to you, O Lord.','The Gospel is announced before being proclaimed.'],
+  ['End of Gospel','Stand','DEACON / PRIEST','The Gospel of the Lord.','PEOPLE','Praise to you, Lord Jesus Christ.','Everyone listens to the Gospel before the homily.'],
+  ['Homily and Creed','Sit, then stand','PRIEST / DEACON','A homily is given; the profession of faith follows where prescribed.','PEOPLE','Join in the Nicene or Apostles’ Creed.','The Creed is normally said on Sundays and solemnities.'],
+  ['Universal Prayer','Stand','DEACON / READER','The intercessions are announced.','PEOPLE','Lord, hear our prayer.','The actual response can vary and is announced locally.']
+ ]},
+ {id:'eucharist',number:'03',title:'Liturgy of the Eucharist',summary:'Offerings, Eucharistic Prayer and Holy Communion',posture:'Sitting, standing or kneeling as appropriate',items:[
+  ['Preparation of the Gifts','Sit','PRIEST','The gifts of bread and wine are prepared at the altar.','PEOPLE','Join in the offertory hymn or silent prayer.','The accompanying prayers may be spoken quietly or aloud.'],
+  ['Prayer over the Offerings','Stand','PRIEST','The priest invites the assembly to pray and says the prayer over the offerings.','PEOPLE','Amen.','The longer response before the prayer is in the approved Order of Mass.'],
+  ['Preface Dialogue — 1','Stand','PRIEST','The Lord be with you.','PEOPLE','And with your spirit.','This dialogue begins the Eucharistic Prayer.'],
+  ['Preface Dialogue — 2','Stand','PRIEST','Lift up your hearts.','PEOPLE','We lift them up to the Lord.',''],
+  ['Preface Dialogue — 3','Stand','PRIEST','Let us give thanks to the Lord our God.','PEOPLE','It is right and just.',''],
+  ['Sanctus (Holy, Holy, Holy)','Stand','PRIEST / ALL','The Preface leads into the Sanctus.','PEOPLE','Join in the Holy, Holy, Holy.','The full text and musical setting follow the parish’s approved Missal or hymn book.'],
+  ['Consecration and Mystery of Faith','Kneel where customary','PRIEST','The priest proclaims the Eucharistic Prayer, including the consecration, then invites the acclamation of faith.','PEOPLE','Sing or say the appointed Memorial Acclamation.','There are several Eucharistic Prayers and three approved Memorial Acclamations.'],
+  ['Great Amen','Stand after the Eucharistic Prayer','PRIEST','The Eucharistic Prayer concludes with the doxology.','PEOPLE','Amen.','The Great Amen affirms the whole Eucharistic Prayer.'],
+  ['The Lord’s Prayer','Stand','PRIEST','The priest invites all to pray the Lord’s Prayer.','PEOPLE','Everyone prays the Our Father together.','The full prayer is found in the approved Order of Mass.'],
+  ['Rite of Peace','Stand','PRIEST','The peace of the Lord be with you always.','PEOPLE','And with your spirit.','The invitation to offer peace may follow.'],
+  ['Fraction of the Bread','Stand or kneel','CANTOR / ALL','The Lamb of God is sung or recited.','PEOPLE','Join in the Lamb of God.','The invocation accompanies the breaking of the consecrated bread.'],
+  ['Invitation to Communion','Kneel or stand','PRIEST','Behold the Lamb of God …','PEOPLE','Lord, I am not worthy that you should enter under my roof, but only say the word and my soul shall be healed.','The priest’s full invitation is included in the approved Order of Mass.'],
+  ['Receiving Holy Communion','As directed','MINISTER','The Body of Christ.','COMMUNICANT','Amen.','Receive Communion according to Church discipline and the directions of your parish.'],
+  ['Prayer after Communion','Stand','PRIEST','The priest says the prayer after Communion.','PEOPLE','Amen.','The prayer varies with the day.']
+ ]},
+ {id:'concluding',number:'04',title:'Concluding Rites',summary:'Final blessing and dismissal',posture:'Stand',items:[
+  ['Final Greeting','Stand','PRIEST','The Lord be with you.','PEOPLE','And with your spirit.','A solemn blessing or prayer over the people may sometimes be used.'],
+  ['Blessing','Stand','PRIEST','The priest blesses the assembly in the name of the Trinity.','PEOPLE','Amen.','Everyone makes the Sign of the Cross.'],
+  ['Dismissal','Stand','DEACON / PRIEST','Go forth, the Mass is ended.','PEOPLE','Thanks be to God.','Several approved dismissal formulas are possible; a recessional hymn may follow.']
+ ]}
+];
+function cpcMassJump(id){
+ const el=document.getElementById('cpc-mass-'+id);
+ if(!el)return;
+ el.open=true;
+ el.scrollIntoView({block:'start',behavior:document.body.classList.contains('cpc-reduced-motion')?'auto':'smooth'});
+}
+function cpcMassExpandAll(expand){document.querySelectorAll('#libraryContent .cpc-mass-part').forEach(x=>x.open=expand)}
+function cpcRenderOrderOfMass(){
+ const row=([title,posture,who,what,responseBy,response,note])=>`<article class="cpc-mass-step"><div class="cpc-mass-step-heading"><h4>${title}</h4><span class="cpc-mass-posture">${posture}</span></div><div class="cpc-mass-speech"><span class="cpc-mass-speaker">${who}</span><p>${what}</p></div><div class="cpc-mass-speech cpc-mass-response"><span class="cpc-mass-speaker">${responseBy} · ${/^(Join|Everyone|Repeat|The assembly|Sing)/.test(response)?'PARTICIPATION':'YOUR RESPONSE'}</span><p>${response}</p></div>${note?`<p class="cpc-mass-step-note">${note}</p>`:''}</article>`;
+ return `<div class="cpc-mass-page"><div class="cpc-mass-intro"><span class="cpc-mass-hero-icon" aria-hidden="true">⛪</span><p class="cpc-mass-lead">Follow the priest's words and the congregation's responses in the Roman Rite.</p><p class="cpc-mass-explain">This first version is a <strong>shortened participation guide</strong>, not the complete official Missal. Wording, prayers and musical settings can vary. Follow the priest and parish instructions during Mass.</p></div><div class="cpc-mass-quick-nav" aria-label="Jump to a section">${cpcMassGuide.map(x=>`<button type="button" onclick="cpcMassJump('${x.id}')">${x.title}</button>`).join('')}</div><div class="cpc-mass-expand-tools"><button class="ghost" type="button" onclick="cpcMassExpandAll(true)">Expand all</button><button class="ghost" type="button" onclick="cpcMassExpandAll(false)">Collapse all</button></div><div class="cpc-mass-parts">${cpcMassGuide.map((p,i)=>`<details class="cpc-mass-part" id="cpc-mass-${p.id}" ${i===0?'open':''}><summary><span class="cpc-mass-part-num">${p.number}</span><span class="cpc-mass-part-title"><strong>${p.title}</strong><small>${p.summary}</small></span><span class="cpc-mass-chevron" aria-hidden="true">⌄</span></summary><div class="cpc-mass-part-body"><p class="cpc-mass-section-posture">${p.posture}</p>${p.items.map(row).join('')}</div></details>`).join('')}</div><p class="cpc-mass-bottom-note">Posture suggestions are general; local and personal circumstances take precedence. This preview omits variable prayers, extended priest-only texts and alternative formulas. For the official structure, see <a href="https://www.usccb.org/prayer-and-worship/the-mass/order-of-mass" target="_blank" rel="noopener noreferrer">USCCB: Order of Mass</a>. A publicly distributed full English Missal transcription would require the appropriate liturgical-text permissions.</p></div>`;
+}
+
+function showLibrary(type,{fromHistory=false}={}){stopSpeech();const libraryPanel=document.getElementById('libraryPanel');libraryPanel.classList.remove('bp-unboxed','parables-unboxed','novena-detail');if(type==='promises')libraryPanel.classList.add('bp-unboxed');if(type==='parables')libraryPanel.classList.add('parables-unboxed');const artMap={mysteries:'mysteries-art',mass:'mass-art',prayers:'prayers-art',promises:'promises-art',blessings:'blessings-art',parables:'prayers-art',novenas:'novenas-art'};setPanelArt('libraryPanel',`panel-art ${artMap[type]||'prayers-art'}`);document.getElementById('libraryTabs').innerHTML='';const lc=document.getElementById('libraryContent');const title=document.getElementById('libraryTitle');
+ if(type==='mass'){title.textContent='Order of Mass';lc.innerHTML=cpcRenderOrderOfMass();}
  if(type==='spouse-schedule'){title.textContent='Weekly Prayer for a Future Spouse';renderSpouseWeeklyPrayerSchedule();}
  if(type==='promises'){title.textContent='';lc.innerHTML=`<div class="bp-page-header"><h2>Rosary Promises &amp; Blessings</h2></div><div class="cpc-bp-panels"><section class="cpc-bp-panel"><div class="cpc-bp-head"><div class="cpc-bp-title-row"><h3 class="cpc-bp-title">Promises of the Rosary</h3></div><p class="cpc-bp-subtext">The Fifteen Promises are traditionally associated with devotion to the Holy Rosary and express the spiritual graces and help entrusted to those who pray it faithfully.</p></div><div class="cpc-bp-list"><div class="cpc-bp-item"><b>1.</b> Whoever shall faithfully serve me by the recitation of the Rosary, shall receive powerful graces.</div><div class="cpc-bp-item"><b>2.</b> I promise my special protection and the greatest graces to all those who shall recite the Rosary.</div><div class="cpc-bp-item"><b>3.</b> The Rosary shall be a powerful armor against hell, it will destroy vice, decrease sin, and defeat heresies.</div><div class="cpc-bp-item"><b>4.</b> It will cause virtue and good works to flourish; it will obtain for souls the abundant mercy of God; it will withdraw the hearts of people from the love of the world and its vanities, and will lift them to the desire of eternal things. Oh, that souls would sanctify themselves by this means.</div><div class="cpc-bp-item"><b>5.</b> The soul which recommends itself to me by the recitation of the Rosary, shall not perish.</div><div class="cpc-bp-item"><b>6.</b> Whoever shall recite the Rosary devoutly, applying himself to the consideration of its Sacred Mysteries shall never be conquered by misfortune. God will not chastise him in His justice, he shall not perish by an unprovided death; if he be just, he shall remain in the grace of God, and become worthy of eternal life.</div><div class="cpc-bp-item"><b>7.</b> Whoever shall have a true devotion for the Rosary shall not die without the Sacraments of the Church.</div><div class="cpc-bp-item"><b>8.</b> Those who are faithful to recite the Rosary shall have during their life and at their death the light of God and the plentitude of His graces; at the moment of death they shall participate in the merits of the Saints in Paradise.</div><div class="cpc-bp-item"><b>9.</b> I shall deliver from purgatory those who have been devoted to the Rosary.</div><div class="cpc-bp-item"><b>10.</b> The faithful children of the Rosary shall merit a high degree of glory in Heaven.</div><div class="cpc-bp-item"><b>11.</b> You shall obtain all you ask of me by the recitation of the Rosary.</div><div class="cpc-bp-item"><b>12.</b> All those who propagate the Holy Rosary shall be aided by me in their necessities.</div><div class="cpc-bp-item"><b>13.</b> I have obtained from my Divine Son that all the advocates of the Rosary shall have for intercessors the entire celestial court during their life and at the hour of death.</div><div class="cpc-bp-item"><b>14.</b> All who recite the Rosary are my children, and brothers and sisters of my only Son, Jesus Christ.</div><div class="cpc-bp-item"><b>15.</b> Devotion of my Rosary is a great sign of predestination.</div></div></section><section class="cpc-bp-panel"><div class="cpc-bp-head"><div class="cpc-bp-title-row"><h3 class="cpc-bp-title">Blessings of the Rosary</h3></div><p class="cpc-bp-subtext">These blessings describe the spiritual fruits traditionally associated with praying the Rosary, including conversion, consolation, peace, growth in faith, and help for the faithful departed.</p></div><div class="cpc-bp-list"><div class="cpc-bp-item"><b>1.</b> Sinners are forgiven.</div><div class="cpc-bp-item"><b>2.</b> Souls that thirst are refreshed.</div><div class="cpc-bp-item"><b>3.</b> Those who are fettered have their bonds broken.</div><div class="cpc-bp-item"><b>4.</b> Those who weep find happiness.</div><div class="cpc-bp-item"><b>5.</b> Those who are tempted find peace.</div><div class="cpc-bp-item"><b>6.</b> The poor find help.</div><div class="cpc-bp-item"><b>7.</b> Religions are reformed.</div><div class="cpc-bp-item"><b>8.</b> Those who are ignorant are instructed.</div><div class="cpc-bp-item"><b>9.</b> The living learn to overcome pride.</div><div class="cpc-bp-item"><b>10.</b> The Holy Souls in Purgatory have their pains eased by suffrages.</div></div></section></div>`}
 
