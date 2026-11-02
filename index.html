@@ -6011,7 +6011,7 @@ function liturgicalWeekLabel(date,season=''){
 
 function heroOrdinalDay(n){const v=n%100;if(v>=11&&v<=13)return n+'th';switch(n%10){case 1:return n+'st';case 2:return n+'nd';case 3:return n+'rd';default:return n+'th';}}
 function heroDateText(d){const months=['January','February','March','April','May','June','July','August','September','October','November','December'];return `${heroOrdinalDay(d.getDate())} ${months[d.getMonth()]} ${d.getFullYear()}`;}
-async function updateToday(){const hero=document.querySelector('#home .hero'),mysteryKey=todaySetKey();if(hero)hero.dataset.mysterySet=mysteryKey;const mysteryLabel=document.getElementById('todayMysterySet');if(mysteryLabel)mysteryLabel.textContent=`${(sets[mysteryKey]?.name||'Rosary Mysteries').replace(/^The\s+/,'')}`;const el=document.getElementById('todayLabel');const d=new Date();if(el)el.innerHTML=`<span class="today-liturgy"><span class="hero-date-main"><span>${heroDateText(d)}</span></span><span class="hero-liturgical-week"><span id="heroLitWeek">Liturgical week</span><span class="hero-lit-dot" id="heroLitDot" aria-hidden="true"></span></span></span>`;setDailyScripture();try{const p=apiDateParts(d),r=await fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok){const cal=await r.json(),lc=liturgicalColour(cal),dot=document.getElementById('heroLitDot'),week=document.getElementById('heroLitWeek');if(dot)dot.style.setProperty('--hero-lit',lc.hex);if(week)week.textContent=liturgicalWeekLabel(d,cal.season||'');}}catch(e){const week=document.getElementById('heroLitWeek');if(week)week.textContent='';}}
+async function updateToday(){const hero=document.querySelector('#home .hero'),mysteryKey=todaySetKey();if(hero)hero.dataset.mysterySet=mysteryKey;const mysteryLabel=document.getElementById('todayMysterySet');if(mysteryLabel)mysteryLabel.textContent=`${(sets[mysteryKey]?.name||'Rosary Mysteries').replace(/^The\s+/,'')}`;const el=document.getElementById('todayLabel');const d=new Date();if(el)el.innerHTML=`<span class="today-liturgy"><span class="hero-date-main"><span>${heroDateText(d)}</span></span><span class="hero-liturgical-week"><span id="heroLitWeek">Liturgical week</span><span class="hero-lit-dot" id="heroLitDot" aria-hidden="true"></span></span></span>`;setDailyScripture();try{const p=apiDateParts(d),r=await fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok){const cal=await r.json(),lc=liturgicalColour(cal,d),dot=document.getElementById('heroLitDot'),week=document.getElementById('heroLitWeek');if(dot)dot.style.setProperty('--hero-lit',lc.hex);if(week)week.textContent=liturgicalWeekLabel(d,cal.season||'');}}catch(e){const week=document.getElementById('heroLitWeek');if(week)week.textContent='';}}
 function startToday(){showRosaryModePicker(todaySetKey())}
 function showMysteryPicker(){showLibrary('mysteries')}
 function showRosaryModePicker(k,{fromHistory=false}={}){
@@ -7329,7 +7329,7 @@ function readingRefCard(title,ref,colour){
  return `<button class="reading-card reading-bible-link" type="button" style="--reading-lit-light:${lc.textLight};--reading-lit-dark:${lc.textDark}" onclick='openBibleReference(${JSON.stringify(JSON.stringify(String(ref)))})'><b style="display:block;margin-bottom:8px">${title}</b><span class="ref" style="display:block;margin:0">${esc(ref)} <span aria-hidden="true">→</span></span></button>`;
 }
 function renderReadingSet(x,cal){
- const lc=liturgicalColour(cal);
+ const lc=liturgicalColour(cal,typeof d!=='undefined'?d:new Date());
  return [
   readingRefCard('First Reading',x.firstReading,lc),
   readingRefCard('Responsorial Psalm',x.psalm,lc),
@@ -7347,7 +7347,7 @@ function massReadingsPageHtml(d,r,cal,{eyebrow='Today',cardAction="showDevotion(
  const x=r&&r.readings?r.readings:{};
  const cards=r?renderReadingSet(x,cal):'';
  const litMeta=liturgicalMetaText(cal);
- const lc=liturgicalColour(cal);
+ const lc=liturgicalColour(cal,typeof d!=='undefined'?d:new Date());
  const dateText=d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
  const seasonText=(r&&r.season)||((cal&&cal.season)||'');
  const action=cardAction?` onclick="${cardAction}"`:'';
@@ -7370,31 +7370,54 @@ async function renderDailyReadings(){
 }
 
 
-function liturgicalColour(data){
- const season=((data&&data.season)||'').toLowerCase();
- const cel=(data&&data.celebration)||{};
- const name=(cel.name||'').toLowerCase();
- const desc=(cel.description||'').toLowerCase();
- // Rose is used on Gaudete and Laetare Sundays.
- if(name.includes('gaudete')||name.includes('laetare')) return {key:'rose',hex:'#d9879b',label:'Rose',textLight:'#9b3f5d',textDark:'#f3a9bd'};
- // Red: Passion/Palm Sunday, Good Friday, Pentecost, apostles/evangelists and martyrs.
- if(name.includes('pentecost')||name.includes('palm sunday')||name.includes('passion of the lord')||name.includes('good friday')||name.includes('holy cross')||name.includes('apostle')||name.includes('evangelist')||name.includes('martyr')||desc.includes('martyr')) return {key:'red',hex:'#a33b3b',label:'Red',textLight:'#842e2e',textDark:'#ef8f8f'};
- if(season.includes('advent')||season.includes('lent')) return {key:'violet',hex:'#75558f',label:'Violet',textLight:'#65447d',textDark:'#c8a7e4'};
- if(season.includes('ordinary')) return {key:'green',hex:'#4f7b58',label:'Green',textLight:'#35643f',textDark:'#94d3a1'};
- if(season.includes('easter')||season.includes('christmas')) return {key:'white',hex:'#d6b75e',label:'White / Gold',textLight:'#8b6a16',textDark:'#f0d784'};
- // Most solemnities/feasts of Our Lord, Our Lady, angels and non-martyr saints use white.
- if(cel.type && ['SOLEMNITY','FEAST','MEMORIAL','OPTIONAL_MEMORIAL','OPT_MEMORIAL'].includes(String(cel.type).trim().toUpperCase().replace(/[\s-]+/g,'_'))) return {key:'white',hex:'#d6b75e',label:'White / Gold',textLight:'#8b6a16',textDark:'#f0d784'};
+function liturgicalColour(data, date=null){
+ // In the Roman calendar the celebration, not the season, determines the day's colour.
+ const season=String(data?.season||'').toLowerCase();
+ const cel=data?.celebration||{};
+ const name=String(cel.name||data?.name||'').toLowerCase();
+ const desc=String(cel.description||'').toLowerCase();
+ const type=String(cel.type||data?.type||'').trim().toUpperCase().replace(/[\s-]+/g,'_');
+ const raw=String(cel.color||cel.colour||data?.color||data?.colour||data?.liturgicalColor||data?.liturgicalColour||'').toLowerCase();
+ const colors={
+  green:{key:'green',hex:'#4f7b58',label:'Green',textLight:'#35643f',textDark:'#94d3a1'},
+  violet:{key:'violet',hex:'#75558f',label:'Violet',textLight:'#65447d',textDark:'#c8a7e4'},
+  white:{key:'white',hex:'#d6b75e',label:'White / Gold',textLight:'#8b6a16',textDark:'#f0d784'},
+  red:{key:'red',hex:'#a33b3b',label:'Red',textLight:'#842e2e',textDark:'#ef8f8f'},
+  rose:{key:'rose',hex:'#d9879b',label:'Rose',textLight:'#9b3f5d',textDark:'#f3a9bd'},
+  black:{key:'black',hex:'#36343b',label:'Black',textLight:'#36343b',textDark:'#c5c1c9'}
+ };
+ const isAllSouls=/all souls|all the faithful departed|commemoration of.*faithful departed/.test(name);
+ const isAllSaints=/all saints|all the saints/.test(name);
+ // In Singapore show violet as the app default for All Souls (white/black also permitted).
+ if(isAllSouls) return colors.violet;
+ if(isAllSaints) return colors.white;
+ // Date guard for calendar sources that fail to include the celebration name.
+ if(date instanceof Date && !Number.isNaN(date.getTime())){
+  if(date.getMonth()===10&&date.getDate()===2) return colors.violet;
+  if(date.getMonth()===10&&date.getDate()===1) return colors.white;
+ }
+ if(/gaudete|laetare/.test(name)) return colors.rose;
+ if(/pentecost|palm sunday|passion of the lord|good friday|exaltation of the holy cross/.test(name)) return colors.red;
+ // A calendar's explicit colour can distinguish a non-martyr from a martyr.
+ const explicit=raw.match(/\b(violet|purple|white|gold|red|rose|green|black)\b/);
+ if(explicit){const k={purple:'violet',gold:'white'}[explicit[1]]||explicit[1];return colors[k]}
+ if(/apostle|evangelist|martyr/.test(name)||/martyr/.test(desc)) return colors.red;
+ if(type==='SOLEMNITY'||type==='FEAST'||type==='MEMORIAL') return colors.white;
+ // Optional memorials need not be observed; default to the season's colour.
+ if(season.includes('advent')||season.includes('lent')) return colors.violet;
+ if(season.includes('easter')||season.includes('christmas')) return colors.white;
+ if(season.includes('ordinary')) return colors.green;
  return {key:'neutral',hex:'#c8beb4',label:'Liturgical day',textLight:'#6f6258',textDark:'#d9cdc4'};
 }
 function liturgicalLegend(){
  const x=[
   ['#4f7b58','Green','Ordinary Time'],
-  ['#75558f','Violet','Advent & Lent'],
+  ['#75558f','Violet','Advent, Lent & All Souls'],
   ['#d6b75e','White / Gold','Christmas, Easter & joyful feasts'],
   ['#a33b3b','Red','Passion, Pentecost & martyrs'],
   ['#d9879b','Rose','Gaudete & Laetare Sundays']
  ];
- return `<div class="lit-legend-wrap"><div class="lit-legend-title">Liturgical colours</div><div class="lit-legend">${x.map(([c,n,d])=>`<div class="lit-key"><span class="lit-swatch" style="background:${c}"></span><span class="lit-key-text"><b>${n}</b><small>${d}</small></span></div>`).join('')}</div><div class="lit-legend-note">Colours are inferred from the Roman liturgical season and celebration. Local Singapore observances may occasionally differ.</div></div>`;
+ return `<div class="lit-legend-wrap"><div class="lit-legend-title">Liturgical colours</div><div class="lit-legend">${x.map(([c,n,d])=>`<div class="lit-key"><span class="lit-swatch" style="background:${c}"></span><span class="lit-key-text"><b>${n}</b><small>${d}</small></span></div>`).join('')}</div><div class="lit-legend-note">Celebrations take priority over the season. All Souls defaults to violet (white or black may also be used); local observances may differ.</div></div>`;
 }
 function calendarViewToggle(){
  return `<div class="calendar-view-toggle" role="group" aria-label="Calendar view"><button class="ghost ${calView==='week'?'active':''}" onclick="setCalendarView('week')">Week</button><button class="ghost ${calView==='month'?'active':''}" onclick="setCalendarView('month')">Month</button></div>`;
@@ -7431,7 +7454,7 @@ async function renderCalendarWeek(){
  const data={};
  await Promise.all(days.map(async(d,i)=>{const p=apiDateParts(d);try{const r=await fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok)data[i]=await r.json()}catch(e){}}));
  const today=new Date();
- const cards=days.map((d,i)=>{const z=data[i],name=z&&z.celebration?z.celebration.name:(z&&z.season?z.season:'Liturgical day'),lc=liturgicalColour(z),ist=d.toDateString()===today.toDateString();return `<button class="cal-week-card ${ist?'today':''}" style="--lit:${lc.hex}" title="${esc(lc.label)}" onclick="showCalendarDay(${d.getFullYear()},${d.getMonth()},${d.getDate()})"><span class="cal-week-date">${d.toLocaleDateString(undefined,{weekday:'short'})}<small>${d.getDate()} ${d.toLocaleDateString(undefined,{month:'short'})}</small></span><span class="cal-week-name">${esc(name||'')}</span><span class="lit-dot" style="--lit:${lc.hex}"></span></button>`}).join('');
+ const cards=days.map((d,i)=>{const z=data[i],name=z&&z.celebration?z.celebration.name:(z&&z.season?z.season:'Liturgical day'),lc=liturgicalColour(z,d),ist=d.toDateString()===today.toDateString();return `<button class="cal-week-card ${ist?'today':''}" style="--lit:${lc.hex}" title="${esc(lc.label)}" onclick="showCalendarDay(${d.getFullYear()},${d.getMonth()},${d.getDate()})"><span class="cal-week-date">${d.toLocaleDateString(undefined,{weekday:'short'})}<small>${d.getDate()} ${d.toLocaleDateString(undefined,{month:'short'})}</small></span><span class="cal-week-name">${esc(name||'')}</span><span class="lit-dot" style="--lit:${lc.hex}"></span></button>`}).join('');
  c.innerHTML=`${calendarViewToggle()}<div class="calendar-head"><button class="ghost" onclick="changeWeek(-1)">←</button><h3>${weekRangeLabel(start)}</h3><button class="ghost" onclick="changeWeek(1)">→</button></div><div class="calendar-week-view">${cards}</div>${liturgicalLegend()}`;
 }
 let calendarMonthDayData={};
@@ -7445,14 +7468,14 @@ async function renderCalendarMonth(){
  const weeks=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="cal-week">${x}</div>`).join('');
  const blanks=Array.from({length:start},()=>`<div class="cal-day empty"></div>`).join('');
  const today=new Date();
- const cells=Array.from({length:days},(_,i)=>{const n=i+1,d=new Date(y,m,n),z=data[n],lc=liturgicalColour(z),ist=d.toDateString()===today.toDateString();return `<button class="cal-day ${ist?'today':''}" style="--lit:${lc.hex};--lit-text-light:${lc.textLight};--lit-text-dark:${lc.textDark}" title="${esc(lc.label)}" onclick="showCalendarPopup(${y},${m},${n})"><span class="cal-num">${n}<span class="lit-dot"></span></span></button>`}).join('');
+ const cells=Array.from({length:days},(_,i)=>{const n=i+1,d=new Date(y,m,n),z=data[n],lc=liturgicalColour(z,d),ist=d.toDateString()===today.toDateString();return `<button class="cal-day ${ist?'today':''}" style="--lit:${lc.hex};--lit-text-light:${lc.textLight};--lit-text-dark:${lc.textDark}" title="${esc(lc.label)}" onclick="showCalendarPopup(${y},${m},${n})"><span class="cal-num">${n}<span class="lit-dot"></span></span></button>`}).join('');
  c.innerHTML=`${calendarViewToggle()}<div class="calendar-head"><button class="ghost" onclick="changeMonth(-1)">←</button><h3>${first.toLocaleDateString(undefined,{month:'long',year:'numeric'})}</h3><button class="ghost" onclick="changeMonth(1)">→</button></div>${liturgicalLegend()}<div class="calendar-grid month-minimal">${weeks}${blanks}${cells}</div>`;
 }
 
 function showCalendarPopup(y,m,n){
  const data=calendarMonthDayData[n]||null;
  const d=new Date(y,m,n);
- const lc=liturgicalColour(data);
+ const lc=liturgicalColour(data,typeof d!=='undefined'?d:null);
  const name=data&&data.celebration?data.celebration.name:(data&&data.season?data.season:'Liturgical day');
  const type=data&&data.celebration&&data.celebration.type?liturgicalTypeLabel(data.celebration.type):'';
  const desc=data&&data.celebration&&data.celebration.description?data.celebration.description:'';
