@@ -5694,9 +5694,27 @@ body.cpc-prayer-screen-active #devotions.active{
 #libraryPanel .cpc-mass-creed-choice > summary::after{content:'⌄';float:right;}
 #libraryPanel .cpc-mass-creed-choice[open] > summary::after{content:'⌃';}
 #libraryPanel .cpc-mass-creed-choice .cpc-mass-prayer-text{padding:0 13px 15px;line-height:1.6;}
+
+/* v85: one date-aware Creed, with an optional manual change of form. */
+#libraryPanel .cpc-mass-creed-auto{display:grid;gap:12px}
+#libraryPanel .cpc-mass-creed-selected-head{padding:13px 14px 11px;border-radius:12px;background:rgba(135,90,70,.065);border:1px solid var(--line)}
+#libraryPanel .cpc-mass-creed-selected-label{display:block;color:var(--muted);font:700 10px/1.5 system-ui,sans-serif;text-transform:uppercase;letter-spacing:.09em;margin-bottom:3px}
+#libraryPanel .cpc-mass-selected-creed{display:block;color:var(--accent);font-size:18px;line-height:1.3}
+#libraryPanel .cpc-mass-creed-selection-note{margin:6px 0 0;font:12px/1.5 system-ui,sans-serif;color:var(--muted)}
+#libraryPanel .cpc-mass-creed-auto > .cpc-mass-prayer-text{font-size:16px;line-height:1.7;padding:2px 5px;margin:0;overflow-wrap:break-word}
+#libraryPanel .cpc-mass-change-creed{width:100%;font:700 12px/1.45 system-ui,sans-serif;padding:10px 12px;min-height:40px}
+#libraryPanel .cpc-mass-creed-weekday-note{margin:0;font:11px/1.5 system-ui,sans-serif;color:var(--muted)}
+[data-theme="dark"] #libraryPanel .cpc-mass-creed-selected-head{background:rgba(215,185,160,.08)}
+</style>
+
+<style id="cpc-v86-liturgical-gestures">
+/* Inline rubric: visible but subordinate to the spoken prayer, even in dark mode. */
+#libraryPanel .cpc-mass-incarnation{font-weight:700;text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px}
+#libraryPanel .cpc-mass-rubric{display:block;margin:9px 0 12px;padding:10px 12px;border-radius:9px;background:rgba(142,99,72,.09);border-inline-start:3px solid var(--accent);font:600 12px/1.55 system-ui,sans-serif;color:var(--text)}
+[data-theme="dark"] #libraryPanel .cpc-mass-rubric{background:rgba(215,185,160,.11)}
 </style>
 </head>
-<body data-cpc-version="84">
+<body data-cpc-version="86">
 <div class="app">
   <div class="topbar">
     <div class="brand"><span>Catholic Companion</span></div>
@@ -6889,7 +6907,7 @@ const cpcMassGuide=[
   ['Gospel Announcement','Stand','DEACON / PRIEST','A reading from the holy Gospel according to …','PEOPLE','Glory to you, O Lord.','As you say “Glory to you, O Lord,” make three small Signs of the Cross with your right thumb: on your forehead, lips and heart. This is done just before the Gospel is proclaimed.'],
   ['End of Gospel','Stand','DEACON / PRIEST','The Gospel of the Lord.','PEOPLE','Praise to you, Lord Jesus Christ.','Everyone listens to the Gospel before the homily.'],
   ['Homily','Sit','PRIEST / DEACON','The homily explains the readings and connects them with Christian life.','PEOPLE','Listen and reflect.','After the homily, a period of silent reflection may be observed.'],
-  ['Profession of Faith (Creed)','Stand','PRIEST / ALL','The profession of faith is begun.','PEOPLE','Pray the Nicene Creed or, where permitted, the Apostles’ Creed.','Ordinarily said on Sundays and solemnities. At the words concerning the Incarnation, the faithful make a profound bow; at Christmas and the Annunciation, they genuflect.'],
+  ['Profession of Faith (Creed)','Stand','PRIEST / ALL','The profession of faith is begun.','PEOPLE','Pray the Nicene Creed or, where permitted, the Apostles’ Creed.','Ordinarily said on Sundays and solemnities. The bow or genuflection cue appears directly within the Creed below.'],
   ['Universal Prayer','Stand','DEACON / READER','The intentions are offered for the Church, the world, those in need and the local community.','PEOPLE','Lord, hear our prayer.','The response may differ at each parish. The priest introduces and concludes these prayers.'],
   ['Silence between intentions','Stand','READER','Each petition is read aloud.','PEOPLE','Respond with the announced acclamation or pray in silence.','A common practice is to pray for the intention before giving the response.']
  ]},
@@ -6897,6 +6915,7 @@ const cpcMassGuide=[
   ['Preparation of the Altar and Gifts','Sit','PRIEST / MINISTERS','The altar is prepared; bread and wine are brought forward.','PEOPLE','Join in the offertory hymn or pray quietly.','Bread and wine will become Christ’s Body and Blood in the Eucharistic Prayer. A collection or procession of gifts may take place.'],
   ['Prayer over the Bread','Sit','PRIEST','The priest blesses God for the bread, fruit of the earth and work of human hands.','PEOPLE','Blessed be God for ever.','This response is said if the blessing is spoken aloud and no offertory chant is sung.'],
   ['Prayer over the Wine','Sit','PRIEST','The priest blesses God for the wine, fruit of the vine and work of human hands.','PEOPLE','Blessed be God for ever.','This response is said if the blessing is spoken aloud and no offertory chant is sung.'],
+  ['Incensing the Assembly (when used)','Stand when incensed','ALTAR SERVER / DEACON','If incense is used, the minister incenses the offerings, altar and priest, then turns toward the people.','PEOPLE','Bow toward the minister before and after the assembly is incensed.','The assembly and the minister exchange a profound bow before and after the incensation. This step is omitted when incense is not used; follow your parish’s practice.'],
   ['Invitation to Prayer','Stand','PRIEST','The priest invites everyone to pray that the sacrifice may be acceptable to God.','PEOPLE','Respond with the prayer asking that the Lord accept the sacrifice.','The people’s response refers to God’s glory and the good of the Church. Follow the approved text in your parish Missal.'],
   ['Prayer over the Offerings','Stand','PRIEST','The priest invites the assembly to pray and says the prayer over the offerings.','PEOPLE','Amen.','The longer response before the prayer is in the approved Order of Mass.'],
   ['Preface Dialogue — 1','Stand','PRIEST','The Lord be with you.','PEOPLE','And with your spirit.','This dialogue begins the Eucharistic Prayer.'],
@@ -6929,7 +6948,7 @@ const cpcMassGuide=[
 /* v80: complete prayer reading aids based on traditional texts and new study translations. */
 const cpcSharedNiceneCreedHtml=`I believe in one God,<br>the Father almighty,<br>maker of heaven and earth,<br>of all things visible and invisible.<br><br>I believe in one Lord Jesus Christ,<br>the Only Begotten Son of God,<br>born of the Father before all ages.<br>God from God, Light from Light,<br>true God from true God,<br>begotten, not made, consubstantial with the Father;<br>through him all things were made.<br>For us men and for our salvation<br>he came down from heaven,<br>and by the Holy Spirit was incarnate of the Virgin Mary,<br>and became man.<br>For our sake he was crucified under Pontius Pilate,<br>he suffered death and was buried,<br>and rose again on the third day<br>in accordance with the Scriptures.<br>He ascended into heaven<br>and is seated at the right hand of the Father.<br>He will come again in glory<br>to judge the living and the dead<br>and his kingdom will have no end.<br><br>I believe in the Holy Spirit, the Lord, the giver of life,<br>who proceeds from the Father and the Son,<br>who with the Father and the Son is adored and glorified,<br>who has spoken through the prophets.<br><br>I believe in one, holy, catholic and apostolic Church.<br>I confess one Baptism for the forgiveness of sins<br>and I look forward to the resurrection of the dead<br>and the life of the world to come.<br><br>Amen.`;
 const cpcSharedApostlesCreedHtml=`I believe in God the Father Almighty, Creator of heaven and earth, And in Jesus Christ, his only Son, our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died, and was buried. He descended into hell, the third day He rose again from the dead.<br><br>He ascended into heaven and sits at the right hand of God the Father Almighty. From thence He shall come to judge the living and the dead. I believe in the Holy Spirit, the Holy Catholic Church, the Communion of Saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen.`;
-const cpcMassFullPrayers={"confiteor":{"title":"Penitential Act — full confession","note":"Confiteor as supplied for this app. The gesture instruction is shown in italics.","text":"I confess to almighty God and to you, my brothers and sisters, that I have greatly sinned, in my thoughts and in my words, in what I have done and in what I have failed to do, (striking your left chest with the right hand) through my fault, through my fault, through my most grievous fault; therefore I ask blessed Mary ever- Virgin, all the Angels and Saints, and you, my brothers and sisters, to pray for me to the Lord our God. Amen."},"kyrie":{"title":"Kyrie — complete threefold invocations","note":"The invocations are repeated by the assembly. English and Greek are shown side by side.","text":"Lord, have mercy. / Kyrie eleison.\nLord, have mercy. / Kyrie eleison.\n\nChrist, have mercy. / Christe eleison.\nChrist, have mercy. / Christe eleison.\n\nLord, have mercy. / Kyrie eleison.\nLord, have mercy. / Kyrie eleison."},"gloria":{"title":"Gloria — full hymn of praise","note":"Gloria as supplied for this app.","text":"Glory to God in the highest, and on earth peace to people of good will.\nWe praise you, we bless you, we adore you, we glorify you, we give you thanks for your great glory, Lord God, heavenly King, O God, almighty Father.\nLord Jesus Christ, Only Begotten Son, Lord God, Lamb of God, Son of the Father, you take away the sins of the world, have mercy on us; you take away the sins of the world, receive our prayer;\nyou are seated at the right hand of the Father, have mercy on us.\nFor you alone are the Holy One, you alone are the Lord, you alone are the Most High, Jesus Christ, with the Holy Spirit, in the glory of God the Father. Amen."},"creed":{"title":"Profession of Faith — full Creeds","note":"Choose either the Nicene Creed or the Apostles’ Creed, following the form used at Mass.","text":""},"sanctus":{"title":"Sanctus — full Holy, Holy, Holy","note":"Sanctus as supplied for this app.","text":"Holy, Holy, Holy Lord God of hosts.\nHeaven and earth are full of your glory.\nHosanna in the highest.\nBlessed is he who comes in the name of the Lord.\nHosanna in the highest."},"pater":{"title":"The Lord’s Prayer — complete prayer","note":"Traditional English wording used for devotion.","text":"Our Father, who art in heaven,\nhallowed be thy name;\nthy kingdom come;\nthy will be done on earth as it is in heaven.\nGive us this day our daily bread;\nand forgive us our trespasses,\nas we forgive those who trespass against us;\nand lead us not into temptation,\nbut deliver us from evil."},"agnus":{"title":"Agnus Dei — full Lamb of God","note":"Complete threefold litany in a traditional English rendering.","text":"Lamb of God, who takes away the sins of the world: have mercy on us.\n\nLamb of God, who takes away the sins of the world: have mercy on us.\n\nLamb of God, who takes away the sins of the world: grant us peace."}};
+const cpcMassFullPrayers={"confiteor":{"title":"Penitential Act — full confession","note":"Confiteor as supplied for this app. The gesture instruction is shown in italics.","text":"I confess to almighty God and to you, my brothers and sisters, that I have greatly sinned, in my thoughts and in my words, in what I have done and in what I have failed to do, (striking your left chest with the right hand) through my fault, through my fault, through my most grievous fault; therefore I ask blessed Mary ever- Virgin, all the Angels and Saints, and you, my brothers and sisters, to pray for me to the Lord our God. Amen."},"kyrie":{"title":"Kyrie — complete threefold invocations","note":"The invocations are repeated by the assembly. English and Greek are shown side by side.","text":"Lord, have mercy. / Kyrie eleison.\nLord, have mercy. / Kyrie eleison.\n\nChrist, have mercy. / Christe eleison.\nChrist, have mercy. / Christe eleison.\n\nLord, have mercy. / Kyrie eleison.\nLord, have mercy. / Kyrie eleison."},"gloria":{"title":"Gloria — full hymn of praise","note":"Gloria as supplied for this app.","text":"Glory to God in the highest, and on earth peace to people of good will.\nWe praise you, we bless you, we adore you, we glorify you, we give you thanks for your great glory, Lord God, heavenly King, O God, almighty Father.\nLord Jesus Christ, Only Begotten Son, Lord God, Lamb of God, Son of the Father, you take away the sins of the world, have mercy on us; you take away the sins of the world, receive our prayer;\nyou are seated at the right hand of the Father, have mercy on us.\nFor you alone are the Holy One, you alone are the Lord, you alone are the Most High, Jesus Christ, with the Holy Spirit, in the glory of God the Father. Amen."},"creed":{"title":"Profession of Faith — full Creeds","note":"The season suggests a Creed automatically. At Mass, use the form chosen by the celebrant.","text":""},"sanctus":{"title":"Sanctus — full Holy, Holy, Holy","note":"Sanctus as supplied for this app.","text":"Holy, Holy, Holy Lord God of hosts.\nHeaven and earth are full of your glory.\nHosanna in the highest.\nBlessed is he who comes in the name of the Lord.\nHosanna in the highest."},"pater":{"title":"The Lord’s Prayer — complete prayer","note":"Traditional English wording used for devotion.","text":"Our Father, who art in heaven,\nhallowed be thy name;\nthy kingdom come;\nthy will be done on earth as it is in heaven.\nGive us this day our daily bread;\nand forgive us our trespasses,\nas we forgive those who trespass against us;\nand lead us not into temptation,\nbut deliver us from evil."},"agnus":{"title":"Agnus Dei — full Lamb of God","note":"Complete threefold litany in a traditional English rendering.","text":"Lamb of God, who takes away the sins of the world: have mercy on us.\n\nLamb of God, who takes away the sins of the world: have mercy on us.\n\nLamb of God, who takes away the sins of the world: grant us peace."}};
 const cpcMassPrayerForStep={"Confiteor or alternative form": "confiteor", "Kyrie": "kyrie", "Gloria": "gloria", "Profession of Faith (Creed)": "creed", "Sanctus (Holy, Holy, Holy)": "sanctus", "The Lord’s Prayer": "pater", "Fraction of the Bread — Agnus Dei": "agnus"};
 function cpcMassHtmlEscape(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c])}
 function cpcMassBilingual(s){
@@ -6937,9 +6956,55 @@ function cpcMassBilingual(s){
  if(!greek)return cpcMassHtmlEscape(s);
  return `<span class="cpc-mass-bilingual"><span class="cpc-mass-english">${cpcMassHtmlEscape(s)}</span><span class="cpc-mass-greek-separator" aria-hidden="true">//</span><span class="cpc-mass-greek" lang="el-Latn">${cpcMassHtmlEscape(greek)}</span></span>`;
 }
+/* v85: Date-aware Creed suggestion. It is a seasonal preference, not a rule requiring a particular Creed. */
+function cpcMassCreedForDate(date=new Date()){
+ const today=new Date(date.getFullYear(),date.getMonth(),date.getDate());
+ const easter=easterSunday(today.getFullYear());
+ const ashWednesday=new Date(easter);ashWednesday.setDate(easter.getDate()-46);
+ const pentecost=new Date(easter);pentecost.setDate(easter.getDate()+49);
+ const lent=today>=ashWednesday&&today<easter;
+ const eastertime=today>=easter&&today<=pentecost;
+ // The Annunciation itself normally uses the Nicene Creed when celebrated on 25 March.
+ const annunciationDate=today.getMonth()===2&&today.getDate()===25;
+ const creed=(lent||eastertime)&&!annunciationDate?'apostles':'nicene';
+ const season=lent?'Lent':eastertime?'Easter Time':'the rest of the liturgical year';
+ return {creed,season};
+}
+function cpcMassCreedName(type){return type==='apostles'?'Apostles’ Creed':'Nicene Creed'}
+/* v86: keep the devotional Creed texts unchanged elsewhere in the app, while showing liturgical gestures in the Order of Mass only. */
+function cpcMassCreedGesture(date=new Date()){
+ const month=date.getMonth()+1,day=date.getDate();
+ const genuflect=(month===12&&day===25)||(month===3&&day===25);
+ return genuflect
+  ? '<span class="cpc-mass-rubric" role="note">✝ Genuflect at these words on Christmas Day and the Annunciation (when celebrated today).</span>'
+  : '<span class="cpc-mass-rubric" role="note">↘ Make a profound bow at these words, then stand upright after “and became man.”</span>';
+}
+function cpcMassCreedHtml(type){
+ const gesture=cpcMassCreedGesture();
+ if(type==='apostles'){
+  const target='who was conceived by the Holy Spirit, born of the Virgin Mary,';
+  const marked='<span class="cpc-mass-incarnation">'+target+'</span>'+gesture;
+  return cpcSharedApostlesCreedHtml.replace(target,marked);
+ }
+ const target='and by the Holy Spirit was incarnate of the Virgin Mary,<br>and became man.';
+ const marked='<span class="cpc-mass-incarnation">'+target+'</span>'+gesture;
+ return cpcSharedNiceneCreedHtml.replace(target,marked);
+}
+function cpcMassToggleCreed(){
+ const root=document.querySelector('#libraryContent .cpc-mass-creed-auto');if(!root)return;
+ const type=root.dataset.creed==='apostles'?'nicene':'apostles';root.dataset.creed=type;
+ const name=cpcMassCreedName(type);
+ const title=root.querySelector('.cpc-mass-selected-creed');if(title)title.textContent=name;
+ const body=root.querySelector('.cpc-mass-prayer-text');if(body)body.innerHTML=cpcMassCreedHtml(type);
+ const button=root.querySelector('.cpc-mass-change-creed');if(button){button.textContent=`Use ${cpcMassCreedName(type==='apostles'?'nicene':'apostles')} instead`;button.setAttribute('aria-label',button.textContent)}
+ const notice=root.querySelector('.cpc-mass-creed-selection-note');if(notice)notice.textContent='You’ve selected the alternative Creed. Follow the version used by your parish.';
+ const response=document.getElementById('cpc-mass-creed-response');if(response)response.textContent=`If the Creed is said, pray the ${name} or follow the version chosen by the priest.`;
+}
 function cpcMassFullText(id,p){
  if(id==='creed'){
-  return `<div class="cpc-mass-creed-choices"><details class="cpc-mass-creed-choice" open><summary>Nicene Creed</summary><div class="cpc-mass-prayer-text">${cpcSharedNiceneCreedHtml}</div></details><details class="cpc-mass-creed-choice"><summary>Apostles’ Creed</summary><div class="cpc-mass-prayer-text">${cpcSharedApostlesCreedHtml}</div></details></div>`;
+  const setting=cpcMassCreedForDate(),name=cpcMassCreedName(setting.creed);
+  const alternative=cpcMassCreedName(setting.creed==='apostles'?'nicene':'apostles');
+  return `<div class="cpc-mass-creed-auto" data-creed="${setting.creed}"><div class="cpc-mass-creed-selected-head"><span class="cpc-mass-creed-selected-label">Seasonal suggestion</span><strong class="cpc-mass-selected-creed">${name}</strong><p class="cpc-mass-creed-selection-note">${setting.creed==='apostles'?'The Apostles’ Creed is especially appropriate during '+setting.season+'.':'The Nicene Creed is the usual form outside Lent and Easter Time.'} The celebrant may choose either permitted Creed.</p></div><div class="cpc-mass-prayer-text">${cpcMassCreedHtml(setting.creed)}</div><button type="button" class="ghost cpc-mass-change-creed" onclick="cpcMassToggleCreed()">Use ${alternative} instead</button><p class="cpc-mass-creed-weekday-note">The Creed is ordinarily said on Sundays and solemnities; it is usually omitted at weekday Mass unless a solemnity or other suitable occasion calls for it.</p></div>`;
  }
  if(id==='kyrie'){
   const lines=[['PRIEST / CANTOR','Lord, have mercy.'],['PEOPLE','Lord, have mercy.'],['PRIEST / CANTOR','Christ, have mercy.'],['PEOPLE','Christ, have mercy.'],['PRIEST / CANTOR','Lord, have mercy.'],['PEOPLE','Lord, have mercy.']];
@@ -6951,7 +7016,7 @@ function cpcMassFullText(id,p){
 }
 function cpcMassFullPrayer(title){
  const id=cpcMassPrayerForStep[title],p=id&&cpcMassFullPrayers[id];if(!p)return '';
- return `<details class="cpc-mass-full-prayer"><summary>Read full prayer</summary><div class="cpc-mass-prayer-body"><div class="cpc-mass-prayer-note">${cpcMassHtmlEscape(p.note)}</div>${cpcMassFullText(id,p)}</div></details>`;
+ return `<details class="cpc-mass-full-prayer"><summary>${id==='creed'?'Read suggested Creed':'Read full prayer'}</summary><div class="cpc-mass-prayer-body"><div class="cpc-mass-prayer-note">${cpcMassHtmlEscape(p.note)}</div>${cpcMassFullText(id,p)}</div></details>`;
 }
 
 function cpcMassJump(id){
@@ -6962,7 +7027,7 @@ function cpcMassJump(id){
 }
 function cpcMassExpandAll(expand){document.querySelectorAll('#libraryContent .cpc-mass-part').forEach(x=>x.open=expand)}
 function cpcRenderOrderOfMass(){
- const row=([title,posture,who,what,responseBy,response,note])=>`<article class="cpc-mass-step"><div class="cpc-mass-step-heading"><h4>${title}</h4><span class="cpc-mass-posture">${posture}</span></div><div class="cpc-mass-speech"><span class="cpc-mass-speaker">${who}</span><p>${cpcMassBilingual(what)}</p></div><div class="cpc-mass-speech cpc-mass-response"><span class="cpc-mass-speaker">${responseBy} · ${/^(Join|Everyone|Repeat|The assembly|Sing)/.test(response)?'PARTICIPATION':'YOUR RESPONSE'}</span><p>${cpcMassBilingual(response)}</p></div>${note?`<p class="cpc-mass-step-note">${note}</p>`:''}${cpcMassFullPrayer(title)}</article>`;
+ const row=([title,posture,who,what,responseBy,response,note])=>`<article class="cpc-mass-step"><div class="cpc-mass-step-heading"><h4>${title}</h4><span class="cpc-mass-posture">${posture}</span></div><div class="cpc-mass-speech"><span class="cpc-mass-speaker">${who}</span><p>${cpcMassBilingual(what)}</p></div><div class="cpc-mass-speech cpc-mass-response"><span class="cpc-mass-speaker">${responseBy} · ${/^(Join|Everyone|Repeat|The assembly|Sing)/.test(response)?'PARTICIPATION':'YOUR RESPONSE'}</span><p ${title==='Profession of Faith (Creed)'?'id="cpc-mass-creed-response"':''}>${title==='Profession of Faith (Creed)'?cpcMassHtmlEscape(`If the Creed is said, pray the ${cpcMassCreedName(cpcMassCreedForDate().creed)} or follow the version chosen by the priest.`):cpcMassBilingual(response)}</p></div>${note?`<p class="cpc-mass-step-note">${note}</p>`:''}${cpcMassFullPrayer(title)}</article>`;
  return `<div class="cpc-mass-page"><div class="cpc-mass-intro"><span class="cpc-mass-hero-icon" aria-hidden="true">⛪</span><p class="cpc-mass-lead">Follow the priest's words and the congregation's responses in the Roman Rite.</p><p class="cpc-mass-explain">A step-by-step participation guide with the celebrant’s prompts, the people’s responses, and brief explanations. Open the prayers below for the full Gloria, Sanctus, Confiteor and Creeds. Follow the approved wording used by your parish during Mass.</p></div><div class="cpc-mass-quick-nav" aria-label="Jump to a section">${cpcMassGuide.map(x=>`<button type="button" onclick="cpcMassJump('${x.id}')">${x.title}</button>`).join('')}</div><p class="cpc-mass-reading-hint">Open a section to follow the Mass in sequence. The shaded panels show the people’s part; where words vary, follow your parish Missal.</p><div class="cpc-mass-expand-tools"><button class="ghost" type="button" onclick="cpcMassExpandAll(true)">Expand all</button><button class="ghost" type="button" onclick="cpcMassExpandAll(false)">Collapse all</button></div><div class="cpc-mass-parts">${cpcMassGuide.map((p,i)=>`<details class="cpc-mass-part" id="cpc-mass-${p.id}" ${i===0?'open':''}><summary><span class="cpc-mass-part-num">${p.number}</span><span class="cpc-mass-part-title"><strong>${p.title}</strong><small>${p.summary}</small></span><span class="cpc-mass-chevron" aria-hidden="true">⌄</span></summary><div class="cpc-mass-part-body"><p class="cpc-mass-section-posture">${p.posture}</p>${p.items.map(row).join('')}</div></details>`).join('')}</div><p class="cpc-mass-bottom-note">Posture suggestions are general; local and personal circumstances take precedence. The included prayer texts are reading aids; follow the approved Roman Missal in your parish. Variable prayers and alternate formulas remain summarised. For the official structure, see <a href="https://www.usccb.org/prayer-and-worship/the-mass/order-of-mass" target="_blank" rel="noopener noreferrer">USCCB: Order of Mass</a>. A publicly distributed full English Missal transcription would require the appropriate liturgical-text permissions.</p></div>`;
 }
 
