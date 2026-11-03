@@ -5614,8 +5614,57 @@ body.cpc-prayer-screen-active #devotions.active{
 #libraryPanel .cpc-mass-kyrie-line .cpc-mass-bilingual{font-size:.96rem}
 @media(max-width:360px){#libraryPanel .cpc-mass-bilingual{gap:.3em}#libraryPanel .cpc-mass-kyrie-line{padding:8px 7px}}
 </style>
+<style id="cpc-v83-home-one-screen">
+/* Keep the header fixed, but use compact spacing only on the Home screen.
+   No changes to prayer screens, library layout, or the card destinations. */
+@media (max-width:540px){
+  body:has(#home.active) .app{padding-top:10px!important;padding-bottom:10px!important}
+  body:has(#home.active) .topbar{margin-bottom:9px!important}
+  #home > #todayLabel{margin-bottom:6px!important}
+  #home > #todayLabel .today-liturgy{gap:1px!important}
+  #home > #todayLabel .hero-liturgical-week{margin-top:1px!important}
+  #home .hero{padding:11px 12px 11px!important;margin-bottom:8px!important;border-radius:15px!important}
+  #home .hero .hero-title-stack{
+    flex-direction:row!important;gap:6px!important;
+    margin-bottom:3px!important;align-items:center!important
+  }
+  #home .hero .hero-title-stack .hero-title-icon{font-size:1.43rem!important;line-height:1!important}
+  #home .hero .hero-title-stack h1{width:auto!important;font-size:22px!important;line-height:1.1!important}
+  #home .hero .hero-mystery-today{margin:0 0 3px!important;font-size:12px!important;line-height:1.2!important}
+  #home .hero .daily-quote{font-size:13.3px!important;line-height:1.32!important;margin:0 0 5px!important}
+  #home .hero .daily-quote cite{display:inline!important;margin:0!important;font-size:10.5px!important;letter-spacing:0!important}
+  #home .hero .daily-quote .daily-quote-source{
+    display:inline!important;min-height:0!important;height:auto!important;
+    padding:0 2px!important;margin:0!important;font-size:10.5px!important;line-height:1.25!important;
+    vertical-align:baseline!important
+  }
+  #home .hero .actions{margin:0!important;gap:0!important}
+  #home .hero .today-rosary-btn{min-height:39px!important;height:39px!important;padding:5px 10px!important;font-size:12.5px!important}
+  #home .hero .weekly-prayer-note{margin-top:4px!important;font-size:11.3px!important;line-height:1.2!important}
+  #home .grid{gap:7px!important}
+  #home .grid > .card{height:73px!important;min-height:73px!important;padding:4px 2px!important;border-radius:11px!important}
+  #home .grid > .card > strong{gap:2px!important}
+  #home .grid > .card .home-icon{font-size:26px!important;line-height:1!important}
+  #home .grid > .card .home-title-text{font-size:14px!important;line-height:1.06!important}
+  #home .home-network-status,#home .grid + .home-network-status{margin-top:8px!important;font-size:11px!important;line-height:1.25!important}
+  #home .home-network-status + .footer-note,#home > .footer-note{margin-top:6px!important;font-size:11px!important;line-height:1.3!important}
+  #home .footer-note{padding:0 6px!important}
+}
+/* The informational footnotes are secondary to the ten navigation cards.
+   Keep them on regular phones, but don't let them cause scrolling on shorter phones. */
+@media (max-width:540px) and (max-height:740px){
+  #home .home-network-status,#home > .footer-note{display:none!important}
+  #home .grid{gap:5px!important}
+  #home .grid > .card{height:59px!important;min-height:59px!important}
+  #home .grid > .card .home-icon{font-size:21px!important}
+  #home .hero{padding:7px 11px 8px!important}
+  #home .hero .weekly-prayer-note{font-size:10px!important}
+}
+/* Larger text/accessibility settings can still make a page longer: allow normal
+   scrolling rather than clipping content or concealing controls. */
+</style>
 </head>
-<body data-cpc-version="82">
+<body data-cpc-version="83">
 <div class="app">
   <div class="topbar">
     <div class="brand"><span>Catholic Companion</span></div>
