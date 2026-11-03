@@ -1,6 +1,6 @@
-/* Catholic Companion v90 — offline shell and versioned app updates. */
+/* Catholic Companion v91 — offline shell and versioned app updates. */
 const CACHE_PREFIX='catholic-companion-release-';
-const CACHE_NAME=CACHE_PREFIX+'v90';
+const CACHE_NAME=CACHE_PREFIX+'v91';
 const APP_SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)));
@@ -27,7 +27,7 @@ self.addEventListener('fetch',event=>{
     }
     return response;
    }catch(_){
-    const cached=await caches.match('./index.html');
+    const cached=await caches.match('./index.html',{ignoreSearch:true});
     return cached||Response.error();
    }
   })());

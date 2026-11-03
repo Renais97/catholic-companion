@@ -5723,6 +5723,33 @@ body.cpc-prayer-screen-active #devotions.active{
 #libraryPanel .cpc-mass-rubric{display:block;margin:9px 0 12px;padding:10px 12px;border-radius:9px;background:rgba(142,99,72,.09);border-inline-start:3px solid var(--accent);font:600 12px/1.55 system-ui,sans-serif;color:var(--text)}
 [data-theme="dark"] #libraryPanel .cpc-mass-rubric{background:rgba(215,185,160,.11)}
 </style>
+
+<style id="cpc-v91-stability-accessibility">
+/* Accessible controls and legible shortcuts, without imposing a fixed page height. */
+#libraryPanel .cpc-mass-quick-nav button{font-size:.88rem;line-height:1.35;min-height:44px;padding:10px 12px}
+#libraryPanel .cpc-mass-conditional{font-size:.76rem}
+#pickerPanel .cpc-rosary-set-tab small{font-size:.75rem;line-height:1.35}
+#pickerPanel .cpc-rosary-mystery-copy small{font-size:.78rem}
+#pickerPanel .cpc-rosary-method-grid .rosary-mode-description{font-size:.8rem!important;line-height:1.35!important}
+.cpc-v91-bible{max-width:680px;margin:0 auto;padding:4px 0 16px}
+.cpc-v91-bible h3{margin:8px 0 10px;text-align:center;color:var(--accent)}
+.cpc-v91-bible p{font-size:.9rem;line-height:1.55}
+.cpc-v91-bible-controls{display:grid;grid-template-columns:minmax(0,2fr) minmax(85px,.7fr);gap:12px;margin:18px 0 14px}
+.cpc-v91-bible-controls label{display:flex;flex-direction:column;gap:6px;font-size:.85rem;font-weight:700;color:var(--ink)}
+.cpc-v91-bible-controls select,.cpc-v91-bible-controls input{min-width:0;width:100%;min-height:45px;padding:9px 12px;border:1px solid var(--line);border-radius:11px;background:var(--panel);color:var(--ink);font:inherit}
+.cpc-v91-usccb-action{display:block;min-height:44px;padding:12px 14px;margin:8px auto 15px;text-align:center;text-decoration:none;font:700 .9rem/1.45 system-ui,sans-serif;border-radius:12px;background:var(--accent);color:white}
+.cpc-v91-bible-reference{background:var(--soft);border-radius:10px;padding:10px 12px}
+.cpc-v91-offline-option{border:1px solid var(--line);border-radius:14px;background:var(--soft);padding:15px;margin-top:19px}
+.cpc-v91-offline-option p{margin:6px 0 13px;color:var(--muted)}
+.cpc-v91-offline-option button,.cpc-v91-back-usccb{min-height:44px}
+#pickerPanel button:focus-visible,#libraryPanel button:focus-visible,.cpc-v91-bible a:focus-visible,.cpc-v91-bible select:focus-visible,.cpc-v91-bible input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media(max-width:340px){
+ #libraryPanel .cpc-mass-quick-nav button{font-size:.82rem;padding:9px 8px}
+ #pickerPanel .cpc-rosary-set-tab small{font-size:.7rem}
+ .cpc-v91-bible-controls{grid-template-columns:minmax(0,1fr) 88px;gap:8px}
+}
+@media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto!important}}
+</style>
 </head>
 <body data-cpc-version="86">
 <div class="app">
@@ -6273,7 +6300,7 @@ function liturgicalWeekLabel(date,season=''){
 
 function heroOrdinalDay(n){const v=n%100;if(v>=11&&v<=13)return n+'th';switch(n%10){case 1:return n+'st';case 2:return n+'nd';case 3:return n+'rd';default:return n+'th';}}
 function heroDateText(d){const months=['January','February','March','April','May','June','July','August','September','October','November','December'];return `${heroOrdinalDay(d.getDate())} ${months[d.getMonth()]} ${d.getFullYear()}`;}
-async function updateToday(){const hero=document.querySelector('#home .hero'),mysteryKey=todaySetKey();if(hero)hero.dataset.mysterySet=mysteryKey;const mysteryLabel=document.getElementById('todayMysterySet');if(mysteryLabel)mysteryLabel.textContent=`${(sets[mysteryKey]?.name||'Rosary Mysteries').replace(/^The\s+/,'')}`;const el=document.getElementById('todayLabel');const d=new Date();if(el)el.innerHTML=`<span class="today-liturgy"><span class="hero-date-main"><span>${heroDateText(d)}</span></span><span class="hero-liturgical-week"><span id="heroLitWeek">Liturgical week</span><span class="hero-lit-dot" id="heroLitDot" aria-hidden="true"></span></span></span>`;setDailyScripture();try{const p=apiDateParts(d),r=await fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok){const cal=await r.json(),lc=liturgicalColour(cal,d),dot=document.getElementById('heroLitDot'),week=document.getElementById('heroLitWeek');if(dot)dot.style.setProperty('--hero-lit',lc.hex);if(week)week.textContent=liturgicalWeekLabel(d,cal.season||'');}}catch(e){const week=document.getElementById('heroLitWeek');if(week)week.textContent='';}}
+async function updateToday(){const hero=document.querySelector('#home .hero'),mysteryKey=todaySetKey();if(hero)hero.dataset.mysterySet=mysteryKey;const mysteryLabel=document.getElementById('todayMysterySet');if(mysteryLabel)mysteryLabel.textContent=`${(sets[mysteryKey]?.name||'Rosary Mysteries').replace(/^The\s+/,'')}`;const el=document.getElementById('todayLabel');const d=new Date();if(el)el.innerHTML=`<span class="today-liturgy"><span class="hero-date-main"><span>${heroDateText(d)}</span></span><span class="hero-liturgical-week"><span id="heroLitWeek">Liturgical week</span><span class="hero-lit-dot" id="heroLitDot" aria-hidden="true"></span></span></span>`;setDailyScripture();try{const p=apiDateParts(d),r=await cpcFetchWithTimeout(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok){const cal=await r.json(),lc=liturgicalColour(cal,d),dot=document.getElementById('heroLitDot'),week=document.getElementById('heroLitWeek');if(dot)dot.style.setProperty('--hero-lit',lc.hex);if(week)week.textContent=liturgicalWeekLabel(d,cal.season||'');}}catch(e){const week=document.getElementById('heroLitWeek');if(week)week.textContent='';}}
 function startToday(){showRosaryModePicker(todaySetKey())}
 function showMysteryPicker(){showLibrary('mysteries')}
 function cpcOpenMysteryFromRosary(k,index=0){
@@ -6500,8 +6527,9 @@ function renderPrayer(){queueMicrotask(ensurePrayerNavigationTip);
  markComplete('rosary');c.innerHTML=`<div class="completion-screen-copy"><div class="eyebrow">${isScripturalRosary()?'Scriptural Rosary':'Rosary'} complete</div>${completionMoment('Prayer offered with love')}<h2>May the peace of Christ remain with you.</h2><p class="subtitle">May Our Lady keep you close to her Son, and may you return tomorrow with a heart renewed in prayer.</p></div>`;
  }
 function next(){
- const dest=state.step+1;
  const dStart=introSteps.length,dEnd=dStart+25;
+ if(!state.setKey||state.step>=(dEnd+endingSteps.length))return;
+ const dest=state.step+1;
  const completing=dest>=(dEnd+endingSteps.length);
  const inMysteries=dest>=dStart&&dest<dEnd;
  const destPhase=inMysteries?((dest-dStart)%5):-1;
@@ -6964,7 +6992,22 @@ function cpcMassBilingual(s){
  if(!greek)return cpcMassHtmlEscape(s);
  return `<span class="cpc-mass-bilingual"><span class="cpc-mass-english">${cpcMassHtmlEscape(s)}</span><span class="cpc-mass-greek-separator" aria-hidden="true">//</span><span class="cpc-mass-greek" lang="el-Latn">${cpcMassHtmlEscape(greek)}</span></span>`;
 }
-/* v85: Date-aware Creed suggestion. It is a seasonal preference, not a rule requiring a particular Creed. */
+/* v91: Creed suggestion is seasonal; the celebrant may choose either permitted Creed.
+   The Annunciation is calculated by its OBSERVED date, including its transfer
+   when 25 March falls in Holy Week/Easter Octave or on a Lenten Sunday. */
+function cpcObservedAnnunciationDate(year){
+ const march25=new Date(year,2,25);
+ const easter=easterSunday(year);
+ const holyWeek=new Date(easter);holyWeek.setDate(easter.getDate()-7);
+ const easterOctaveEnd=new Date(easter);easterOctaveEnd.setDate(easter.getDate()+7);
+ if(march25>=holyWeek && march25<=easterOctaveEnd){
+  const monday=new Date(easter);monday.setDate(easter.getDate()+8);return monday;
+ }
+ if(march25.getDay()===0){const monday=new Date(march25);monday.setDate(march25.getDate()+1);return monday;}
+ return march25;
+}
+function cpcSameCivilDate(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
+function cpcIsAnnunciationObserved(date){return cpcSameCivilDate(date,cpcObservedAnnunciationDate(date.getFullYear()))}
 function cpcMassCreedForDate(date=new Date()){
  const today=new Date(date.getFullYear(),date.getMonth(),date.getDate());
  const easter=easterSunday(today.getFullYear());
@@ -6972,19 +7015,18 @@ function cpcMassCreedForDate(date=new Date()){
  const pentecost=new Date(easter);pentecost.setDate(easter.getDate()+49);
  const lent=today>=ashWednesday&&today<easter;
  const eastertime=today>=easter&&today<=pentecost;
- // The Annunciation itself normally uses the Nicene Creed when celebrated on 25 March.
- const annunciationDate=today.getMonth()===2&&today.getDate()===25;
- const creed=(lent||eastertime)&&!annunciationDate?'apostles':'nicene';
+ // On the Annunciation's actual celebration, suggest the Nicene Creed.
+ const annunciation=cpcIsAnnunciationObserved(today);
+ const creed=(lent||eastertime)&&!annunciation?'apostles':'nicene';
  const season=lent?'Lent':eastertime?'Easter Time':'the rest of the liturgical year';
  return {creed,season};
 }
 function cpcMassCreedName(type){return type==='apostles'?'Apostles’ Creed':'Nicene Creed'}
-/* v86: keep the devotional Creed texts unchanged elsewhere in the app, while showing liturgical gestures in the Order of Mass only. */
 function cpcMassCreedGesture(date=new Date()){
- const month=date.getMonth()+1,day=date.getDate();
- const genuflect=(month===12&&day===25)||(month===3&&day===25);
- return genuflect
-  ? '<span class="cpc-mass-rubric" role="note">✝ Genuflect at these words on Christmas Day and the Annunciation (when celebrated today).</span>'
+ const christmas=date.getMonth()===11&&date.getDate()===25;
+ const annunciation=cpcIsAnnunciationObserved(date);
+ return (christmas||annunciation)
+  ? '<span class="cpc-mass-rubric" role="note">✝ Genuflect at these words on Christmas Day and on the observed Solemnity of the Annunciation.</span>'
   : '<span class="cpc-mass-rubric" role="note">↘ Make a profound bow at these words, then stand upright after “and became man.”</span>';
 }
 function cpcMassCreedHtml(type){
@@ -7768,6 +7810,11 @@ function ensurePrayerA11yNavigation(root,kind){
    nav.innerHTML=`<button type="button" onclick="window.previousAngelus()" aria-label="Previous prayer">Previous prayer</button><button type="button" onclick="window.angelusNext()" aria-label="Next prayer">Next prayer</button>`;
  }
 }
+async function cpcFetchWithTimeout(url,timeoutMs=9000){
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs);
+ try{return await fetch(url,{signal:controller.signal})}
+ finally{clearTimeout(timer)}
+}
 function apiDateParts(d){return {y:d.getFullYear(),md:`${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}}
 function usccbDailyReadingsUrl(d){
  const mm=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0'),yy=String(d.getFullYear()).slice(-2);
@@ -7817,11 +7864,14 @@ async function renderDailyReadings(){
  const c=document.getElementById('devotionContent'), d=new Date(), p=apiDateParts(d);
  c.innerHTML=`<div class="notice">Loading today’s liturgical information and reading references…</div>`;
  try{
-  const [rr,cr]=await Promise.all([fetch(`https://cpbjr.github.io/catholic-readings-api/readings/${p.y}/${p.md}.json`),fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`)]);
+  const [rr,cr]=await Promise.all([cpcFetchWithTimeout(`https://cpbjr.github.io/catholic-readings-api/readings/${p.y}/${p.md}.json`),cpcFetchWithTimeout(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`)]);
   if(!rr.ok) throw new Error('readings');
   const r=await rr.json(), cal=cr.ok?await cr.json():null;
   c.innerHTML=massReadingsPageHtml(d,r,cal);
- }catch(err){c.innerHTML=`<div class="notice">Daily readings could not be loaded. Check your internet connection and try again.</div><div class="actions"><button class="primary" onclick="renderDailyReadings()">Try again</button></div>`}
+ }catch(err){
+  const dayLabel=d.toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});
+  c.innerHTML=`<div class="notice" role="status">Daily reading data for ${esc(dayLabel)} could not be loaded. Your saved prayers still work offline. Please reconnect and try again, or open an official reading source.</div>${officialMassReadingSources(d)}<div class="actions"><button class="primary" onclick="renderDailyReadings()">Try again</button></div>`;
+ }
 }
 
 
@@ -7907,7 +7957,7 @@ async function renderCalendarWeek(){
  const start=startOfCalendarWeek(calDate), days=Array.from({length:7},(_,i)=>{const d=new Date(start);d.setDate(start.getDate()+i);return d});
  c.innerHTML=`${calendarViewToggle()}<div class="calendar-head"><button class="ghost" onclick="changeWeek(-1)">←</button><h3>${weekRangeLabel(start)}</h3><button class="ghost" onclick="changeWeek(1)">→</button></div><div class="notice">Loading this week’s celebrations…</div>`;
  const data={};
- await Promise.all(days.map(async(d,i)=>{const p=apiDateParts(d);try{const r=await fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok)data[i]=await r.json()}catch(e){}}));
+ await Promise.all(days.map(async(d,i)=>{const p=apiDateParts(d);try{const r=await cpcFetchWithTimeout(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok)data[i]=await r.json()}catch(e){}}));
  const today=new Date();
  const cards=days.map((d,i)=>{const z=data[i],name=z&&z.celebration?z.celebration.name:(z&&z.season?z.season:'Liturgical day'),lc=liturgicalColour(z,d),ist=d.toDateString()===today.toDateString();return `<button class="cal-week-card ${ist?'today':''}" style="--lit:${lc.hex}" title="${esc(lc.label)}" onclick="showCalendarDay(${d.getFullYear()},${d.getMonth()},${d.getDate()})"><span class="cal-week-date">${d.toLocaleDateString(undefined,{weekday:'short'})}<small>${d.getDate()} ${d.toLocaleDateString(undefined,{month:'short'})}</small></span><span class="cal-week-name">${esc(name||'')}</span><span class="lit-dot" style="--lit:${lc.hex}"></span></button>`}).join('');
  c.innerHTML=`${calendarViewToggle()}<div class="calendar-head"><button class="ghost" onclick="changeWeek(-1)">←</button><h3>${weekRangeLabel(start)}</h3><button class="ghost" onclick="changeWeek(1)">→</button></div><div class="calendar-week-view">${cards}</div>${liturgicalLegend()}`;
@@ -7918,7 +7968,7 @@ async function renderCalendarMonth(){
  const first=new Date(y,m,1), days=new Date(y,m+1,0).getDate(), start=first.getDay();
  c.innerHTML=`${calendarViewToggle()}<div class="calendar-head"><button class="ghost" onclick="changeMonth(-1)">←</button><h3>${first.toLocaleDateString(undefined,{month:'long',year:'numeric'})}</h3><button class="ghost" onclick="changeMonth(1)">→</button></div><div class="notice">Loading liturgical colours…</div>`;
  const data={};
- await Promise.all(Array.from({length:days},async(_,i)=>{const d=new Date(y,m,i+1),p=apiDateParts(d);try{const r=await fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok)data[i+1]=await r.json()}catch(e){}}));
+ await Promise.all(Array.from({length:days},async(_,i)=>{const d=new Date(y,m,i+1),p=apiDateParts(d);try{const r=await cpcFetchWithTimeout(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok)data[i+1]=await r.json()}catch(e){}}));
  calendarMonthDayData=data;
  const weeks=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="cal-week">${x}</div>`).join('');
  const blanks=Array.from({length:start},()=>`<div class="cal-day empty"></div>`).join('');
@@ -7964,10 +8014,10 @@ async function showCalendarDay(y,m,n){
  setPanelArt('devotionPanel','panel-art readings-art');
  c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><div class="notice">Loading liturgical information and reading references…</div>`;
  try{
-  const [cr,rr]=await Promise.all([fetch(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`),fetch(`https://cpbjr.github.io/catholic-readings-api/readings/${p.y}/${p.md}.json`)]);
+  const [cr,rr]=await Promise.all([cpcFetchWithTimeout(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`),cpcFetchWithTimeout(`https://cpbjr.github.io/catholic-readings-api/readings/${p.y}/${p.md}.json`)]);
   const cal=cr.ok?await cr.json():null, r=rr.ok?await rr.json():null;
   c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button>${massReadingsPageHtml(d,r,cal,{eyebrow:'Selected date',cardAction:'renderCalendar()',cardAria:'Back to liturgical calendar'})}`;
- }catch(e){c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><div class="notice">Information for this day could not be loaded.</div>`}
+ }catch(e){c.innerHTML=`<button class="ghost" onclick="renderCalendar()">← Back to calendar</button><div class="notice" role="status">Information for this day could not be loaded. Open the official readings below or try again online.</div>${officialMassReadingSources(d)}`}
 }
 
 function enableTapEffects(){
@@ -8255,6 +8305,57 @@ window.searchOfflineBible=async function(){
 window.openBibleSearchHit=function(slug,ch,v){bibleReferenceTarget={slug,chapter:Number(ch),verseStart:Number(v),verseEnd:Number(v),raw:`${bibleBooks.find(x=>x[0]===slug)?.[1]||slug} ${ch}:${v}`};bibleState.slug=slug;bibleState.chapter=Number(ch);localStorage.setItem('cpc-bible-book',slug);localStorage.setItem('cpc-bible-chapter',String(ch));window.renderBible()};
 window.renderBible=function(){const c=document.getElementById('devotionContent'),displayName=bibleBooks.find(x=>x[0]===bibleState.slug)?.[1]||'Bible';c.innerHTML=`<div class="bible-status-line"><span id="networkBibleStatus">${navigator.onLine?'● Online':'● Offline'}</span><span>Offline reader: Douay–Rheims · 73-book canon</span></div><div class="bible-search-row"><input id="bibleSearchInput" type="search" placeholder="Search saved Bible text" onkeydown="if(event.key==='Enter')searchOfflineBible()"><button class="secondary" id="bibleSearchBtn" type="button" onclick="searchOfflineBible()">Search</button><button class="ghost" onclick="renderBibleBookmarks()">★ Bookmarks</button></div><div id="bibleSearchResults"></div><div class="bible-toolbar"><select id="bibleBookSelect" aria-label="Bible book" onchange="changeBibleBook(this.value)">${bibleBookOptions()}</select><select id="bibleChapterSelect" aria-label="Bible chapter" disabled><option>Chapter</option></select></div><div id="bibleBookGuide">${bibleBookGuideHtml(bibleState.slug)}</div><div id="bibleReader"><div class="notice">Loading ${esc(displayName)}…</div></div><p class="footer-note">This offline Bible uses the public-domain Douay–Rheims translation, not USCCB/NABRE text. Book guide cards open the corresponding USCCB pages separately. Books you open are saved locally when supported.</p><div class="bible-offline-row bible-offline-bottom"><div><b>Catholic Bible</b><div id="bibleOfflineStatus" class="bible-offline-status">Checking saved books…</div><div class="bible-download-progress" id="bibleDownloadProgress"><span></span></div></div><button class="secondary" id="bibleDownloadBtn" onclick="downloadCompleteBible()">Download all</button></div>`;cpcWireLiveBibleSearch();loadBibleBook(bibleState.slug).then(({data})=>renderBibleBook(data)).catch(()=>{const r=document.getElementById('bibleReader');if(r)r.innerHTML=`<div class="notice">This book is not available offline yet and could not be downloaded.</div><div class="actions"><button class="primary" onclick="retryBibleBook()">Try again</button></div>`});updateBibleOfflineStatus()};
 window.renderBibleChapter=function(book){const ch=bibleChapterObj(book,bibleState.chapter),reader=document.getElementById('bibleReader');if(!ch||!reader)return;const name=book.short_title||book.book_title||bibleBooks.find(x=>x[0]===bibleState.slug)?.[1]||'Bible',verses=Array.isArray(ch.verses)?ch.verses:[],chapters=book.chapters||[],idx=chapters.findIndex(x=>Number(x.chapter)===Number(bibleState.chapter)),prev=idx>0?Number(chapters[idx-1].chapter)||idx:null,next=idx>=0&&idx<chapters.length-1?(Number(chapters[idx+1].chapter)||idx+2):null,target=(bibleReferenceTarget&&bibleReferenceTarget.slug===bibleState.slug&&Number(bibleReferenceTarget.chapter)===Number(bibleState.chapter))?bibleReferenceTarget:null,marks=new Set(getBibleBookmarks().map(b=>b.key)),refNotice=target?`<div class="notice bible-reference-notice">Reading: <b>${esc(target.raw)}</b></div>`:'';reader.innerHTML=`<div class="bible-chapter-head"><button class="ghost" onclick="bibleGoChapter(${prev??'null'})" ${prev==null?'disabled':''}>‹</button><h3>${esc(name)} ${esc(bibleState.chapter)}</h3><button class="ghost" onclick="bibleGoChapter(${next??'null'})" ${next==null?'disabled':''}>›</button></div>${refNotice}${cleanBibleText(ch.introduction)?`<p class="muted bible-intro">${esc(cleanBibleText(ch.introduction))}</p>`:''}<div class="bible-verses">${verses.length?verses.map(v=>{const vn=parseInt(String(v.verse),10),hit=target&&target.verseStart!=null&&vn>=target.verseStart&&vn<=target.verseEnd,key=verseKey(bibleState.slug,bibleState.chapter,vn),saved=marks.has(key);return `<div class="bible-verse${hit?' bible-verse-target':''}"${hit?' id="bibleTargetVerse"':''}><button class="verse-bookmark" aria-label="${saved?'Remove':'Add'} bookmark" onclick='event.stopPropagation();toggleBibleBookmark(${JSON.stringify(bibleState.slug)},${Number(bibleState.chapter)},${vn},${JSON.stringify(cleanBibleText(v.text))})'>${saved?'★':'☆'}</button><sup>${esc(v.verse)}</sup>${esc(cleanBibleText(v.text))}</div>`}).join(''):'<div class="notice">No verse text was found for this chapter.</div>'}</div>`;if(target)setTimeout(()=>document.getElementById('bibleTargetVerse')?.scrollIntoView({behavior:CPC.settings.reducedMotion?'auto':'smooth',block:'center'}),80)};
+
+/* v91: USCCB-first Bible access. The older public-domain offline reader is
+   available only as a clearly identified compatibility option; all saved
+   bookmarks and books remain on-device without destructive migration. */
+const cpcLegacyBibleRenderer=window.renderBible;
+function cpcUSCCBChapterUrl(slug=bibleState.slug,chapter=bibleState.chapter){
+ const record=bibleBookGuides[slug];
+ const clean=record&&/^[a-z0-9-]+$/.test(record.usccbSlug)?record.usccbSlug:'john';
+ const n=Math.max(1,Math.min(150,Number(chapter)||1));
+ return `https://bible.usccb.org/bible/${clean}/${n}`;
+}
+function cpcUSCCBBibleBookChange(slug){
+ if(!bibleBooks.some(row=>row[0]===slug))return;
+ bibleState.slug=slug;bibleState.chapter=1;
+ localStorage.setItem('cpc-bible-book',slug);localStorage.setItem('cpc-bible-chapter','1');
+ cpcRenderUSCCBBible();
+}
+function cpcUSCCBBibleChapterChange(n){
+ bibleState.chapter=Math.max(1,Math.min(150,parseInt(n,10)||1));
+ localStorage.setItem('cpc-bible-chapter',String(bibleState.chapter));
+ cpcUpdateUSCCBBibleLink();
+}
+function cpcUpdateUSCCBBibleLink(){
+ const link=document.getElementById('cpcBibleOnlineChapter');
+ if(link)link.href=cpcUSCCBChapterUrl();
+ const title=document.getElementById('cpcBibleOnlineChapterTitle');
+ if(title)title.textContent=`Read ${bibleBooks.find(row=>row[0]===bibleState.slug)?.[1]||'Bible'} ${bibleState.chapter} on USCCB`;
+}
+function cpcRenderUSCCBBible(){
+ const root=document.getElementById('devotionContent');if(!root)return;
+ const book=bibleBooks.find(row=>row[0]===bibleState.slug);
+ if(!book){bibleState.slug='john';bibleState.chapter=1;}
+ root.innerHTML=`<section class="cpc-v91-bible"><h3>Read the Catholic Bible</h3>
+ <p class="muted">Choose a book and chapter, then open the text on the USCCB website. The website needs an internet connection; Bible text is not reproduced in this app.</p>
+ <div class="cpc-v91-bible-controls"><label>Book<select id="cpcBibleUSCCBBook" aria-label="Bible book" onchange="cpcUSCCBBibleBookChange(this.value)">${bibleBookOptions()}</select></label>
+ <label>Chapter<input id="cpcBibleUSCCBChapter" type="number" min="1" max="150" inputmode="numeric" aria-label="Bible chapter number" value="${bibleState.chapter}" onchange="cpcUSCCBBibleChapterChange(this.value)" /></label></div>
+ <a class="primary cpc-v91-usccb-action" id="cpcBibleOnlineChapter" href="${cpcUSCCBChapterUrl()}" target="_blank" rel="noopener noreferrer"><span id="cpcBibleOnlineChapterTitle"></span> ↗</a>
+ ${bibleReferenceTarget&&bibleReferenceTarget.slug===bibleState.slug?`<p class="cpc-v91-bible-reference" role="note">Selected reference: <b>${esc(bibleReferenceTarget.raw)}</b>. Open the USCCB chapter to find the verse.</p>`:''}
+ <div id="bibleBookGuide">${bibleBookGuideHtml(bibleState.slug)}</div>
+ <div class="cpc-v91-offline-option"><b>Need your saved offline Bible?</b><p>Previously downloaded Douay–Rheims books and bookmarks are still available on this device. This older translation is different from the USCCB text.</p><button type="button" class="secondary" onclick="cpcShowLegacyOfflineBible()">Open saved offline Bible</button></div></section>`;
+ cpcUpdateUSCCBBibleLink();
+}
+function cpcShowLegacyOfflineBible(){
+ cpcLegacyBibleRenderer();
+ const root=document.getElementById('devotionContent');
+ if(root){const b=document.createElement('button');b.type='button';b.className='ghost cpc-v91-back-usccb';b.textContent='← USCCB Bible reader';b.onclick=cpcRenderUSCCBBible;root.prepend(b);}
+}
+window.renderBible=cpcRenderUSCCBBible;
+window.cpcUSCCBBibleBookChange=cpcUSCCBBibleBookChange;
+window.cpcUSCCBBibleChapterChange=cpcUSCCBBibleChapterChange;
+window.cpcShowLegacyOfflineBible=cpcShowLegacyOfflineBible;
 
 /* Settings and export/import */
 window.exportPrayerData=function(){const keys=Object.keys(localStorage).filter(k=>k.startsWith('cpc-')||k==='rosaryState'),data={version:1,exportedAt:new Date().toISOString(),localStorage:{}};keys.forEach(k=>data.localStorage[k]=localStorage.getItem(k));const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`catholic-companion-backup-${todayKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
