@@ -1,115 +1,60 @@
+
 name: Catholic Companion App Tests
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'service-worker.js'
+      - 'manifest.webmanifest'
+      - 'tests/**'
+      - 'playwright.config.cjs'
+      - '.github/workflows/catholic-companion-rosary-tests.yml'
+
+permissions:
+  contents: read
 
 jobs:
-  test:
+  mobile-tests:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 25
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
 
-      - name: Install Playwright
+      - name: Verify expected app files
+        run: |
+          test -f index.html
+          test -f service-worker.js
+          test -f playwright.config.cjs
+          test -f tests/catholic-companion.spec.cjs
+
+      - name: Install Playwright and mobile browser engines
         run: |
           npm install --no-save @playwright/test@1.56.1
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps chromium webkit
 
-      - name: Check app files
-        run: |
-          test -f index.html || {
-            echo "ERROR: index.html is missing"
-            exit 1
-          }
+      - name: Validate JavaScript and release versions
+        run: node scripts/check-release.cjs
 
-      - name: Start app server
-        run: |
-          python3 -m http.server 4173 \
-            --bind 127.0.0.1 \
-            > /tmp/app-server.log 2>&1 &
-          echo $! > /tmp/app-server.pid
-
-      - name: Create Playwright tests
-        run: |
-          mkdir -p tests
-
-          cat > tests/app.spec.cjs <<'EOF'
-          const { test, expect } = require('@playwright/test');
-
-          test.use({
-            viewport: { width: 390, height: 844 },
-            timezoneId: 'Asia/Singapore'
-          });
-
-          test.beforeEach(async ({ page }) => {
-            await page.goto('http://127.0.0.1:4173/');
-          });
-
-          test('Homepage loads', async ({ page }) => {
-            await expect(page.locator('#home'))
-              .toHaveClass(/active/);
-          });
-
-          test('Rosary selection page opens', async ({ page }) => {
-            await page.locator('.today-rosary-btn').click();
-
-            await expect(page.locator('#picker'))
-              .toHaveClass(/active/);
-          });
-
-          test('Four mystery sets are displayed', async ({ page }) => {
-            await page.locator('.today-rosary-btn').click();
-
-            await expect(
-              page.locator('.cpc-rosary-set-tab')
-            ).toHaveCount(4);
-          });
-
-          test('Traditional Rosary starts', async ({ page }) => {
-            await page.locator('.today-rosary-btn').click();
-            await page.locator('#cpcRosaryTraditional').click();
-
-            await expect(page.locator('#prayer'))
-              .toHaveClass(/active/);
-          });
-
-          test('Scriptural Rosary starts', async ({ page }) => {
-            await page.locator('.today-rosary-btn').click();
-            await page.locator('#cpcRosaryScriptural').click();
-
-            await expect(page.locator('#prayer'))
-              .toHaveClass(/active/);
-          });
-
-          test('Order of Mass opens', async ({ page }) => {
-            await page.locator('#home button.card')
-              .filter({ hasText: 'Order of Mass' })
-              .click();
-
-            await expect(page.locator('#library'))
-              .toHaveClass(/active/);
-          });
-          EOF
-
-      - name: Run Playwright tests
-        run: |
-          npx playwright test tests/app.spec.cjs \
-            --browser=chromium \
-            --reporter=html
+      - name: Run mobile regression tests
+        run: npx playwright test --config=playwright.config.cjs
         env:
-          PLAYWRIGHT_HTML_OPEN: never
+          CI: 'true'
 
-      - name: Upload test report
+      - name: Upload detailed report (including failures)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: catholic-companion-test-report
-          path: playwright-report/
-          if-no-files-found: ignore 
+          name: catholic-companion-mobile-regression-report
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          
