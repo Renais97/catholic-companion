@@ -1,0 +1,115 @@
+name: Catholic Companion App Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save @playwright/test@1.56.1
+          npx playwright install --with-deps chromium
+
+      - name: Check app files
+        run: |
+          test -f index.html || {
+            echo "ERROR: index.html is missing"
+            exit 1
+          }
+
+      - name: Start app server
+        run: |
+          python3 -m http.server 4173 \
+            --bind 127.0.0.1 \
+            > /tmp/app-server.log 2>&1 &
+          echo $! > /tmp/app-server.pid
+
+      - name: Create Playwright tests
+        run: |
+          mkdir -p tests
+
+          cat > tests/app.spec.cjs <<'EOF'
+          const { test, expect } = require('@playwright/test');
+
+          test.use({
+            viewport: { width: 390, height: 844 },
+            timezoneId: 'Asia/Singapore'
+          });
+
+          test.beforeEach(async ({ page }) => {
+            await page.goto('http://127.0.0.1:4173/');
+          });
+
+          test('Homepage loads', async ({ page }) => {
+            await expect(page.locator('#home'))
+              .toHaveClass(/active/);
+          });
+
+          test('Rosary selection page opens', async ({ page }) => {
+            await page.locator('.today-rosary-btn').click();
+
+            await expect(page.locator('#picker'))
+              .toHaveClass(/active/);
+          });
+
+          test('Four mystery sets are displayed', async ({ page }) => {
+            await page.locator('.today-rosary-btn').click();
+
+            await expect(
+              page.locator('.cpc-rosary-set-tab')
+            ).toHaveCount(4);
+          });
+
+          test('Traditional Rosary starts', async ({ page }) => {
+            await page.locator('.today-rosary-btn').click();
+            await page.locator('#cpcRosaryTraditional').click();
+
+            await expect(page.locator('#prayer'))
+              .toHaveClass(/active/);
+          });
+
+          test('Scriptural Rosary starts', async ({ page }) => {
+            await page.locator('.today-rosary-btn').click();
+            await page.locator('#cpcRosaryScriptural').click();
+
+            await expect(page.locator('#prayer'))
+              .toHaveClass(/active/);
+          });
+
+          test('Order of Mass opens', async ({ page }) => {
+            await page.locator('#home button.card')
+              .filter({ hasText: 'Order of Mass' })
+              .click();
+
+            await expect(page.locator('#library'))
+              .toHaveClass(/active/);
+          });
+          EOF
+
+      - name: Run Playwright tests
+        run: |
+          npx playwright test tests/app.spec.cjs \
+            --browser=chromium \
+            --reporter=html
+        env:
+          PLAYWRIGHT_HTML_OPEN: never
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: catholic-companion-test-report
+          path: playwright-report/
+          if-no-files-found: ignore 
