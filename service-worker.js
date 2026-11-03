@@ -1,6 +1,6 @@
-/* Catholic Companion v83 — offline shell and versioned app updates. */
+/* Catholic Companion v84 — offline shell and versioned app updates. */
 const CACHE_PREFIX='catholic-companion-release-';
-const CACHE_NAME=CACHE_PREFIX+'v83';
+const CACHE_NAME=CACHE_PREFIX+'v84';
 const APP_SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)));
