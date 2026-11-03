@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="description" content="Catholic Companion for the Rosary, Divine Mercy, Angelus, Mass reading references, Scripture, saints, and prayer." />
 <title>Catholic Companion</title>
+<meta name="cpc-release" content="92">
 <meta name="theme-color" content="#f4efe8" />
 <style id="cpc-consolidated-styles">
 /* ---- legacy-style-1 ---- */
@@ -5651,7 +5652,7 @@ body.cpc-prayer-screen-active #devotions.active{
   #home .hero .actions{margin:0!important;gap:0!important}
   #home .hero .today-rosary-btn{min-height:39px!important;height:39px!important;padding:5px 10px!important;font-size:12.5px!important}
   #home .hero .weekly-prayer-note{margin-top:4px!important;font-size:11.3px!important;line-height:1.2!important}
-  #home .grid{gap:7px!important}
+  #home .grid{gap:9px!important}
   #home .grid > .card{height:73px!important;min-height:73px!important;padding:4px 2px!important;border-radius:11px!important}
   #home .grid > .card > strong{gap:2px!important}
   #home .grid > .card .home-icon{font-size:26px!important;line-height:1!important}
@@ -5750,8 +5751,28 @@ body.cpc-prayer-screen-active #devotions.active{
 }
 @media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto!important}}
 </style>
+<style id="cpc-v92-accessibility">
+/* Safe, readable tap targets on compact devices and at large system text sizes. */
+#home .card{min-height:54px}
+#libraryPanel .cpc-mass-quick-nav button,#pickerPanel .cpc-rosary-set-tab,
+.prayer-settings-playback button,.prayer-settings-drawer summary{min-height:44px}
+#libraryPanel .cpc-mass-conditional,#libraryPanel .cpc-mass-optional,
+#libraryPanel .cpc-mass-creed-weekday-note{font-size:max(.82rem,12px);line-height:1.5}
+.cpc-v92-local-note{line-height:1.55;margin:12px 0}
+.cpc-v92-audio-error{font-size:.85rem;line-height:1.5;color:var(--ink);padding:10px;border:1px solid var(--line);border-radius:8px}
+@media (max-width:375px), (max-height:700px){
+ #home{padding-bottom:18px}
+ #home .hero{padding:15px 16px!important}
+ #home .grid{gap:9px!important}
+ #home .card{min-height:54px;}
+ #home .home-title-text{line-height:1.25}
+}
+@media (prefers-reduced-motion:reduce){
+ *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+</style>
 </head>
-<body data-cpc-version="86">
+<body data-cpc-version="92">
 <div class="app">
   <div class="topbar">
     <div class="brand"><span>Catholic Companion</span></div>
@@ -6300,7 +6321,7 @@ function liturgicalWeekLabel(date,season=''){
 
 function heroOrdinalDay(n){const v=n%100;if(v>=11&&v<=13)return n+'th';switch(n%10){case 1:return n+'st';case 2:return n+'nd';case 3:return n+'rd';default:return n+'th';}}
 function heroDateText(d){const months=['January','February','March','April','May','June','July','August','September','October','November','December'];return `${heroOrdinalDay(d.getDate())} ${months[d.getMonth()]} ${d.getFullYear()}`;}
-async function updateToday(){const hero=document.querySelector('#home .hero'),mysteryKey=todaySetKey();if(hero)hero.dataset.mysterySet=mysteryKey;const mysteryLabel=document.getElementById('todayMysterySet');if(mysteryLabel)mysteryLabel.textContent=`${(sets[mysteryKey]?.name||'Rosary Mysteries').replace(/^The\s+/,'')}`;const el=document.getElementById('todayLabel');const d=new Date();if(el)el.innerHTML=`<span class="today-liturgy"><span class="hero-date-main"><span>${heroDateText(d)}</span></span><span class="hero-liturgical-week"><span id="heroLitWeek">Liturgical week</span><span class="hero-lit-dot" id="heroLitDot" aria-hidden="true"></span></span></span>`;setDailyScripture();try{const p=apiDateParts(d),r=await cpcFetchWithTimeout(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok){const cal=await r.json(),lc=liturgicalColour(cal,d),dot=document.getElementById('heroLitDot'),week=document.getElementById('heroLitWeek');if(dot)dot.style.setProperty('--hero-lit',lc.hex);if(week)week.textContent=liturgicalWeekLabel(d,cal.season||'');}}catch(e){const week=document.getElementById('heroLitWeek');if(week)week.textContent='';}}
+async function updateToday(){const hero=document.querySelector('#home .hero'),mysteryKey=todaySetKey();if(hero)hero.dataset.mysterySet=mysteryKey;const mysteryLabel=document.getElementById('todayMysterySet');if(mysteryLabel)mysteryLabel.textContent=`${(sets[mysteryKey]?.name||'Rosary Mysteries').replace(/^The\s+/,'')}`;const el=document.getElementById('todayLabel');const d=new Date();if(el)el.innerHTML=`<span class="today-liturgy"><span class="hero-date-main"><span>${heroDateText(d)}</span></span><span class="hero-liturgical-week"><span id="heroLitWeek">Liturgical week</span><span class="hero-lit-dot" id="heroLitDot" aria-hidden="true"></span></span></span>`;setDailyScripture();try{const p=apiDateParts(d),r=await cpcFetchWithTimeout(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok){const cal=cpcSingaporeCalendarData(await r.json(),d),lc=liturgicalColour(cal,d),dot=document.getElementById('heroLitDot'),week=document.getElementById('heroLitWeek');if(dot)dot.style.setProperty('--hero-lit',lc.hex);if(week)week.textContent=liturgicalWeekLabel(d,cal.season||'');}}catch(e){const week=document.getElementById('heroLitWeek');if(week)week.textContent='';}}
 function startToday(){showRosaryModePicker(todaySetKey())}
 function showMysteryPicker(){showLibrary('mysteries')}
 function cpcOpenMysteryFromRosary(k,index=0){
@@ -6352,7 +6373,27 @@ function save(){localStorage.setItem('rosaryState',JSON.stringify(state))}
 let prayerSpeed=parseFloat(localStorage.getItem('cpc-prayer-speed')||'1');
 const prayerSpeedOptions=[[0.75,'Slow'],[1,'Gentle'],[1.5,'Fast'],[2,'Faster']];
 if(!prayerSpeedOptions.some(([v])=>Math.abs(v-prayerSpeed)<.001))prayerSpeed=1;
-let speechRun=0, speechPauseTimer=null, preferredLectorVoice=null;
+let speechRun=0, speechPauseTimer=null, autoChainTimer=null, preferredLectorVoice=null;
+function cpcAutoPlaybackCanContinue(kind){
+ const screen=document.querySelector('.screen.active')?.id;
+ if(document.visibilityState==='hidden'||!autoAdvance[kind])return false;
+ return kind==='rosary'?screen==='prayer':screen==='devotions'&&currentDevotion===(kind==='mercy'?'divineMercy':'angelus');
+}
+function cpcScheduleAuto(kind,callback,delay){
+ if(autoChainTimer!==null)clearTimeout(autoChainTimer);
+ const token=speechRun;
+ autoChainTimer=setTimeout(()=>{
+   autoChainTimer=null;
+   if(token===speechRun&&cpcAutoPlaybackCanContinue(kind))callback();
+ },delay);
+}
+function cpcShowAudioError(){
+ const panel=document.querySelector('.screen.active .prayer-settings-content');
+ if(!panel)return;
+ let msg=panel.querySelector('.cpc-v92-audio-error');
+ if(!msg){msg=document.createElement('p');msg.className='cpc-v92-audio-error';msg.setAttribute('role','status');panel.prepend(msg);}
+ msg.textContent='Audio could not continue on this device. Tap Play to retry, or continue praying manually.';
+}
 function refreshLectorVoice(){
  const voices=window.speechSynthesis?window.speechSynthesis.getVoices():[];
  if(!voices.length)return null;
@@ -6369,7 +6410,7 @@ function refreshLectorVoice(){
  return preferredLectorVoice;
 }
 if(window.speechSynthesis){refreshLectorVoice();window.speechSynthesis.addEventListener?.('voiceschanged',refreshLectorVoice)}
-function stopSpeech(){speechRun++;if(speechPauseTimer){clearTimeout(speechPauseTimer);speechPauseTimer=null}window.speechSynthesis.cancel()}
+function stopSpeech(){speechRun++;if(speechPauseTimer){clearTimeout(speechPauseTimer);speechPauseTimer=null}if(autoChainTimer!==null){clearTimeout(autoChainTimer);autoChainTimer=null}window.speechSynthesis?.cancel?.()}
 function setPrayerSpeed(v){prayerSpeed=parseFloat(v)||1;localStorage.setItem('cpc-prayer-speed',String(prayerSpeed));stopSpeech();document.querySelectorAll('.voice-speed-select').forEach(x=>x.value=String(prayerSpeed))}
 function voiceSpeedControls(){const icon=prayerSpeed<=1?'🐌':'⚡';const current=(prayerSpeedOptions.find(([v])=>Math.abs(prayerSpeed-v)<.001)||[1,'Gentle'])[1];return `<div class="voice-speed-row cpc-speed-tile"><div class="cpc-speed-display" aria-hidden="true"><span class="cpc-speed-icon">${icon}</span><span class="cpc-speed-text">${current}</span></div><select class="voice-speed-select" aria-label="Prayer voice speed" onchange="setPrayerSpeed(this.value)">${prayerSpeedOptions.map(([v,n])=>`<option value="${v}" ${Math.abs(prayerSpeed-v)<.001?'selected':''}>${n}</option>`).join('')}</select></div>`}
 function prayerSpeechPlainText(text){
@@ -6411,7 +6452,9 @@ function lectorSegments(text){
  });
  return out;
 }
-function speakText(text,rate=null,onDone=null){requestPrayerWakeLock();
+function speakText(text,rate=null,onDone=null){
+ if(!window.speechSynthesis||!window.SpeechSynthesisUtterance){cpcShowAudioError();return;}
+ requestPrayerWakeLock();
  stopSpeech(); const run=++speechRun, parts=lectorSegments(text), chosenRate=rate==null?prayerSpeed:rate; let i=0;
  const voice=preferredLectorVoice||refreshLectorVoice();
  function finishSpeech(){
@@ -6428,16 +6471,17 @@ function speakText(text,rate=null,onDone=null){requestPrayerWakeLock();
    const part=parts[i++],u=new SpeechSynthesisUtterance(part.text);
    u.rate=chosenRate;u.pitch=.96;u.volume=1;if(voice)u.voice=voice;
    u.onend=()=>{if(run!==speechRun)return;speechPauseTimer=setTimeout(speakNext,part.pause);};
-   u.onerror=()=>{
-     // Do not rapidly skip into the next prayer if a mobile TTS engine reports
-     // a transient error; leave a natural gap before continuing this run.
-     if(run===speechRun)speechPauseTimer=setTimeout(speakNext,260);
+   u.onerror=(event)=>{
+     if(run!==speechRun)return;
+     // Do not silently skip a prayer or advance after a speech-engine failure.
+     if(event?.error==='canceled'||event?.error==='interrupted')return;
+     stopSpeech();cpcShowAudioError();
    };
    window.speechSynthesis.speak(u);
  }
  speakNext();
 }
-function toggleSpeech(){if(speechSynthesis.speaking){if(speechSynthesis.paused)speechSynthesis.resume();else speechSynthesis.pause()}}
+function toggleSpeech(){if(!window.speechSynthesis)return;if(speechSynthesis.speaking){if(speechSynthesis.paused)speechSynthesis.resume();else speechSynthesis.pause()}}
 function rerenderPlaybackKind(kind){
  if(kind==='rosary'&&state.setKey){renderPrayer();return}
  if(kind==='mercy'&&currentDevotion==='divineMercy'){renderMercy();return}
@@ -6472,9 +6516,9 @@ function playPrayerAudio(text,kind='none',action='none'){
 }
 function autoAdvanceToNext(kind){
  if(!autoAdvance[kind])return;
- if(kind==='rosary'){next();if(autoPlayNext.rosary)setTimeout(playCurrentRosary,420);return}
- if(kind==='mercy'){mercyNext();if(autoPlayNext.mercy)setTimeout(playCurrentMercy,420);return}
- if(kind==='angelus'){window.angelusNext();if(autoPlayNext.angelus)setTimeout(playCurrentAngelus,420);return}
+ if(kind==='rosary'){next();if(autoPlayNext.rosary)cpcScheduleAuto('rosary',playCurrentRosary,420);return}
+ if(kind==='mercy'){mercyNext();if(autoPlayNext.mercy)cpcScheduleAuto('mercy',playCurrentMercy,420);return}
+ if(kind==='angelus'){window.angelusNext();if(autoPlayNext.angelus)cpcScheduleAuto('angelus',playCurrentAngelus,420);return}
 }
 function playCurrentRosary(){if(!autoAdvance.rosary||!autoPlayNext.rosary||!state.setKey)return;const s=state.step;if(s<introSteps.length){const key=introSteps[s];if(key==='hail3')playPrayerAudio(prayers.hailMary,'rosary','rosaryIntroHail');else playPrayerAudio(prayers[key],'rosary','next');return}const dStart=introSteps.length,dEnd=dStart+25;if(s<dEnd){const rel=s-dStart,idx=Math.floor(rel/5),phase=rel%5;if(phase===0){speakMystery(idx,true);return}if(phase===1){playPrayerAudio(prayers.ourFather,'rosary','next');return}if(phase===2){playPrayerAudio(rosaryHailAudioText(),'rosary','rosaryHail');return}if(phase===3){playPrayerAudio(prayers.glory,'rosary','next');return}playPrayerAudio(prayers.fatima,'rosary','next');return}const endIndex=s-dEnd;if(endIndex<endingSteps.length)playPrayerAudio(prayers[endingSteps[endIndex]],'rosary','next')}
 function playCurrentMercy(){if(!autoAdvance.mercy||!autoPlayNext.mercy)return;const s=mercyState.step;if(s<4){playPrayerAudio(divineMercy.opening[s],'mercy','next');return}const rel=s-4;if(rel<10){const phase=rel%2;if(phase===0)playPrayerAudio(divineMercy.large,'mercy','next');else playPrayerAudio(divineMercy.small,'mercy','mercySmall');return}if(rel===10){playPrayerAudio(divineMercy.holyGod,'mercy','mercyHoly');return}if(rel===11)playPrayerAudio(divineMercy.closing,'mercy','next')}
@@ -6484,38 +6528,38 @@ function autoRosaryIntroHail(){
    state.hail++;if(window.cpcPrayerHaptic)window.cpcPrayerHaptic.short();save();updateHomeTrackers();updateRosaryBeadUI();
    // state.hail is the number of the prayer that is about to be prayed next.
    // When it becomes 3, the third Hail Mary still needs to be spoken.
-   if(autoPlayNext.rosary)setTimeout(()=>playPrayerAudio(prayers.hailMary,'rosary','rosaryIntroHail'),320);
+   if(autoPlayNext.rosary)cpcScheduleAuto('rosary',()=>playPrayerAudio(prayers.hailMary,'rosary','rosaryIntroHail'),320);
    return;
  }
- setTimeout(()=>autoAdvanceToNext('rosary'),500);
+ cpcScheduleAuto('rosary',()=>autoAdvanceToNext('rosary'),500);
 }
 function autoRosaryHail(){
  if(!autoAdvance.rosary)return;
  if(state.hail<10){
    state.hail++;if(window.cpcPrayerHaptic)window.cpcPrayerHaptic.short();save();updateHomeTrackers();updateRosaryBeadUI();
    // Likewise, reaching bead 10 means the tenth Hail Mary is next, not done.
-   if(autoPlayNext.rosary)setTimeout(()=>playPrayerAudio(rosaryHailAudioText(),'rosary','rosaryHail'),320);
+   if(autoPlayNext.rosary)cpcScheduleAuto('rosary',()=>playPrayerAudio(rosaryHailAudioText(),'rosary','rosaryHail'),320);
    return;
  }
- setTimeout(()=>autoAdvanceToNext('rosary'),500);
+ cpcScheduleAuto('rosary',()=>autoAdvanceToNext('rosary'),500);
 }
 function autoMercySmall(){
  if(!autoAdvance.mercy)return;
  if(mercyState.small<10){
    mercyState.small++;if(window.cpcPrayerHaptic)window.cpcPrayerHaptic.short();updateHomeTrackers();updateMercyBeadUI();
-   if(autoPlayNext.mercy)setTimeout(()=>playPrayerAudio(divineMercy.small,'mercy','mercySmall'),320);
+   if(autoPlayNext.mercy)cpcScheduleAuto('mercy',()=>playPrayerAudio(divineMercy.small,'mercy','mercySmall'),320);
    return;
  }
- setTimeout(()=>autoAdvanceToNext('mercy'),500);
+ cpcScheduleAuto('mercy',()=>autoAdvanceToNext('mercy'),500);
 }
 function autoMercyHoly(){
  if(!autoAdvance.mercy)return;
  if(mercyState.holy<3){
    mercyState.holy++;if(window.cpcPrayerHaptic)window.cpcPrayerHaptic.short();updateHomeTrackers();updateMercyBeadUI();
-   if(autoPlayNext.mercy)setTimeout(()=>playPrayerAudio(divineMercy.holyGod,'mercy','mercyHoly'),320);
+   if(autoPlayNext.mercy)cpcScheduleAuto('mercy',()=>playPrayerAudio(divineMercy.holyGod,'mercy','mercyHoly'),320);
    return;
  }
- setTimeout(()=>autoAdvanceToNext('mercy'),500);
+ cpcScheduleAuto('mercy',()=>autoAdvanceToNext('mercy'),500);
 }
 function renderPrayer(){queueMicrotask(ensurePrayerNavigationTip);
  stopSpeech();updateRosaryModeHeading();
@@ -7359,7 +7403,7 @@ function renderMysteryLibrary(k,{fromHistory=false}={}){setPanelArt('libraryPane
 function showDevotion(type,{fromHistory=false}={}){stopSpeech();if(type!=='divineMercy'&&type!=='angelus')releasePrayerWakeLock();currentDevotion=type;const artMap={divineMercy:'mercy-art',angelus:'angelus-art',readings:'readings-art',calendar:'calendar-art',bible:'readings-art'};setPanelArt('devotionPanel',`panel-art ${artMap[type]||'prayers-art'}`);setScreen('devotions',{fromHistory,routeKey:`devotion:${type}`});
  const t=document.getElementById('devotionTitle'), e=document.getElementById('devotionEyebrow');
  if(type==='divineMercy'){e.textContent='Devotion';t.textContent='Chaplet of Divine Mercy';renderMercy();}
- if(type==='angelus'){if(!isCompleteToday('angelus'))localStorage.setItem('cpc-started-angelus',todayKey());updateHomeTrackers();e.textContent='Marian prayer';t.textContent='The Angelus';try{const saved=JSON.parse(localStorage.getItem('cpc-angelus-state')||'null');if(saved&&!isCompleteToday('angelus'))Object.assign(angelusState,saved)}catch(_){}window.renderAngelus();}
+ if(type==='angelus'){if(!isCompleteToday('angelus'))localStorage.setItem('cpc-started-angelus',todayKey());updateHomeTrackers();e.textContent='Marian prayer';t.textContent='The Angelus';try{const saved=JSON.parse(localStorage.getItem('cpc-angelus-state')||'null');if(saved&&cpcPrayerStateIsToday(saved)&&!isCompleteToday('angelus'))Object.assign(angelusState,saved)}catch(_){}window.renderAngelus();}
  if(type==='readings'){e.textContent='Liturgy of the Word';t.textContent='Daily Mass Readings';renderDailyReadings();}
  if(type==='calendar'){e.textContent='Liturgical year';t.textContent='Catholic Liturgical Calendar';calDate=new Date();renderCalendar();}
  if(type==='bible'){e.textContent='Sacred Scripture';t.textContent='Catholic Bible';window.renderBible();}
@@ -7511,6 +7555,7 @@ function renderMercy(){queueMicrotask(ensurePrayerNavigationTip);
  markComplete('mercy');c.innerHTML=`<div class="completion-screen-copy"><div class="eyebrow">Chaplet complete</div>${completionMoment('Prayer offered with love')}<h2>Praise be to the Father of mercies.</h2><p class="subtitle">May His mercy remain with you today, and may your heart be drawn back to prayer tomorrow.</p></div>`;
 }
 function mercyNext(){
+ if(mercyState.step>=16)return;
  const dest=mercyState.step+1;
  const completing=dest>=16;
  const rel=dest-4;
@@ -7580,6 +7625,7 @@ function retreatRosaryBead(){
  return false;
 }
 function previousRosary(){
+ stopSpeech();
  if(!state.setKey||state.step<=0)return false;
  state.step--;
  const dStart=introSteps.length;
@@ -7620,6 +7666,7 @@ function retreatMercyBead(){
  return false;
 }
 function previousMercy(){
+ stopSpeech();
  if(mercyState.step<=0)return false;
  mercyState.step--;
  const rel=mercyState.step-4;
@@ -7846,8 +7893,10 @@ function catholicSGScriptureReflectionCard(readingDate=new Date()){
  return `<div class="reading-card catholic-sg-reflection-card"><div class="eyebrow">Scripture Reflection</div><h3>Reflect on today’s Word</h3><p>Continue your prayer with the Scripture Reflection from the Roman Catholic Archdiocese of Singapore.</p><a class="primary catholic-sg-reflection-link" href="https://www.catholic.sg/scripture-reflection/" target="_blank" rel="noopener noreferrer" aria-label="Open CatholicSG Scripture Reflection for ${esc(dateLabel)}">Read Scripture Reflection <span aria-hidden="true">↗</span></a><div class="catholic-sg-reflection-source">CatholicSG · Archdiocese of Singapore</div></div>`;
 }
 function massReadingsPageHtml(d,r,cal,{eyebrow='Today',cardAction="showDevotion('calendar')",cardAria='Open liturgical calendar'}={}){
+ cal=cpcSingaporeCalendarData(cal,d);
  const x=r&&r.readings?r.readings:{};
- const cards=r?renderReadingSet(x,cal):'';
+ const hasLocalException=!!CPC_SG_LOCAL_EXCEPTIONS[cpcCivilKey(d)];
+ const cards=r&&!hasLocalException?renderReadingSet(x,cal):'';
  const litMeta=liturgicalMetaText(cal);
  const lc=liturgicalColour(cal,typeof d!=='undefined'?d:new Date());
  const dateText=d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
@@ -7857,7 +7906,7 @@ function massReadingsPageHtml(d,r,cal,{eyebrow='Today',cardAction="showDevotion(
  const topCard=cal&&cal.celebration
   ?`<button class="reading-card today-liturgical-card" type="button"${action}${aria}><div class="eyebrow">${esc(eyebrow)}</div><div class="today-liturgical-date">${dateText}</div><h3 class="today-liturgical-title" style="--lit-title:${lc.hex}">${esc(cal.celebration.name)}</h3><div class="muted">${litMeta?esc(litMeta)+' · ':''}<span class="lit-dot" style="--lit:${lc.hex}"></span> ${lc.label}</div>${massLectionaryCycleHtml(d)}</button>`
   :`<button class="reading-card today-liturgical-card" type="button"${action}${aria}><div class="eyebrow">${esc(eyebrow)}</div><div class="today-liturgical-date">${dateText}</div><div class="muted">${esc(seasonText)}</div>${massLectionaryCycleHtml(d)}</button>`;
- return `${topCard}${officialMassReadingSources(d)}${cards}${r?catholicSGScriptureReflectionCard(d):''}`;
+ return `${topCard}${cpcSingaporeCalendarNote(d)}${officialMassReadingSources(d)}${cards}${r?catholicSGScriptureReflectionCard(d):''}`;
 }
 
 async function renderDailyReadings(){
@@ -7875,7 +7924,32 @@ async function renderDailyReadings(){
 }
 
 
+/* v92 — Singapore observance corrections. These are deliberately narrow:
+   unverified future local transfers are NOT guessed from the weekday alone.
+   Check the Archdiocese's published calendar for subsequent years. */
+const CPC_SG_LOCAL_EXCEPTIONS = Object.freeze({
+ '2027-10-31': {name:'All Saints',type:'SOLEMNITY',color:'white',note:'In the Singapore calendar, All Saints is celebrated on Sunday, 31 October 2027.'},
+ '2027-11-01': {name:'Monday of Week 31 in Ordinary Time',type:'FERIA',color:'green',note:'All Saints is celebrated on 31 October in the Singapore calendar for 2027.'}
+});
+function cpcCivilKey(date){
+ if(!(date instanceof Date)||!Number.isFinite(date.getTime()))return '';
+ return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+}
+function cpcSingaporeCalendarData(cal,date){
+ const correction=CPC_SG_LOCAL_EXCEPTIONS[cpcCivilKey(date)];
+ if(!correction)return cal;
+ const copy=cal&&typeof cal==='object'?{...cal}:{};
+ copy.celebration={...(copy.celebration||{}),name:correction.name,type:correction.type,color:correction.color};
+ copy.localObservanceNote=correction.note;
+ return copy;
+}
+function cpcSingaporeCalendarNote(date){
+ const correction=CPC_SG_LOCAL_EXCEPTIONS[cpcCivilKey(date)];
+ if(!correction)return '';
+ return `<div class="notice cpc-v92-local-note" role="note"><strong>Singapore calendar:</strong> ${esc(correction.note)} For the readings of this local observance, use CatholicSG below. The general-purpose reading feed may not match.</div>`;
+}
 function liturgicalColour(data, date=null){
+ data=cpcSingaporeCalendarData(data,date);
  // In the Roman calendar the celebration, not the season, determines the day's colour.
  const season=String(data?.season||'').toLowerCase();
  const cel=data?.celebration||{};
@@ -7899,7 +7973,7 @@ function liturgicalColour(data, date=null){
  // Date guard for calendar sources that fail to include the celebration name.
  if(date instanceof Date && !Number.isNaN(date.getTime())){
   if(date.getMonth()===10&&date.getDate()===2) return colors.violet;
-  if(date.getMonth()===10&&date.getDate()===1) return colors.white;
+  if(date.getMonth()===10&&date.getDate()===1&&date.getFullYear()!==2027) return colors.white;
  }
  if(/gaudete|laetare/.test(name)) return colors.rose;
  if(/pentecost|palm sunday|passion of the lord|good friday|exaltation of the holy cross/.test(name)) return colors.red;
@@ -7959,7 +8033,7 @@ async function renderCalendarWeek(){
  const data={};
  await Promise.all(days.map(async(d,i)=>{const p=apiDateParts(d);try{const r=await cpcFetchWithTimeout(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok)data[i]=await r.json()}catch(e){}}));
  const today=new Date();
- const cards=days.map((d,i)=>{const z=data[i],name=z&&z.celebration?z.celebration.name:(z&&z.season?z.season:'Liturgical day'),lc=liturgicalColour(z,d),ist=d.toDateString()===today.toDateString();return `<button class="cal-week-card ${ist?'today':''}" style="--lit:${lc.hex}" title="${esc(lc.label)}" onclick="showCalendarDay(${d.getFullYear()},${d.getMonth()},${d.getDate()})"><span class="cal-week-date">${d.toLocaleDateString(undefined,{weekday:'short'})}<small>${d.getDate()} ${d.toLocaleDateString(undefined,{month:'short'})}</small></span><span class="cal-week-name">${esc(name||'')}</span><span class="lit-dot" style="--lit:${lc.hex}"></span></button>`}).join('');
+ const cards=days.map((d,i)=>{const z=cpcSingaporeCalendarData(data[i],d),name=z&&z.celebration?z.celebration.name:(z&&z.season?z.season:'Liturgical day'),lc=liturgicalColour(z,d),ist=d.toDateString()===today.toDateString();return `<button class="cal-week-card ${ist?'today':''}" style="--lit:${lc.hex}" title="${esc(lc.label)}" onclick="showCalendarDay(${d.getFullYear()},${d.getMonth()},${d.getDate()})"><span class="cal-week-date">${d.toLocaleDateString(undefined,{weekday:'short'})}<small>${d.getDate()} ${d.toLocaleDateString(undefined,{month:'short'})}</small></span><span class="cal-week-name">${esc(name||'')}</span><span class="lit-dot" style="--lit:${lc.hex}"></span></button>`}).join('');
  c.innerHTML=`${calendarViewToggle()}<div class="calendar-head"><button class="ghost" onclick="changeWeek(-1)">←</button><h3>${weekRangeLabel(start)}</h3><button class="ghost" onclick="changeWeek(1)">→</button></div><div class="calendar-week-view">${cards}</div>${liturgicalLegend()}`;
 }
 let calendarMonthDayData={};
@@ -7969,6 +8043,7 @@ async function renderCalendarMonth(){
  c.innerHTML=`${calendarViewToggle()}<div class="calendar-head"><button class="ghost" onclick="changeMonth(-1)">←</button><h3>${first.toLocaleDateString(undefined,{month:'long',year:'numeric'})}</h3><button class="ghost" onclick="changeMonth(1)">→</button></div><div class="notice">Loading liturgical colours…</div>`;
  const data={};
  await Promise.all(Array.from({length:days},async(_,i)=>{const d=new Date(y,m,i+1),p=apiDateParts(d);try{const r=await cpcFetchWithTimeout(`https://cpbjr.github.io/catholic-readings-api/liturgical-calendar/${p.y}/${p.md}.json`);if(r.ok)data[i+1]=await r.json()}catch(e){}}));
+ Object.keys(data).forEach(day=>{data[day]=cpcSingaporeCalendarData(data[day],new Date(y,m,Number(day)))});
  calendarMonthDayData=data;
  const weeks=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="cal-week">${x}</div>`).join('');
  const blanks=Array.from({length:start},()=>`<div class="cal-day empty"></div>`).join('');
@@ -7978,8 +8053,8 @@ async function renderCalendarMonth(){
 }
 
 function showCalendarPopup(y,m,n){
- const data=calendarMonthDayData[n]||null;
  const d=new Date(y,m,n);
+ const data=cpcSingaporeCalendarData(calendarMonthDayData[n]||null,d);
  const lc=liturgicalColour(data,typeof d!=='undefined'?d:null);
  const name=data&&data.celebration?data.celebration.name:(data&&data.season?data.season:'Liturgical day');
  const type=data&&data.celebration&&data.celebration.type?liturgicalTypeLabel(data.celebration.type):'';
@@ -8261,7 +8336,7 @@ window.angelusNext=function(){
  }
  goHome();return true;
 };
-window.previousAngelus=function(){if(angelusState.step<=0)return false;angelusState.step--;saveAngelusState();window.renderAngelus();return true};
+window.previousAngelus=function(){stopSpeech();if(angelusState.step<=0)return false;angelusState.step--;saveAngelusState();window.renderAngelus();return true};
 
 /* Bible bookmarks + offline search */
 function getBibleBookmarks(){return safeJSON('cpc-bible-bookmarks',[])}
